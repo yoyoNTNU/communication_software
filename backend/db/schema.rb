@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema[7.0].define(version: 2023_07_02_091140) do
   create_table "chatrooms", force: :cascade do |t|
-    t.string "type"
+    t.string "type_"
     t.integer "type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -63,7 +63,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_091140) do
   create_table "messages", force: :cascade do |t|
     t.integer "chatroom_id", null: false
     t.integer "member_id", null: false
-    t.string "type"
+    t.string "type_"
     t.text "content"
     t.string "photo"
     t.boolean "isPinned"
