@@ -30,6 +30,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_091140) do
   create_table "group_members", force: :cascade do |t|
     t.integer "member_id", null: false
     t.integer "group_id", null: false
+    t.string "background"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_group_members_on_group_id"
@@ -65,6 +66,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_091140) do
     t.string "type"
     t.text "content"
     t.string "photo"
+    t.boolean "isPinned"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"

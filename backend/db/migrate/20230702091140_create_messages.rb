@@ -6,6 +6,7 @@ class CreateMessages < ActiveRecord::Migration[7.0]
       t.string :type #string or photo
       t.text :content
       t.string :photo
+      t.boolean :isPinned
       t.timestamps
     end
   end
