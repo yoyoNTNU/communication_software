@@ -3,7 +3,7 @@ class CreateMembers < ActiveRecord::Migration[7.0]
     create_table :members do |t|
       t.integer :user_id
       t.string :photo
-      t.string :background
+      t.string :background #個人檔案背景
       t.date :birthday
       t.string :introduction
       t.string :email
