@@ -22,6 +22,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_091140) do
     t.integer "member_id", null: false
     t.integer "friend_id"
     t.string "nickname"
+    t.string "background"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_friends_on_member_id"
@@ -38,7 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_02_091140) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer "count"
     t.string "name"
     t.string "photo"
     t.string "background"
