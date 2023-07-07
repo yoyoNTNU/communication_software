@@ -3,7 +3,7 @@ class Message < ApplicationRecord
     validate  :check_message_exist
     belongs_to :member
     belongs_to :chatroom
-
+    mount_uploader :photo , MessageUploader
 
     def check_message_exist
         if type_=="string" && content.blank?
