@@ -58,6 +58,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_08_131554) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.string "user_id"
     t.string "email"
     t.string "photo"
