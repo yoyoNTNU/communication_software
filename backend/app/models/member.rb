@@ -15,7 +15,7 @@ class Member < ApplicationRecord
 
     def password_complexity
       # Configure Password Complexity Requirements
-      if password.present? && password.match?(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/)
+      if password.present? && !password.match?(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]+$/)
         errors.add(:password, "at least one uppercase, lowercase letter and one number and can not include other character")
       end
     end
