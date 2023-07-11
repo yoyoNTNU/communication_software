@@ -45,6 +45,7 @@ gem "bootsnap", require: false
 gem 'carrierwave', '~> 2.2'
 gem 'rspec-rails', '~> 6.0.1'
 gem 'rspec_junit_formatter', '~> 0.6.0'
+gem 'simplecov'
 # Use Sass to process CSS
 # gem "sassc-rails"
 
