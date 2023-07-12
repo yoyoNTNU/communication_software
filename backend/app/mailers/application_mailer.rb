@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "railssentemail@gmail.com"
+  default from: "Express Message <noreply@express.message>"
   layout "mailer"
 end
