@@ -18,15 +18,15 @@ en:
       unconfirmed: "You have to confirm your email address before continuing."
     mailer:
       confirmation_instructions:
-        subject: "【Express Message】帳號啟用通知信"
+        subject: "【Express Message】帳號啟用確認信"
       reset_password_instructions:
-        subject: "Reset password instructions"
+        subject: "【Express Message】重設密碼通知信"
       unlock_instructions:
         subject: "Unlock instructions"
       email_changed:
         subject: "Email Changed"
       password_change:
-        subject: "Password Changed"
+        subject: "【Express Message】密碼更改通知信"
     passwords:
       no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
       send_instructions: "You will receive an email with instructions on how to reset your password in a few minutes."
