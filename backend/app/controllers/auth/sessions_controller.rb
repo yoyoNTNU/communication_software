@@ -12,7 +12,7 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def render_create_error_not_confirmed
-    if @resource.is_login_mail
+    if @resource && @resource.is_login_mail
       MemberMailer.login_failed_email(@resource).deliver_now
     end
     render json: {
@@ -23,7 +23,7 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def render_create_error_bad_credentials
-    if @resource.is_login_mail
+    if @resource && @resource.is_login_mail
       MemberMailer.login_failed_email(@resource).deliver_now
     end
     render json: {
