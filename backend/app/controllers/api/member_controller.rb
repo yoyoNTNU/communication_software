@@ -30,6 +30,6 @@ class Api::MemberController < ApplicationController
   def info_params
     #user_id,email,phone can't be modify.
     #password should though devise to modify.
-    params.permit(:photo, :background, :birthday, :introduction, :name)
+    params.permit(:photo, :background, :birthday, :introduction, :name, :is_login_mail)
   end
 end
