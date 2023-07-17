@@ -1,7 +1,9 @@
 class Auth::SessionsController < DeviseTokenAuth::SessionsController
 
   def render_create_success
-    MemberMailer.login_success_email(@resource).deliver_now
+    if @resource.is_login_mail
+      MemberMailer.login_success_email(@resource).deliver_now
+    end
     render json: {
         error: false,
         message: "succeed to sign in",
@@ -10,7 +12,9 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def render_create_error_not_confirmed
-    MemberMailer.login_failed_email(@resource).deliver_now
+    if @resource.is_login_mail
+      MemberMailer.login_failed_email(@resource).deliver_now
+    end
     render json: {
         error: true,
         message: "failed to sign in",
@@ -19,7 +23,9 @@ class Auth::SessionsController < DeviseTokenAuth::SessionsController
   end
 
   def render_create_error_bad_credentials
-    MemberMailer.login_failed_email(@resource).deliver_now
+    if @resource.is_login_mail
+      MemberMailer.login_failed_email(@resource).deliver_now
+    end
     render json: {
         error: true,
         message: "failed to sign in",
