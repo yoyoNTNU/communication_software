@@ -13,6 +13,6 @@ class Auth::TokenValidationsController < DeviseTokenAuth::TokenValidationsContro
         message: "failed to validate",
         data: I18n.t('devise_token_auth.token_validations.invalid')
     }.to_json, :status => 401
-end
+  end
 
 end
