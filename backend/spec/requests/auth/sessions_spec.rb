@@ -6,7 +6,7 @@ RSpec.configure do |c|
     c.include AuthorizedHelper
 end
 
-RSpec.describe "Api::Members", type: :request do
+RSpec.describe "Auth::Sessions", type: :request do
   before do
     m=Member.new(user_id:"test",name:"test",phone:"0912345678",email:"example@email.com",password:"Example123")
     m.skip_confirmation!
@@ -60,7 +60,7 @@ RSpec.describe "Api::Members", type: :request do
   end
 end
 
-RSpec.describe "Api::Members", type: :request do
+RSpec.describe "Auth::Sessions", type: :request do
   before do
     m=Member.new(user_id:"test",name:"test",phone:"0912345678",email:"example@email.com",password:"Example123")
     m.save
