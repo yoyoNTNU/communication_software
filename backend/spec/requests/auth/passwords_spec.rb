@@ -8,10 +8,10 @@ end
 
 RSpec.describe "Api::Passwords", type: :request do
   before do
-    m=Member.new(user_id:"test",name:"test",phone:"0912345678",email:"example@email.com",password:"Example123")
+    m=Member.new(user_id:"test",name:"test",phone:"0912345678",email:"example@gmail.com",password:"Example123")
     m.skip_confirmation!
     m.save
-    post "/auth/member/sign_in",params:{email:"example@email.com",password:"Example123"}
+    post "/auth/member/sign_in",params:{email:"example@gmail.com",password:"Example123"}
     @header={Authorization: response.headers["Authorization"]}
   end
 
