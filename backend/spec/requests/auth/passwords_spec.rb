@@ -6,7 +6,7 @@ RSpec.configure do |c|
   c.include AuthorizedHelper
 end
 
-RSpec.describe "Api::Passwords", type: :request do
+RSpec.describe "Auth::Passwords", type: :request do
   before do
     m=Member.new(user_id:"test",name:"test",phone:"0912345678",email:"example@gmail.com",password:"Example123")
     m.skip_confirmation!
