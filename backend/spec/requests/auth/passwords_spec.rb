@@ -30,6 +30,20 @@ RSpec.describe "Auth::Passwords", type: :request do
       ) 
     end
 
+    example "succeed to sign in with updated password" do
+      put "/auth/member/password",params:{password:"Example124",password_confirmation:"Example124", current_password:"Example123"},headers:@header
+      post "/auth/member/sign_in",
+      params:{email:"example@gmail.com",password:"Example124"}
+      expect(response).to have_http_status(200)
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["data"]["user_id"]).to eq("test")
+      expect(parsed_body["data"]["name"]).to eq("test")
+      expect(parsed_body["data"]["email"]).to eq("example@gmail.com")
+      expect(parsed_body["data"]["phone"]).to eq("0912345678")
+      expect(parsed_body["error"]).to eq(false) 
+      expect(parsed_body["message"]).to eq("succeed to sign in")
+    end
+
     example "failed to update password: invalid password format" do
       put "/auth/member/password",params:{password:"111111",password_confirmation:"111111", current_password:"Example123"},headers:@header
       expect(response).to have_http_status(400)
