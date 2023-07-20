@@ -96,5 +96,25 @@ RSpec.describe "Auth::Sessions", type: :request do
         )
       )
     end
+
+    example "failed to sign out" do
+      m=Member.new(user_id:"test",name:"test",phone:"0912345678",email:"example@gmail.com",password:"Example123")
+      m.skip_confirmation!
+      m.save
+      post "/auth/member/sign_in",params:{email:"example@gmail.com",password:"Example123"}
+      @header={Authorization: response.headers["Authorization"]} 
+      delete "/auth/member/sign_out", headers:@header
+      delete "/auth/member/sign_out", headers:@header
+      expect(response).to have_http_status(404)
+      expect(JSON.parse(response.body)).to eq(
+        JSON.parse(
+          {
+            "error": true,
+            "message": "failed to sign out",
+            "data": "User was not found or was not logged in."
+          }.to_json
+        )
+      )
+    end
   end
 end
