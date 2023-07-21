@@ -13,7 +13,7 @@ class Auth::RegistrationsController < DeviseTokenAuth::RegistrationsController
       message: "failed to sign up",
       data: resource_errors
     }.to_json, :status => 401
-end
+  end
 
 
 end
