@@ -6,7 +6,7 @@ class Member < ApplicationRecord
           :confirmable
     include DeviseTokenAuth::Concerns::User
     validates_uniqueness_of :user_id,:phone
-    validates :user_id, :name,:phone, presence: true
+    validates :user_id, :name, :phone, presence: true
     validate :password_complexity
     has_many :friends ,dependent: :destroy
     has_many :messages ,dependent: :destroy

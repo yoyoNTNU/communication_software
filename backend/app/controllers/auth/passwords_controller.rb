@@ -59,9 +59,9 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
 
     def render_update_error_unauthorized
       render json: {
-          error: true,
-          message: "failed to update password",
-          data:"Unauthorized."
+        error: true,
+        message: "Unauthorized",
+        data: "The user is not login."
       }.to_json, :status => 401
     end
 

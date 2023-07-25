@@ -46,16 +46,7 @@ RSpec.describe "Auth::Passwords", type: :request do
 
     example "failed to update password: not sign in" do
       put "/auth/member/password",params:{password:"Example124",password_confirmation:"Example124", current_password:"Example123"}
-      expect(response).to have_http_status(401)
-      expect(JSON.parse(response.body)).to eq(
-        JSON.parse( 
-          {
-            "error": true,
-            "message": "failed to update password",
-            "data": "Unauthorized."
-          }.to_json
-        )
-      ) 
+      expect_unauthorized(response)
     end
 
     example "failed to update password: invalid password format" do
