@@ -95,8 +95,7 @@ RSpec.describe "Auth::Sessions", type: :request do
     example "failed to sign in with unconfirmed email" do
       m=Member.new(user_id:"new",name:"new",phone:"0900000000",email:"example3@gmail.com",password:"Example123", is_login_mail: true)
       m.save
-      post "/auth/member/sign_in",
-      params:{email: "example3@gmail.com", password:"Example123"}
+      post "/auth/member/sign_in",params:{email: "example3@gmail.com", password:"Example123"}
       expect(response).to have_http_status(401)
       expect(JSON.parse(response.body)).to eq(
         JSON.parse(
