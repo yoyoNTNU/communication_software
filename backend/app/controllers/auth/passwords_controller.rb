@@ -38,7 +38,7 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
           error: true,
           message: "failed to sent reset password email",
           data: I18n.t('devise_token_auth.passwords.missing_email')
-      }.to_json, :status => 401
+      }.to_json, :status => 400
     end
 
     def render_create_error_missing_redirect_url
@@ -46,7 +46,19 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
           error: true,
           message: "failed to sent reset password email",
           data: I18n.t('devise_token_auth.passwords.missing_redirect_url')
-      }.to_json, :status => 401
+      }.to_json, :status => 400
+    end
+
+    def render_not_found_error
+      if Devise.paranoid
+        render_create_success
+      else
+        render json: {
+          error: true,
+          message: "failed to sent reset password email",
+          data: "Unable to find user with email '#{@email}'."
+      }.to_json, :status => 400
+      end
     end
 
     def render_create_success
@@ -59,12 +71,11 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
 
     def render_update_error_unauthorized
       render json: {
-          error: true,
-          message: "failed to update password",
-          data:"Unauthorized."
+        error: true,
+        message: "Unauthorized",
+        data: "The user is not login."
       }.to_json, :status => 401
     end
-
 
     def render_update_error_missing_password
       render json: {

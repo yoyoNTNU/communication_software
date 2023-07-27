@@ -8,7 +8,7 @@ end
 
 RSpec.describe "Api::Members", type: :request do
   before do
-    m=Member.new(user_id:"test",name:"測試",phone:"0912345678",email:"example@gmail.com",password:"Example123")
+    m=Member.new(user_id:"test",name:"測試",phone:"0912345678",email:"example@gmail.com",password:"Example123",is_login_mail:true)
     m.skip_confirmation!
     m.save
     post "/auth/member/sign_in",params:{email:"example@gmail.com",password:"Example123"}
@@ -20,7 +20,7 @@ RSpec.describe "Api::Members", type: :request do
 
   describe "PATCH /api/member/info" do
     example "succeed to update member info" do
-      patch "/api/member/info",params:{photo:filepath,background:filepath,birthday:"2023/01/01",introduction:"我好師",name:"改名"},headers:@header
+      patch "/api/member/info",params:{photo:filepath,background:filepath,birthday:"2023/01/01",introduction:"我好師",name:"改名",is_login_mail:false},headers:@header
       expect(response).to have_http_status(200)
       expect(JSON.parse(response.body)).to eq(
         JSON.parse( 

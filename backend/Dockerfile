@@ -8,7 +8,7 @@ RUN bundle install
 COPY . /app
 RUN rake db:migrate && \
     rake db:seed
-
+ENTRYPOINT ["rails", "server", "-b", "0.0.0.0"]
 # 生產階段
 FROM ruby:3.1.2 AS production
 RUN mkdir /app
@@ -19,8 +19,5 @@ RUN bundle install --without development test
 COPY . /app
 RUN rake db:migrate assets:precompile && \
     rake db:seed
-
-# 最終階段
-FROM production AS final
-ENV RAILS_ENV production
 ENTRYPOINT ["rails", "server", "-b", "0.0.0.0"]
+
