@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :friend_requests
     mount_devise_token_auth_for 'Member', at: 'auth/member' ,controllers:{
       confirmations:      'auth/confirmations',
       registrations:      'auth/registrations',
