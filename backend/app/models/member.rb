@@ -20,4 +20,8 @@ class Member < ApplicationRecord
         errors.add(:password, "at least one uppercase, lowercase letter, number and can not include other special character")
       end
     end
+
+    def remove_friend(friend)
+      current_member.friends.destroy(friend)
+    end
 end

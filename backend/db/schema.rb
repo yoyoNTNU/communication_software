@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_27_044404) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_27_063820) do
   create_table "chatrooms", force: :cascade do |t|
     t.string "type_"
     t.integer "type_id"
@@ -35,6 +35,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_044404) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_friends_on_member_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer "member_id", null: false
+    t.integer "friend_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["member_id"], name: "index_friendships_on_member_id"
   end
 
   create_table "group_members", force: :cascade do |t|
@@ -106,6 +115,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_044404) do
   add_foreign_key "friend_requests", "friends"
   add_foreign_key "friend_requests", "users"
   add_foreign_key "friends", "members"
+  add_foreign_key "friendships", "friends"
+  add_foreign_key "friendships", "members"
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "members"
   add_foreign_key "messages", "chatrooms"

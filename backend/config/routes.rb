@@ -11,5 +11,7 @@ Rails.application.routes.draw do
     get 'member/info'=> 'member#show'
     patch 'member/info' => 'member#update'
     resources :friend_requests
+    get 'friends/index' => 'friends#index'
+    delete 'friends/index' => 'friends#destroy'
   end
 end
