@@ -7,6 +7,7 @@ class Friendship < ApplicationRecord
   validates :user, presence: true
   validates :friend, presence: true, uniqueness: { scope: :member }
   validate :not_self
+  mount_uploader :background , FriendUploader
 
   private
   def not_self
