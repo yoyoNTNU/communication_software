@@ -3,8 +3,9 @@ p "clean DB"
 
 Message.destroy_all
 Chatroom.destroy_all
-Friend.destroy_all
-Group_member.destroy_all
+Friendship.destroy_all
+FriendRequest.destroy_all
+GroupMember.destroy_all
 Group.destroy_all
 Member.destroy_all
 

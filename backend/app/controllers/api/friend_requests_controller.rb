@@ -16,9 +16,7 @@ class Api::FriendRequestsController < ApplicationController
   end
 
   def create
-    friend = Member.find(params[:friend_id])
-    @friend_request = current_member.friend_requests.new(friend: friend)
-
+    @friend_request = current_member.friend_requests.new(request_params)
     if @friend_request.save
       render json: {
         error: false,
@@ -55,5 +53,9 @@ class Api::FriendRequestsController < ApplicationController
 
   def set_friend_request
     @friend_request = FriendRequest.find(params[:id])
+  end
+
+  def request_params
+    params.permit(:friend_id, :content)
   end
 end
