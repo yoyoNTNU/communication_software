@@ -4,8 +4,7 @@ class Friendship < ApplicationRecord
 
   belongs_to :member
   belongs_to :friend, class_name: 'Member'
-  validates :user, presence: true
-  validates :friend, presence: true, uniqueness: { scope: :member }
+  validates :friend, uniqueness: { scope: :member }
   validate :not_self
   mount_uploader :background , FriendUploader
 
