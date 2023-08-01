@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   namespace :api do
     get 'member/info'=> 'member#show'
     patch 'member/info' => 'member#update'
+    get 'search/phone' => 'search#by_phone'
+    get 'search/user_id' => 'search#by_user_id'
     resources :friend_requests ,only:[:index,:create] do
       post 'accept' => 'friend_requests#accept'
       delete 'reject' =>'friend_requests#reject'
