@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/pages/friends_list.dart';
+import 'package:proj/pages/groups_list.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -71,6 +72,7 @@ class ProfilePage extends StatelessWidget {
 
             // TODO: 好友列表 and 群組列表
             const FriendsList(),
+            const GroupsList(),
 
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
