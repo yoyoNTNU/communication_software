@@ -11,11 +11,14 @@ Rails.application.routes.draw do
     get 'member/info'=> 'member#show'
     patch 'member/info' => 'member#update'
     resources :friend_requests ,only:[:index,:create] do
-      post '/accept' => 'friend_requests#accept'
-      delete '/reject' =>'friend_requests#reject'
-      delete '/' =>'friend_requests#destroy'
+      post 'accept' => 'friend_requests#accept'
+      delete 'reject' =>'friend_requests#reject'
+      delete '' =>'friend_requests#destroy'
     end
-    get 'friends/index' => 'friends#index'
-    delete 'friends/index' => 'friends#destroy'
+    resources :friends ,only:[:index] do
+      get 'check' => 'friends#check'
+      patch '' => 'friends#update'
+      delete '' => 'friends#destroy'
+    end
   end
 end

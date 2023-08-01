@@ -1,4 +1,5 @@
 class Friendship < ApplicationRecord
+  before_create :set_default_nickname
   after_create :create_inverse_relationship
   after_destroy :destroy_inverse_relationship
 
@@ -20,5 +21,9 @@ class Friendship < ApplicationRecord
   def destroy_inverse_relationship
     friendship = friend.friendships.find_by(friend: member)
     friendship.destroy if friendship
+  end
+
+  def set_default_nickname
+    self.nickname=Member.find(self.friend_id).name
   end
 end
