@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/pages/profile.dart';
-
-import '../pages/chatroom.dart';
+import 'package:proj/pages/chatroom.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
