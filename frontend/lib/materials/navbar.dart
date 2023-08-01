@@ -41,5 +41,3 @@ class _NavBarState extends State<NavBar> {
     );
   }
 }
-
-void pass() {}
