@@ -9,8 +9,8 @@ class Api::FriendRequestsController < ApplicationController
       error: false,
       message: "succeed to get all sent and received requests",
       data: {
-        incoming: @incoming,
-        outgoing: @outgoing
+        received: @incoming,
+        send: @outgoing
       }
     }.to_json, status: 200
   end
@@ -33,26 +33,57 @@ class Api::FriendRequestsController < ApplicationController
   end
 
   def destroy
-    @friend_request.destroy
-    render json: {
-      message: "succeed to delete request",
-      data: {}
-    }, status: 200
+    if @friend_request.member!=current_member
+      return_not_permit_action
+    else
+      @friend_request.destroy
+      render json: {
+        error: false,
+        message: "succeed to delete request",
+        data: {}
+      }.to_json, status: 200
+    end
   end
 
   def accept
-    member.friends << friend
-    destroy
+    if @friend_request.friend!=current_member
+      return_not_permit_action
+    else
+      @friend=Friendship.create!(member:@friend_request.member,friend:@friend_request.friend)
+      @friend_request.destroy
+      render json: {
+        error: false,
+        message: "succeed to accept request",
+        data: "#{@friend.member.name} and #{@friend.friend.name} become friends."
+      }.to_json, status: 200
+    end
   end
 
-  def update
-    @friend_request.accept
-    head :no_content
+  def reject
+    if @friend_request.friend!=current_member
+      return_not_permit_action
+    else
+      @friend_request.destroy
+      render json: {
+        error: false,
+        message: "succeed to reject request",
+        data: {}
+      }.to_json, status: 200
+    end
   end
+  
   private
 
   def set_friend_request
-    @friend_request = FriendRequest.find(params[:id])
+    @friend_request = FriendRequest.find_by(id:params[:friend_request_id])
+    if !@friend_request
+      render json: {
+        error: true,
+        message: "failed to get specific request",
+        data: {}
+      }.to_json, status: 400
+      return
+    end
   end
 
   def request_params

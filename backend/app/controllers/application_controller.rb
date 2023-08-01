@@ -19,4 +19,12 @@ class ApplicationController < ActionController::Base
       }.to_json, :status => 401
     end
   end
+
+  def return_not_permit_action
+    render :json => {
+      error: true,
+      message: "Unauthorized",
+      data: "User not permitted for this action."
+    }.to_json, :status => 401
+  end
 end
