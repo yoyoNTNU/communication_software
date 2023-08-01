@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:proj/pages/profile.dart';
 
+import '../pages/chatroom.dart';
+
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
 
@@ -34,11 +36,7 @@ class _NavBarState extends State<NavBar> {
       ),
       body: <Widget>[
         const ProfilePage(),
-        Container(
-          color: Colors.blue,
-          alignment: Alignment.center,
-          child: const Text('聊天室頁面'),
-        ),
+        const ChatroomPage(),
       ][currentPageIndex],
     );
   }
