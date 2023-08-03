@@ -5,7 +5,6 @@ WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install --without development test
-ENV RAILS_ENV=production
 COPY . /app
 RUN rake db:migrate assets:precompile && \
     rake db:seed
