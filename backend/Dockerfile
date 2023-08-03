@@ -1,23 +1,14 @@
-# 開發階段
-FROM ruby:3.1.2 AS development
-RUN mkdir /app
-WORKDIR /app
-COPY Gemfile /app/Gemfile
-COPY Gemfile.lock /app/Gemfile.lock
-RUN bundle install
-COPY . /app
-RUN rake db:migrate && \
-    rake db:seed
-ENTRYPOINT ["rails", "server", "-b", "0.0.0.0"]
-# 生產階段
-FROM ruby:3.1.2 AS production
+FROM ruby:3.1.2
+RUN apt-get update && apt-get install -y cron
 RUN mkdir /app
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install --without development test
+ENV RAILS_ENV=production
 COPY . /app
 RUN rake db:migrate assets:precompile && \
     rake db:seed
-ENTRYPOINT ["rails", "server", "-b", "0.0.0.0"]
-
+COPY run_app.sh /app/run_app.sh
+RUN chmod +x /app/run_app.sh
+CMD ["/app/run_app.sh"]
