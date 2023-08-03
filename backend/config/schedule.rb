@@ -7,7 +7,7 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every 14.minutes do
+every 5.minutes do
   command "curl https://express-message-development.onrender.com"
 end
 # every 2.hours do
