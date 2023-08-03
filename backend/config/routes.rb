@@ -22,5 +22,7 @@ Rails.application.routes.draw do
       patch '' => 'friends#update'
       delete '' => 'friends#destroy'
     end
+
+    resources :group
   end
 end

@@ -14,6 +14,7 @@ class Member < ApplicationRecord
     has_many :friends, through: :friendships
     has_many :messages ,dependent: :destroy
     has_many :group_members ,dependent: :destroy
+    has_many :groups , throught: :group_members
     mount_uploader :photo , MemberPhotoUploader
     mount_uploader :background , MemberBackUploader
 
