@@ -9,6 +9,7 @@ end
 RSpec.describe "Auth::Resgistrations", type: :request do
 	describe 'POST /auth/member' do 
 		example 'succeed to sign up' do
+      #註冊
 			post '/auth/member', params:{user_id:"test", email:"example@gmail.com", password:"Example123", password_confirmation:"Example123", name:"test", phone:"0987654321"}
 			expect(response).to have_http_status(200)
 			parsed_body = JSON.parse(response.body)
@@ -18,7 +19,40 @@ RSpec.describe "Auth::Resgistrations", type: :request do
 			expect(parsed_body["data"]["phone"]).to eq("0987654321")
 			expect(parsed_body["error"]).to eq(false) 
 			expect(parsed_body["message"]).to eq("succeed to sign up")
-		end
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.first.to).to include("example@gmail.com")
+      expect(ActionMailer::Base.deliveries.first.subject).to eq("【Express Message】帳號啟用確認信")
+      #未驗證登入失敗
+      post "/auth/member/sign_in",params:{email: "example@gmail.com", password:"Example123"}
+      expect(response).to have_http_status(401)
+      expect(JSON.parse(response.body)).to eq(
+        JSON.parse(
+          {
+            "error": true,
+            "message": "failed to sign in",
+            "data": "A confirmation email was sent to your account at 'example@gmail.com'. You must follow the instructions in the email before your account can be activated"
+          }.to_json
+        )
+      )
+      expect(ActionMailer::Base.deliveries.count).to eq(2)
+      expect(ActionMailer::Base.deliveries.last.to).to include("example@gmail.com")
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("【Express Message】登入失敗通知")
+      #驗證後登入成功
+      confirmation_token = Member.first.confirmation_token
+      get '/auth/member/confirmation',params:{confirmation_token:confirmation_token}
+      post "/auth/member/sign_in",params:{email: "example@gmail.com", password:"Example123"}
+      expect(response).to have_http_status(200)
+      parsed_body = JSON.parse(response.body)
+      expect(parsed_body["data"]["user_id"]).to eq("test")
+			expect(parsed_body["data"]["name"]).to eq("test")
+			expect(parsed_body["data"]["email"]).to eq("example@gmail.com")
+			expect(parsed_body["data"]["phone"]).to eq("0987654321")
+      expect(parsed_body["error"]).to eq(false) 
+      expect(parsed_body["message"]).to eq("succeed to sign in")
+      expect(ActionMailer::Base.deliveries.count).to eq(3)
+      expect(ActionMailer::Base.deliveries.last.to).to include("example@gmail.com")
+      expect(ActionMailer::Base.deliveries.last.subject).to eq("【Express Message】登入成功通知")
+    end
 
 		example 'failed to sign up: invalid password format' do
 			post '/auth/member', params:{user_id:"test", email:"example@gmail.com", password:"111111", password_confirmation:"111111", name:"test", phone:"0987654321"}
@@ -62,7 +96,7 @@ RSpec.describe "Auth::Resgistrations", type: :request do
 			)
 		end
 
-		example 'failed to sign up: password confirmation doesn\'t match password' do
+		example 'failed to sign up: password confirmation does not match password' do
 			post '/auth/member', params:{user_id:"test", email:"example@gmail.com", password:"Example1", password_confirmation:"Example2", name:"test", phone:"0987654321"}
 			expect(response).to have_http_status(401)
 			expect(JSON.parse(response.body)).to eq(
@@ -83,7 +117,7 @@ RSpec.describe "Auth::Resgistrations", type: :request do
 			)
 		end
 
-		example 'failed to sign up: fields can\'t be blank' do
+		example 'failed to sign up: fields can not be blank' do
 			post '/auth/member', params:{user_id:"", email:"", password:"Example1", password_confirmation:"Example1", name:"", phone:""}
 			expect(response).to have_http_status(401)
 			expect(JSON.parse(response.body)).to eq(

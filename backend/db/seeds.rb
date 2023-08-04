@@ -1,7 +1,29 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+p "DB seeding"
+p "clean DB"
+
+Message.destroy_all
+Chatroom.destroy_all
+Friendship.destroy_all
+FriendRequest.destroy_all
+GroupMember.destroy_all
+Group.destroy_all
+Member.destroy_all
+
+p "create member"
+m=Member.new(user_id:"test1",name:"範例1號",phone:"0900000000",email:"example1@gmail.com",password:"Example123",is_login_mail:true)
+m.skip_confirmation!
+m.save
+m=Member.new(user_id:"test2",name:"範例2號",phone:"0911111111",email:"example2@gmail.com",password:"Example123",is_login_mail:true)
+m.skip_confirmation!
+m.save
+m=Member.new(user_id:"test3",name:"範例3號",phone:"0922222222",email:"example3@gmail.com",password:"Example123",is_login_mail:true)
+m.skip_confirmation!
+m.save
+m=Member.new(user_id:"test4",name:"範例4號",phone:"0933333333",email:"example4@gmail.com",password:"Example123",is_login_mail:true)
+m.skip_confirmation!
+m.save
+m=Member.new(user_id:"test5",name:"範例5號",phone:"0944444444",email:"example5@gmail.com",password:"Example123",is_login_mail:true)
+m.skip_confirmation!
+m.save
+
+p "DB seeded"
