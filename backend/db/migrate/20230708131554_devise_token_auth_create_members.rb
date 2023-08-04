@@ -44,6 +44,7 @@ class DeviseTokenAuthCreateMembers < ActiveRecord::Migration[7.0]
         t.string :introduction
         t.string :name
         t.string :phone
+        t.boolean :is_login_mail ,default:true
 
         ## Tokens
         t.text :tokens

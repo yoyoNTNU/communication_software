@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_17_053051) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_27_084116) do
   create_table "chatrooms", force: :cascade do |t|
     t.string "type_"
     t.integer "type_id"
@@ -18,14 +18,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_053051) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "friends", force: :cascade do |t|
+  create_table "friend_requests", force: :cascade do |t|
     t.integer "member_id", null: false
-    t.integer "friend_id"
+    t.integer "friend_id", null: false
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["friend_id"], name: "index_friend_requests_on_friend_id"
+    t.index ["member_id"], name: "index_friend_requests_on_member_id"
+  end
+
+  create_table "friendships", force: :cascade do |t|
+    t.integer "member_id", null: false
+    t.integer "friend_id", null: false
     t.string "nickname"
     t.string "background"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["member_id"], name: "index_friends_on_member_id"
+    t.index ["friend_id"], name: "index_friendships_on_friend_id"
+    t.index ["member_id"], name: "index_friendships_on_member_id"
   end
 
   create_table "group_members", force: :cascade do |t|
@@ -71,10 +82,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_053051) do
     t.string "introduction"
     t.string "name"
     t.string "phone"
+    t.boolean "is_login_mail", default: true
     t.text "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_login_mail", default: true
     t.index ["confirmation_token"], name: "index_members_on_confirmation_token", unique: true
     t.index ["email"], name: "index_members_on_email", unique: true
     t.index ["reset_password_token"], name: "index_members_on_reset_password_token", unique: true
@@ -94,7 +105,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_17_053051) do
     t.index ["member_id"], name: "index_messages_on_member_id"
   end
 
-  add_foreign_key "friends", "members"
+  add_foreign_key "friend_requests", "members"
+  add_foreign_key "friend_requests", "members", column: "friend_id"
+  add_foreign_key "friendships", "members"
+  add_foreign_key "friendships", "members", column: "friend_id"
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "members"
   add_foreign_key "messages", "chatrooms"

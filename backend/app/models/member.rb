@@ -6,9 +6,12 @@ class Member < ApplicationRecord
           :confirmable
     include DeviseTokenAuth::Concerns::User
     validates_uniqueness_of :user_id,:phone
-    validates :user_id, :name,:phone, presence: true
+    validates :user_id, :name, :phone, presence: true
     validate :password_complexity
-    has_many :friends ,dependent: :destroy
+    has_many :friend_requests, dependent: :destroy
+    has_many :pending_friends, through: :friend_requests, source: :friend
+    has_many :friendships, dependent: :destroy
+    has_many :friends, through: :friendships
     has_many :messages ,dependent: :destroy
     has_many :group_members ,dependent: :destroy
     mount_uploader :photo , MemberPhotoUploader
