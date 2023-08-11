@@ -81,5 +81,6 @@ Rails.application.configure do
   config.action_cable.disable_request_forgery_protection = true
 
   config.hosts << "express-message-development.onrender.com"
+  config.hosts << "express-message-production.onrender.com"
   config.hosts << "127.0.0.1" # Render health check
 end
