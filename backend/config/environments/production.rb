@@ -62,7 +62,7 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "backend_production"
 
-  config.action_mailer.default_url_options = {host:"https://express-message-production.onrender.com",from: 'Express Message <noreply@express.message>'}
+  config.action_mailer.default_url_options = {host:"https://express-message-production-wp18.onrender.com",from: 'Express Message <noreply@express.message>'}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
@@ -107,6 +107,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.hosts << "express-message-development.onrender.com"
-  config.hosts << "express-message-production.onrender.com"
+  config.hosts << "express-message-production-wp18.onrender.com"
   config.hosts << "127.0.0.1" # Render health check
 end

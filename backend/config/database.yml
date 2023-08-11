@@ -24,7 +24,7 @@ test:
 production:
   adapter: mysql2
   encoding: utf8
-  database: em_pro_db  # 使用你的 MySQL 正式資料庫名稱
-  username: emteam
+  database: productiondb  # 使用你的 MySQL 正式資料庫名稱
+  username: emproduction
   password: expressmessage2023
   host: db4free.net  # 使用你在 Render 上部署的 MySQL 主機名稱或 IP 地址
