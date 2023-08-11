@@ -6,8 +6,7 @@ COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
 RUN bundle install --without development test
 COPY . /app
-RUN rake db:migrate assets:precompile && \
-    rake db:seed
+RUN rake db:migrate assets:precompile
 COPY run_app.sh /app/run_app.sh
 RUN chmod +x /app/run_app.sh
 CMD ["/app/run_app.sh"]
