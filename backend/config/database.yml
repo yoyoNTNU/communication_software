@@ -15,6 +15,7 @@ development:
   username: emteam
   password: expressmessage2023
   host: db4free.net  # 使用你在 Render 上部署的 MySQL 主機名稱或 IP 地址
+  timezone: "Asia/Taipei"
 
 test:
   <<: *default
@@ -28,3 +29,4 @@ production:
   username: emproduction
   password: expressmessage2023
   host: db4free.net  # 使用你在 Render 上部署的 MySQL 主機名稱或 IP 地址
+  timezone: "Asia/Taipei"
