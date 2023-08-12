@@ -1,5 +1,4 @@
 FROM ruby:3.1.2
-RUN apt-get update && apt-get install -y cron
 RUN mkdir /app
 WORKDIR /app
 COPY Gemfile /app/Gemfile
@@ -7,8 +6,5 @@ COPY Gemfile.lock /app/Gemfile.lock
 ENV RAILS_ENV=production
 RUN bundle install --without development test
 COPY . /app
-RUN rake db:migrate assets:precompile && \
-    rake db:seed
-COPY run_app.sh /app/run_app.sh
-RUN chmod +x /app/run_app.sh
+RUN rake db:migrate assets:precompile
 ENTRYPOINT ["rails", "server", "-b", "0.0.0.0"]
