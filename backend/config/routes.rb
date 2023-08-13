@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       delete '' => 'friends#destroy'
     end
 
-    resources :group
+    resources :groups, param: :name, only: [:show]
+    resources :groups, except: [:show]
   end
 end
