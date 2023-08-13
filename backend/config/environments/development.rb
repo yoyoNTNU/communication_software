@@ -1,7 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  routes.default_url_options[:host] = 'localhost:3000'
+  routes.default_url_options[:host] = 'https://express-message-development.onrender.com'
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -37,7 +37,7 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  config.action_mailer.default_url_options = {host: "127.0.0.1:3000",from: 'Express Message <noreply@express.message>'}
+  config.action_mailer.default_url_options = {host:"https://express-message-development.onrender.com",from: 'Express Message <noreply@express.message>'}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'smtp.gmail.com',
@@ -81,5 +81,6 @@ Rails.application.configure do
   config.action_cable.disable_request_forgery_protection = true
 
   config.hosts << "express-message-development.onrender.com"
+  config.hosts << "express-message-production-wp18.onrender.com"
   config.hosts << "127.0.0.1" # Render health check
 end

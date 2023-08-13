@@ -8,6 +8,6 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: NavBar());
+    return MaterialApp(home: NavBar());
   }
 }
