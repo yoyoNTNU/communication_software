@@ -10,14 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_16_050647) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_16_093214) do
+  create_table "chatroom_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "member_id", null: false
+    t.bigint "chatroom_id", null: false
+    t.string "background"
+    t.boolean "isPinned", default: false
+    t.boolean "isDisabled", default: true
+    t.boolean "isMuted", default: false
+    t.datetime "delete_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chatroom_id"], name: "index_chatroom_members_on_chatroom_id"
+    t.index ["member_id"], name: "index_chatroom_members_on_member_id"
+  end
+
   create_table "chatrooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "type_"
     t.integer "type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "isDisabled", default: false
-    t.boolean "isPinned", default: false
   end
 
   create_table "friend_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -34,7 +46,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_050647) do
     t.bigint "member_id", null: false
     t.bigint "friend_id", null: false
     t.string "nickname"
-    t.string "background"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
@@ -44,7 +55,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_050647) do
   create_table "group_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "member_id", null: false
     t.bigint "group_id", null: false
-    t.string "background"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_group_members_on_group_id"
@@ -94,6 +104,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_050647) do
     t.index ["uid", "provider"], name: "index_members_on_uid_and_provider", unique: true
   end
 
+  create_table "message_readers", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "member_id", null: false
+    t.bigint "message_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id"], name: "index_message_readers_on_member_id"
+    t.index ["message_id"], name: "index_message_readers_on_message_id"
+  end
+
   create_table "messages", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "chatroom_id", null: false
     t.bigint "member_id", null: false
@@ -103,19 +122,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_050647) do
     t.boolean "isPinned", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "isRead", default: false
     t.bigint "reply_to_id"
     t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
     t.index ["member_id"], name: "index_messages_on_member_id"
     t.index ["reply_to_id"], name: "index_messages_on_reply_to_id"
   end
 
+  add_foreign_key "chatroom_members", "chatrooms"
+  add_foreign_key "chatroom_members", "members"
   add_foreign_key "friend_requests", "members"
   add_foreign_key "friend_requests", "members", column: "friend_id"
   add_foreign_key "friendships", "members"
   add_foreign_key "friendships", "members", column: "friend_id"
   add_foreign_key "group_members", "groups"
   add_foreign_key "group_members", "members"
+  add_foreign_key "message_readers", "members"
+  add_foreign_key "message_readers", "messages"
   add_foreign_key "messages", "chatrooms"
   add_foreign_key "messages", "members"
   add_foreign_key "messages", "messages", column: "reply_to_id"

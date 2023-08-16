@@ -7,7 +7,6 @@ class Friendship < ApplicationRecord
   belongs_to :friend, class_name: 'Member'
   validates :friend, uniqueness: { scope: :member }
   validate :not_self
-  mount_uploader :background , FriendUploader
 
   private
   def not_self

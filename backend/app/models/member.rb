@@ -15,6 +15,8 @@ class Member < ApplicationRecord
     has_many :messages ,dependent: :destroy
     has_many :group_members ,dependent: :destroy
     has_many :groups , through: :group_members
+    has_many :chatroom_members,dependent: :destroy
+    has_many :message_readers, dependent: :destroy
     mount_uploader :photo , MemberPhotoUploader
     mount_uploader :background , MemberBackUploader
 
