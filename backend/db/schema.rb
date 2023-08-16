@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_27_084116) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_16_050647) do
   create_table "chatrooms", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "type_"
     t.integer "type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "isDisabled", default: false
+    t.boolean "isPinned", default: false
   end
 
   create_table "friend_requests", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -98,11 +100,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_084116) do
     t.string "type_"
     t.text "content"
     t.string "photo"
-    t.boolean "isPinned"
+    t.boolean "isPinned", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "isRead", default: false
+    t.bigint "reply_to_id"
     t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
     t.index ["member_id"], name: "index_messages_on_member_id"
+    t.index ["reply_to_id"], name: "index_messages_on_reply_to_id"
   end
 
   add_foreign_key "friend_requests", "members"
@@ -113,4 +118,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_084116) do
   add_foreign_key "group_members", "members"
   add_foreign_key "messages", "chatrooms"
   add_foreign_key "messages", "members"
+  add_foreign_key "messages", "messages", column: "reply_to_id"
 end
