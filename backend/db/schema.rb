@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_16_093214) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_17_052750) do
   create_table "chatroom_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "member_id", null: false
     t.bigint "chatroom_id", null: false
@@ -50,15 +50,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_093214) do
     t.datetime "updated_at", null: false
     t.index ["friend_id"], name: "index_friendships_on_friend_id"
     t.index ["member_id"], name: "index_friendships_on_member_id"
-  end
-
-  create_table "group_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "member_id", null: false
-    t.bigint "group_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_group_members_on_group_id"
-    t.index ["member_id"], name: "index_group_members_on_member_id"
   end
 
   create_table "groups", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -134,8 +125,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_16_093214) do
   add_foreign_key "friend_requests", "members", column: "friend_id"
   add_foreign_key "friendships", "members"
   add_foreign_key "friendships", "members", column: "friend_id"
-  add_foreign_key "group_members", "groups"
-  add_foreign_key "group_members", "members"
   add_foreign_key "message_readers", "members"
   add_foreign_key "message_readers", "messages"
   add_foreign_key "messages", "chatrooms"

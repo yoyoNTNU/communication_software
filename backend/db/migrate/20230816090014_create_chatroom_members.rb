@@ -7,7 +7,7 @@ class CreateChatroomMembers < ActiveRecord::Migration[7.0]
       t.boolean :isPinned ,default:false #個人是否置頂此聊天室
       t.boolean :isDisabled ,default:true #個人是否隱藏此聊天室
       t.boolean :isMuted , default:false #個人是否靜音此聊天室
-      t.datetime :delete_at #何時刪除此聊天室
+      t.datetime :delete_at #個人何時刪除此聊天室
       t.timestamps
     end
   end
