@@ -28,6 +28,7 @@ class Api::GroupsController < ApplicationController
   end
 
   def create
+    #只有創建群組的人要在建立群組時建立CM，其他人等邀請的時候寫在controller
     @group = Group.new(group_params)
 
     if @group.save
