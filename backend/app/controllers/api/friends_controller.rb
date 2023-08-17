@@ -92,6 +92,6 @@ class Api::FriendsController < ApplicationController
   end
 
   def friend_params
-    params.permit(:background, :nickname)
+    params.permit(:nickname)
   end
 end

@@ -1,7 +1,7 @@
 class Group < ApplicationRecord
 	validates :name, presence: true
-	has_many :group_members,dependent: :destroy
-	has_many :members, through: :group_members
+  after_create :create_chatroom
+  after_destroy :destroy_chatroom
 	mount_uploader :photo , GroupPhotoUploader
 	mount_uploader :background , GroupBackUploader
 
@@ -17,5 +17,15 @@ class Group < ApplicationRecord
 		groups
 	end
 
+
+  private
+  def create_chatroom 
+    c=Chatroom.create(type_:"group",type_id:id)
+  end
+
+  def destroy_chatroom
+    c=Chatroom.find_by(type_:"group",type_id:id)
+    c.destroy if c
+  end
 	
 end
