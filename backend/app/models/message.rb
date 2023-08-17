@@ -3,6 +3,8 @@ class Message < ApplicationRecord
     validate  :check_message_exist
     belongs_to :member
     belongs_to :chatroom
+    belongs_to :reply_to, class_name: 'Message', optional: true
+    has_many :message_readers, dependent: :destroy
     mount_uploader :photo , MessageUploader
 
     def check_message_exist
