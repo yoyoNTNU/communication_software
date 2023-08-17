@@ -1,6 +1,5 @@
 class Group < ApplicationRecord
 	validates :name, presence: true
-	has_many :members, through: :group_members
   after_create :create_chatroom
   after_destroy :destroy_chatroom
 	mount_uploader :photo , GroupPhotoUploader
