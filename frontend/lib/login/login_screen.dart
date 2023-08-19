@@ -1,3 +1,4 @@
+import 'package:express_message/style.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
@@ -11,7 +12,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFE6F0F5),
+      color: AppStyle.blue[50],
       padding: const EdgeInsets.only(
         top: 44,
         left: 24,
@@ -52,16 +53,10 @@ class Logo extends StatelessWidget {
             height: 120,
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Instant Communication, Delivered Express',
+          Text(
+            'Express Message',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF195374),
-              fontSize: 16,
-              fontFamily: 'Noto Sans TC',
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.40,
-            ),
+            style: AppStyle.header(level: 1, color: AppStyle.blue),
           ),
         ],
       ),
@@ -77,13 +72,13 @@ class DialogBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      decoration: const BoxDecoration(
-        color: Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+      decoration: BoxDecoration(
+        color: AppStyle.white,
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
         boxShadow: [
           BoxShadow(
-            color: Color(0x33000000),
-            offset: Offset(0, 2),
+            color: AppStyle.black.withOpacity(0.3),
+            offset: const Offset(0, 2),
             blurRadius: 4,
             spreadRadius: 0,
           ),
@@ -91,7 +86,7 @@ class DialogBox extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(title),
+          Text(title, style: AppStyle.header(level: 2)),
           const SizedBox(height: 8),
           content,
         ],
