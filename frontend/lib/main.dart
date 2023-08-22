@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import './materials/navbar.dart';
+import 'package:express_message/login/login_screen.dart';
+
+// Define http host name
+const String host = 'https://express-message-development.onrender.com';
 
 void main() => runApp(const ChatApp());
 
@@ -8,6 +12,6 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: NavBar());
+    return const MaterialApp(home: Login());
   }
 }
