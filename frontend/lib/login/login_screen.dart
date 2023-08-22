@@ -46,19 +46,21 @@ class _LoginState extends State<Login> {
                           errorText: null,
                           isPassword: true),
                       const SizedBox(height: 16),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Buttons
                           ElevatedButton(
                             onPressed: null,
-                            child: Text("登入"),
+                            style: AppStyle.primaryBtn(),
+                            child: const Text("登入"),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           // Outline Button
                           OutlinedButton(
                             onPressed: null,
-                            child: Text("忘記密碼"),
+                            style: AppStyle.primaryBtn(),
+                            child: const Text("忘記密碼"),
                           ),
                         ],
                       ),

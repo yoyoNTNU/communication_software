@@ -85,10 +85,10 @@ class AppStyle {
           FontWeight weight = FontWeight.w600}) =>
       TextStyle(
         color: color,
-        fontSize: 14 - level * 4.0,
+        fontSize: 18 - level * 4.0,
         fontFamily: 'NotoSansTC',
         fontWeight: weight,
-        letterSpacing: (14 - level * 4.0) * 0.16,
+        letterSpacing: (18 - level * 4.0) * 0.16,
       );
   static TextStyle info(
           {int level = 1,
@@ -100,5 +100,34 @@ class AppStyle {
         fontFamily: 'NotoSansTC',
         fontWeight: weight,
         letterSpacing: (12 - level * 2.0) * 0.04,
+      );
+
+  // Define Button Style
+  static ButtonStyle primaryBtn() => ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade300;
+            }
+            if (states.contains(MaterialState.pressed)) return AppStyle.blue;
+            return AppStyle.teal;
+          },
+        ),
+        foregroundColor: const MaterialStatePropertyAll<Color>(AppStyle.white),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.caption(color: AppStyle.gray.shade100);
+            } else {
+              AppStyle.caption(color: AppStyle.white);
+            }
+          },
+        ),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
       );
 }
