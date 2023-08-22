@@ -1,4 +1,4 @@
-class FriendUploader < CarrierWave::Uploader::Base
+class ChatroomMemberUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick

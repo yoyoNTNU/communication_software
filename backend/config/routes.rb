@@ -22,5 +22,8 @@ Rails.application.routes.draw do
       patch '' => 'friends#update'
       delete '' => 'friends#destroy'
     end
+
+    resources :groups, param: :name, only: [:show]
+    resources :groups, except: [:show]
   end
 end

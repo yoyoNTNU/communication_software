@@ -33,6 +33,7 @@ flutter:
   assets:
     # Images
     - assets/images/Mask.png
+    - assets/images/Background.png
     - assets/images/Avatar.jpg
     - assets/images/Logo.png
     # Icons

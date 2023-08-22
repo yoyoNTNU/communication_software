@@ -62,7 +62,22 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "backend_production"
 
+  config.action_mailer.default_url_options = {host:"https://express-message-production-wp18.onrender.com",from: 'Express Message <noreply@express.message>'}
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.gmail.com',
+    port: 587,
+    user_name: 'railssentemail@gmail.com',
+    password: 'osaaugzwohbnqota',
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+  config.action_mailer.perform_deliveries = true
+  # Don't care if the mailer can't send.
+  config.action_mailer.raise_delivery_errors = false
+
   config.action_mailer.perform_caching = false
+
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -92,5 +107,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.hosts << "express-message-development.onrender.com"
+  config.hosts << "express-message-production-wp18.onrender.com"
   config.hosts << "127.0.0.1" # Render health check
 end
