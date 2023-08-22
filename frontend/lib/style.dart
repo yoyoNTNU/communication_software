@@ -57,36 +57,48 @@ class AppStyle {
   static const Color teal = Color(0xFF40A8C4);
 
   // Define Text Style
-  static TextStyle header({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle header(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w500}) =>
       TextStyle(
         color: color,
         fontSize: 20.0 - level * 2.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w500,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (20.0 - level * 2.0) * 0.08,
       );
-  static TextStyle body({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle body(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w400}) =>
       TextStyle(
         color: color,
         fontSize: 16 - level * 2.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w400,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (20.0 - level * 2.0) * 0.04,
       );
-  static TextStyle caption({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle caption(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w600}) =>
       TextStyle(
         color: color,
         fontSize: 14 - level * 4.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w500,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (14 - level * 4.0) * 0.16,
       );
-  static TextStyle info({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle info(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w300}) =>
       TextStyle(
         color: color,
         fontSize: 14 - level * 2.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w400,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (12 - level * 2.0) * 0.04,
       );
 }
