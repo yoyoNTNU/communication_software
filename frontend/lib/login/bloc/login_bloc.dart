@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
-import 'package:express_message/main.dart';
+import 'package:proj/main.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

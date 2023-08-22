@@ -1,8 +1,8 @@
-import 'package:express_message/style.dart';
-import 'package:express_message/login/login_widget.dart';
+import 'package:proj/style.dart';
+import 'package:proj/login/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:express_message/login/bloc/login_bloc.dart';
+import 'package:proj/login/bloc/login_bloc.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
