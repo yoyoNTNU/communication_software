@@ -57,36 +57,77 @@ class AppStyle {
   static const Color teal = Color(0xFF40A8C4);
 
   // Define Text Style
-  static TextStyle header({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle header(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w500}) =>
       TextStyle(
         color: color,
         fontSize: 20.0 - level * 2.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w500,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (20.0 - level * 2.0) * 0.08,
       );
-  static TextStyle body({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle body(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w400}) =>
       TextStyle(
         color: color,
         fontSize: 16 - level * 2.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w400,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (20.0 - level * 2.0) * 0.04,
       );
-  static TextStyle caption({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle caption(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w600}) =>
       TextStyle(
         color: color,
-        fontSize: 14 - level * 4.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w500,
-        letterSpacing: (14 - level * 4.0) * 0.16,
+        fontSize: 18 - level * 4.0,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
+        letterSpacing: (18 - level * 4.0) * 0.16,
       );
-  static TextStyle info({int level = 1, Color color = AppStyle.black}) =>
+  static TextStyle info(
+          {int level = 1,
+          Color color = AppStyle.black,
+          FontWeight weight = FontWeight.w300}) =>
       TextStyle(
         color: color,
         fontSize: 14 - level * 2.0,
-        fontFamily: 'Noto Sans TC',
-        fontWeight: FontWeight.w400,
+        fontFamily: 'NotoSansTC',
+        fontWeight: weight,
         letterSpacing: (12 - level * 2.0) * 0.04,
+      );
+
+  // Define Button Style
+  static ButtonStyle primaryBtn() => ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade300;
+            }
+            if (states.contains(MaterialState.pressed)) return AppStyle.blue;
+            return AppStyle.teal;
+          },
+        ),
+        foregroundColor: const MaterialStatePropertyAll<Color>(AppStyle.white),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.caption(color: AppStyle.gray.shade100);
+            } else {
+              AppStyle.caption(color: AppStyle.white);
+            }
+          },
+        ),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
       );
 }
