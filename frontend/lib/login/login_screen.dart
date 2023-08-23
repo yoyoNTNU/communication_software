@@ -16,27 +16,27 @@ class _LoginState extends State<Login> {
   final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<LoginBloc, LoginState>(
-      builder: (context, state) {
-        if (state is LoginSuccess) {
-          Navigator.pushNamed(context, '/home');
-        }
-        return Material(
-          child: Container(
-            color: AppStyle.blue[50],
-            padding: const EdgeInsets.only(
-              top: 44,
-              left: 24,
-              right: 24,
-              bottom: 34,
-            ),
-            child: Center(
-              child: Column(
-                children: [
-                  const AppLogo(),
-                  BlocProvider(
-                    create: (context) => LoginBloc(),
-                    child: AppBox(
+    return BlocProvider(
+      create: (context) => LoginBloc(),
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          if (state is LoginSuccess) {
+            Navigator.popAndPushNamed(context, '/home');
+          }
+          return Material(
+            child: Container(
+              color: AppStyle.blue[50],
+              padding: const EdgeInsets.only(
+                top: 44,
+                left: 24,
+                right: 24,
+                bottom: 34,
+              ),
+              child: Center(
+                child: Column(
+                  children: [
+                    const AppLogo(),
+                    AppBox(
                         title: "使用者登入",
                         content: BlocBuilder<LoginBloc, LoginState>(
                           builder: (context, state) {
@@ -125,18 +125,19 @@ class _LoginState extends State<Login> {
                             );
                           },
                         )),
-                  ),
-                  const SizedBox(height: 32),
-                  const ElevatedButton(
-                    onPressed: null,
-                    child: Text("註冊"),
-                  )
-                ],
+                    const SizedBox(height: 32),
+                    ElevatedButton(
+                      onPressed: () =>
+                          Navigator.popAndPushNamed(context, '/home'),
+                      child: const Text("檢視主畫面(DEV)"),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
