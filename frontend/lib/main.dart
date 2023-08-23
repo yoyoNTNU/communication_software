@@ -12,6 +12,12 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: Login());
+    return MaterialApp(
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => const Login(),
+        '/home': (context) => const NavBar(),
+      },
+    );
   }
 }
