@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
@@ -16,9 +17,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(LoginLoading());
 
         final response = await http.post(
-          Uri(host: host, path: '/api/login'),
+          Uri(scheme: 'https', host: host, path: '/auth/member/sign_in'),
           body: {
-            'account': event.account,
+            'email': event.account,
             'password': event.password,
           },
         );
