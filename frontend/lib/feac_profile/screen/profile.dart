@@ -85,7 +85,7 @@ class ProfilePage extends StatelessWidget {
                   backgroundColor: Colors.white,
                 ),
                 icon: Image.asset('assets/icons/Sign_out_circle.png'),
-                onPressed: () {},
+                onPressed: () => Navigator.popAndPushNamed(context, '/login'),
                 label: const Text(
                   '登出',
                   textAlign: TextAlign.center,

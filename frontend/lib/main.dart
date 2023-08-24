@@ -3,7 +3,7 @@ import './materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
 
 // Define http host name
-const String host = 'https://express-message-development.onrender.com';
+const String host = 'express-message-development.onrender.com';
 
 void main() => runApp(const ChatApp());
 
@@ -12,6 +12,12 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: NavBar());
+    return MaterialApp(
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => const Login(),
+        '/home': (context) => const NavBar(),
+      },
+    );
   }
 }
