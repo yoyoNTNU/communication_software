@@ -42,6 +42,23 @@ flutter:
     - assets/icons/Table.png
     - assets/icons/Chat.png
     - assets/icons/Edit.png
+    - assets/icons/tap_check.png
+    - assets/icons/tap_search.png
+    - assets/icons/tap_sort.png
+    - assets/icons/untap_check.png
+    - assets/icons/untap_search.png
+    - assets/icons/untap_sort.png
+    - assets/icons/pin.png
+    - assets/icons/cancel_pin.png
+    - assets/icons/mute.png
+    - assets/icons/sound.png 
+    - assets/icons/view.png 
+    - assets/icons/delete.png 
+    - assets/icons/hide.png 
+
+    # Animations
+    - assets/animations/logo.gif
+    - assets/animations/loading.gif
   fonts:
     - family: NotoSansTC
       fonts:

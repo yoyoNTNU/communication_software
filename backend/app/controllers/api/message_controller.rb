@@ -3,6 +3,7 @@ class Api::MessageController < ApplicationController
 
   def sent_message
 
+
   end
 
   def sent_photo
@@ -28,4 +29,11 @@ class Api::MessageController < ApplicationController
   def index
     
   end
+
+  private
+
+  def message_params
+    params.permit(:type_, :content, :photo, :isPinned, :reply_to_id)
+  end
+
 end
