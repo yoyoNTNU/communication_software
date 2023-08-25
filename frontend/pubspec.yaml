@@ -21,6 +21,8 @@ dependencies:
   http: ^1.1.0
   logging: ^1.2.0
   meta: ^1.9.1
+  web_socket_channel: ^2.0.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -40,6 +42,23 @@ flutter:
     - assets/icons/Table.png
     - assets/icons/Chat.png
     - assets/icons/Edit.png
+    - assets/icons/tap_check.png
+    - assets/icons/tap_search.png
+    - assets/icons/tap_sort.png
+    - assets/icons/untap_check.png
+    - assets/icons/untap_search.png
+    - assets/icons/untap_sort.png
+    - assets/icons/pin.png
+    - assets/icons/cancel_pin.png
+    - assets/icons/mute.png
+    - assets/icons/sound.png 
+    - assets/icons/view.png 
+    - assets/icons/delete.png 
+    - assets/icons/hide.png 
+
+    # Animations
+    - assets/animations/logo.gif
+    - assets/animations/loading.gif
   fonts:
     - family: NotoSansTC
       fonts:
