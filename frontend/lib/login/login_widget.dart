@@ -18,9 +18,8 @@ class AppLogo extends StatelessWidget {
             width: 120,
             height: 120,
           ),
-          const SizedBox(height: 8),
           Text(
-            'Express Message',
+            'ExpressMessage',
             textAlign: TextAlign.center,
             style: AppStyle.header(level: 2, color: AppStyle.blue),
           ),

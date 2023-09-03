@@ -22,21 +22,18 @@ class _LoginState extends State<Login> {
       create: (context) => LoginBloc(),
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          if (state is LoginSuccess) {
-            Navigator.popAndPushNamed(context, '/home');
-          }
           return Material(
               child: Scaffold(
                   resizeToAvoidBottomInset: true,
                   body: Container(
-                      height: 2000,
+                      height: double.infinity,
                       color: AppStyle.blue[50],
                       child: SingleChildScrollView(
                         controller: _scrollController,
                         child: Container(
                           color: AppStyle.blue[50],
                           padding: const EdgeInsets.only(
-                            top: 44,
+                            top: 0,
                             left: 24,
                             right: 24,
                             bottom: 34,
@@ -149,8 +146,16 @@ class _LoginState extends State<Login> {
                                                 const SizedBox(width: 16),
                                                 // Outline Button
                                                 OutlinedButton(
-                                                  onPressed: null,
-                                                  style: AppStyle.primaryBtn(),
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(
+                                                        context, '/home');
+                                                  },
+                                                  style: AppStyle.primaryBtn(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      pressedColor:
+                                                          AppStyle.sea,
+                                                      textColor: AppStyle.teal),
                                                   child: const Text("忘記密碼"),
                                                 ),
                                               ],
@@ -163,7 +168,23 @@ class _LoginState extends State<Login> {
                                 ElevatedButton(
                                   onPressed: () => Navigator.popAndPushNamed(
                                       context, '/home'),
-                                  child: const Text("檢視主畫面(DEV)"),
+                                  style: AppStyle.primaryBtn(
+                                      backgroundColor: AppStyle.yellow,
+                                      pressedColor: AppStyle.yellow[300]!,
+                                      textColor: AppStyle.black),
+                                  child: const Text("註冊"),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "新用戶？點我註冊",
+                                  style: AppStyle.info(
+                                      level: 2, color: AppStyle.yellow[800]!),
+                                ),
+                                const SizedBox(height: 40),
+                                Text(
+                                  "Instant Communication, Delivered Express",
+                                  style: AppStyle.info(
+                                      level: 2, color: AppStyle.blue[700]!),
                                 )
                               ],
                             ),
