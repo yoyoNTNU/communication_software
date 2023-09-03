@@ -33,7 +33,7 @@ class _LoginState extends State<Login> {
                         child: Container(
                           color: AppStyle.blue[50],
                           padding: const EdgeInsets.only(
-                            top: 0,
+                            top: 44,
                             left: 24,
                             right: 24,
                             bottom: 34,
@@ -188,7 +188,7 @@ class _LoginState extends State<Login> {
                                   style: AppStyle.info(
                                       level: 2, color: AppStyle.yellow[800]!),
                                 ),
-                                const SizedBox(height: 40),
+                                const SizedBox(height: 87),
                                 Text(
                                   "Instant Communication, Delivered Express",
                                   style: AppStyle.info(
