@@ -23,6 +23,11 @@ dependencies:
   meta: ^1.9.1
   web_socket_channel: ^2.0.0
   intl: ^0.17.0
+  sqflite: ^2.0.0
+  path: ^1.8.0
+  path_provider: ^2.0.5
+  sqflite_common_ffi: ^2.3.0+2
+  sqlite3_flutter_libs: ^0.5.16
 
 dev_dependencies:
   flutter_lints: ^2.0.0

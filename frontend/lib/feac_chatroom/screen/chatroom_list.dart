@@ -160,7 +160,6 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     if (!widget.isPressed) {
       setState(() {
         middleWidth = screenWidth;
