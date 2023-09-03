@@ -57,12 +57,16 @@ class _LoginState extends State<Login> {
                                                   ? state.error
                                                   : null,
                                               onTap: () {
-                                                _scrollController.animateTo(
-                                                    _scrollController.position
-                                                        .maxScrollExtent,
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.easeInOut);
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  _scrollController.animateTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                });
                                               },
                                               onChanged: (value) {
                                                 context.read<LoginBloc>().add(
@@ -81,12 +85,16 @@ class _LoginState extends State<Login> {
                                                   ? state.error
                                                   : null,
                                               onTap: () {
-                                                _scrollController.animateTo(
-                                                    _scrollController.position
-                                                        .maxScrollExtent,
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.easeInOut);
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  _scrollController.animateTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                });
                                               },
                                               onChanged: (value) {
                                                 context.read<LoginBloc>().add(
