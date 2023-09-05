@@ -175,7 +175,7 @@ class _LoginState extends State<Login> {
                                 const SizedBox(height: 32),
                                 ElevatedButton(
                                   onPressed: () => Navigator.popAndPushNamed(
-                                      context, '/home'),
+                                      context, '/sign_up'),
                                   style: AppStyle.primaryBtn(
                                       backgroundColor: AppStyle.yellow,
                                       pressedColor: AppStyle.yellow[300]!,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj/signup/signup_screen.dart';
 import './materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
 import 'package:sqflite/sqflite.dart';
@@ -65,6 +66,7 @@ class ChatApp extends StatelessWidget {
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const NavBar(),
+        '/sign_up': (context) => const SignUp(),
       },
     );
   }

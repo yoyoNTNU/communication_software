@@ -109,7 +109,7 @@ class _AppTextFieldState extends State<AppTextField> {
               level: 3,
               // Set Color to blue if TextField is focused
               color: _focusNode.hasFocus
-                  ? AppStyle.blue.shade400
+                  ? AppStyle.blue[500]!
                   : AppStyle.gray.shade700,
               weight: FontWeight.w400),
         ),

@@ -28,6 +28,8 @@ dependencies:
   path_provider: ^2.0.5
   sqflite_common_ffi: ^2.3.0+2
   sqlite3_flutter_libs: ^0.5.16
+  intl_phone_number_input: ^0.7.3
+  flutter_countdown_timer: ^4.1.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -42,6 +44,7 @@ flutter:
     - assets/images/Background.png
     - assets/images/Avatar.jpg
     - assets/images/Logo.png
+    - assets/images/success_logo.png
     # Icons
     - assets/icons/Sign_out_circle.png
     - assets/icons/Table.png
@@ -60,6 +63,7 @@ flutter:
     - assets/icons/view.png 
     - assets/icons/delete.png 
     - assets/icons/hide.png 
+    - assets/icons/left.png
 
     # Animations
     - assets/animations/logo.gif
