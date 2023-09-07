@@ -23,7 +23,7 @@ class DatabaseHelper {
       await dir.create(recursive: true);
     }
     final path = p.join(dir.path, 'my_database.db');
-    print(path);
+    //print(path);
     return await openDatabase(
       path,
       version: 1,

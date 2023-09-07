@@ -34,6 +34,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           await DatabaseHelper.instance.setToken(token);
 
           emit(LoginSuccess());
+        } else if (data['data'].toString().startsWith("A")) {
+          emit(LoginConfirmFail());
         } else {
           emit(LoginFailure(error: data['message']));
         }
