@@ -239,6 +239,9 @@ class _AppTextFieldState extends State<AppTextField> {
           ),
         if (!widget.isPhone)
           TextField(
+            keyboardType: widget.labelText == "電子信箱"
+                ? TextInputType.emailAddress
+                : TextInputType.text,
             controller: widget.controller,
             onChanged: widget.onChanged,
             onTap: widget.onTap,
