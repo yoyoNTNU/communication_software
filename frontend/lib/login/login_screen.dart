@@ -112,19 +112,20 @@ class _LoginState extends State<Login> {
                                                     LoginState>(
                                                   builder: (context, state) {
                                                     return ElevatedButton(
-                                                      onPressed: () {
-                                                        context
-                                                            .read<LoginBloc>()
-                                                            .add(
-                                                              LoginButtonPressed(
-                                                                  account:
-                                                                      _accountController
-                                                                          .text,
-                                                                  password:
-                                                                      _passwordController
-                                                                          .text),
-                                                            );
-                                                      },
+                                                      onPressed:
+                                                          state is LoginLoading
+                                                              ? null
+                                                              : () {
+                                                                  context
+                                                                      .read<
+                                                                          LoginBloc>()
+                                                                      .add(
+                                                                        LoginButtonPressed(
+                                                                            account:
+                                                                                _accountController.text,
+                                                                            password: _passwordController.text),
+                                                                      );
+                                                                },
                                                       style:
                                                           AppStyle.primaryBtn(),
                                                       child: Row(
