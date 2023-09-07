@@ -33,7 +33,7 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
   @override
   Widget build(BuildContext context) {
     final CountdownTimerController controller = CountdownTimerController(
-      endTime: DateTime.now().millisecondsSinceEpoch + 10000,
+      endTime: DateTime.now().millisecondsSinceEpoch + 60000,
       onEnd: () {
         setState(() {
           isResentButtonEnable = true;
@@ -73,7 +73,7 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
                             ),
                             Text(
                               textAlign: TextAlign.center,
-                              '開通帳號確認信件已寄出，\n請至設定的電子郵件確認開通',
+                              '開通帳號確認信件已寄出，\n請至設定的電子信箱確認開通',
                               style: AppStyle.info(
                                 level: 2,
                                 color: AppStyle.blue[700]!,
