@@ -27,7 +27,7 @@ class SignUpAPI {
         'password': errorMessage['password'],
         'password_confirmation': errorMessage['password_confirmation'],
         'name': errorMessage['name'],
-        'userID_': errorMessage['user_id'],
+        'userID': errorMessage['user_id'],
       };
       return message;
     } else {
@@ -40,7 +40,7 @@ class ConfirmLetterAPI {
   static Future<int> sentConfirmLetter(String email) async {
     final response = await http.post(
         Uri(scheme: 'https', host: host, path: '/auth/member/confirmation'),
-        body: {email: email});
+        body: {'email': email});
     return response.statusCode;
   }
 }

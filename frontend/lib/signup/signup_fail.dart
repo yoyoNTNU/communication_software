@@ -1,45 +1,116 @@
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
 import 'package:proj/signup/signup_widget.dart';
-import 'package:proj/signup/signup_api.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 
-class SignUpSuccess extends StatefulWidget {
-  final String email;
+class SignUpFail extends StatefulWidget {
+  final Map<String, dynamic> errorMessage;
 
-  const SignUpSuccess({required this.email, super.key});
+  const SignUpFail({required this.errorMessage, super.key});
 
   @override
-  State<SignUpSuccess> createState() => _SignUpSuccessState();
+  State<SignUpFail> createState() => _SignUpFailState();
 }
 
-class _SignUpSuccessState extends State<SignUpSuccess> {
+class _SignUpFailState extends State<SignUpFail> {
   final ScrollController _scrollController = ScrollController();
-  int confirmLetterState = 0;
-  bool isResentButtonEnable = true;
+  final List<String> mainType = ['使用者資訊', '電子信箱', '密碼', '手機號碼'];
+  final List<String> mainIcon = [
+    'assets/icons/user.png',
+    'assets/icons/mail.png',
+    'assets/icons/key.png',
+    'assets/icons/phone.png',
+  ];
+  List<List<String>> secType = List.generate(4, (index) => []);
+  List<List<bool>> isPass = List.generate(4, (index) => []);
+  void parseErrorMessage() {
+    if (widget.errorMessage['name'] == null) {
+      secType[0].add('名稱可使用');
+      isPass[0].add(true);
+    } else {
+      secType[0].add('名稱不可為空');
+      isPass[0].add(false);
+    }
 
-  Future<void> _sentConfirmLetter(String email) async {
-    try {
-      final int sentState = await ConfirmLetterAPI.sentConfirmLetter(email);
-      setState(() {
-        confirmLetterState = sentState;
-      });
-    } catch (e) {
-      print('API request error: $e');
+    if (widget.errorMessage['userID'] == null) {
+      secType[0].add('ID可使用');
+      isPass[0].add(true);
+    } else {
+      List<dynamic> tempDynamic =
+          widget.errorMessage['userID'] as List<dynamic>;
+      List<String> temp =
+          tempDynamic.map((element) => element.toString()).toList();
+      if (temp[0] == "can't be blank") {
+        secType[0].add('ID不可為空');
+        isPass[0].add(false);
+      } else {
+        secType[0].add('ID已被使用');
+        isPass[0].add(false);
+      }
+    }
+
+    if (widget.errorMessage['email'] == null) {
+      secType[1].add('信箱可使用');
+      isPass[1].add(true);
+    } else {
+      List<dynamic> tempDynamic = widget.errorMessage['email'] as List<dynamic>;
+      List<String> temp =
+          tempDynamic.map((element) => element.toString()).toList();
+      if (temp[0] == "can't be blank") {
+        secType[1].add('不可為空');
+        isPass[1].add(false);
+      } else if (temp[0] == "is not an email") {
+        secType[1].add('錯誤的信箱');
+        isPass[1].add(false);
+      } else {
+        secType[1].add('已被使用');
+        isPass[1].add(false);
+      }
+    }
+
+    if (widget.errorMessage['phone'] == null) {
+      secType[3].add('手機號碼可使用');
+      isPass[3].add(true);
+    } else {
+      List<dynamic> tempDynamic = widget.errorMessage['phone'] as List<dynamic>;
+      List<String> temp =
+          tempDynamic.map((element) => element.toString()).toList();
+      if (temp[0] == "can't be blank") {
+        secType[3].add('不可為空');
+        isPass[3].add(false);
+      } else {
+        secType[3].add('已被使用');
+        isPass[3].add(false);
+      }
+    }
+
+    if (widget.errorMessage['password'] == null &&
+        widget.errorMessage['password_confirmation'] == null) {
+      secType[2].add('密碼可使用');
+      isPass[2].add(true);
+    } else {
+      if (widget.errorMessage['password'] != null) {
+        List<dynamic> tempDynamic =
+            widget.errorMessage['password'] as List<dynamic>;
+        List<String> temp =
+            tempDynamic.map((element) => element.toString()).toList();
+        if (temp[0] == "can't be blank") {
+          secType[2].add('不可為空');
+          isPass[2].add(false);
+        } else {
+          secType[2].add('6~24位 含大小寫英數');
+          isPass[2].add(false);
+        }
+      }
+      if (widget.errorMessage['password_confirmation'] != null) {
+        secType[2].add('兩次輸入密碼不一致');
+        isPass[2].add(false);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final CountdownTimerController controller = CountdownTimerController(
-      endTime: DateTime.now().millisecondsSinceEpoch + 10000,
-      onEnd: () {
-        setState(() {
-          isResentButtonEnable = true;
-        });
-      },
-    );
+    parseErrorMessage();
     return Material(
         child: Scaffold(
             resizeToAvoidBottomInset: true,
@@ -62,89 +133,36 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
                         const AppLogo(),
                         AppBox(
                           needLeftButton: false,
-                          title: '註冊成功',
+                          title: '註冊失敗',
                           content: Column(children: [
-                            Image.asset(
-                              'assets/images/success_logo.png',
-                              height: 88,
-                            ),
-                            const SizedBox(
-                              height: 12,
-                            ),
                             Text(
-                              textAlign: TextAlign.center,
-                              '開通帳號確認信件已寄出，\n請至設定的電子郵件確認開通',
-                              style: AppStyle.info(
-                                level: 2,
-                                color: AppStyle.blue[700]!,
-                              ),
+                              '請符合以下所有條件以完成註冊',
+                              style: AppStyle.caption(color: AppStyle.gray),
                             ),
                             const SizedBox(
-                              height: 32,
+                              height: 8,
                             ),
+                            ErrorShow(
+                                mainType: mainType,
+                                mainIcon: mainIcon,
+                                secType: secType,
+                                isPass: isPass),
+                            const SizedBox(height: 8),
                             OutlinedButton(
-                              onPressed: isResentButtonEnable
-                                  ? () {
-                                      setState(() {
-                                        isResentButtonEnable = false;
-                                        controller.endTime = DateTime.now()
-                                                .millisecondsSinceEpoch +
-                                            60000;
-                                      });
-
-                                      _sentConfirmLetter(widget.email);
-                                    }
-                                  : null,
+                              onPressed: () {
+                                Navigator.popAndPushNamed(context, '/sign_up');
+                              },
                               style: AppStyle.primaryBtn(
                                   backgroundColor: Colors.transparent,
                                   pressedColor: AppStyle.sea,
                                   textColor: AppStyle.teal),
-                              child: isResentButtonEnable
-                                  ? const Text("重寄驗證信")
-                                  : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          "重寄驗證信",
-                                          style: AppStyle.caption(
-                                              color: AppStyle.gray.shade100),
-                                        ),
-                                        CountdownTimer(
-                                          controller: controller,
-                                          widgetBuilder: (_, time) {
-                                            if (time == null) {
-                                              setState(() {
-                                                isResentButtonEnable = true;
-                                              });
-                                              return Text(
-                                                '0S',
-                                                style: AppStyle.caption(
-                                                  color: AppStyle.gray.shade100,
-                                                ),
-                                              );
-                                            }
-                                            return Text(
-                                              ' ${time.sec}S',
-                                              style: AppStyle.caption(
-                                                  color:
-                                                      AppStyle.gray.shade100),
-                                            );
-                                          },
-                                        )
-                                      ],
-                                    ),
+                              child: const Text("重新註冊"),
                             ),
                             const SizedBox(
                               height: 24,
                             ),
                             OutlinedButton(
                               onPressed: () {
-                                setState(() {
-                                  controller.dispose();
-                                  isResentButtonEnable = true;
-                                });
                                 Navigator.popAndPushNamed(context, '/login');
                               },
                               style: AppStyle.primaryBtn(
@@ -158,7 +176,7 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
                             ),
                           ]),
                         ),
-                        const SizedBox(height: 156),
+                        const SizedBox(height: 40),
                         Text(
                           "Instant Communication, Delivered Express",
                           style: AppStyle.info(
