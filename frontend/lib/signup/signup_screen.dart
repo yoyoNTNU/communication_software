@@ -2,6 +2,7 @@ import 'package:proj/style.dart';
 import 'package:proj/signup/signup_widget.dart';
 import 'package:proj/signup/signup_api.dart';
 import 'package:proj/signup/signup_success.dart';
+import 'package:proj/signup/signup_fail.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -48,7 +49,8 @@ class _SignUpState extends State<SignUp> {
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SignUpFail(error: message)),
+        MaterialPageRoute(
+            builder: (context) => SignUpFail(errorMessage: message)),
       );
     }
   }
@@ -95,7 +97,7 @@ class _SignUpState extends State<SignUp> {
                               labelText: '電子信箱',
                               hintText: '請輸入信箱',
                               isRequired: true,
-                              additionText: '請輸入有效之電子郵件帳號以進行驗證開通',
+                              additionText: '請輸入有效之電子信箱帳號以進行驗證開通',
                               onTap: () {
                                 Future.delayed(
                                     const Duration(milliseconds: 500), () {
@@ -160,7 +162,7 @@ class _SignUpState extends State<SignUp> {
                               controller: _phoneController,
                               controller2: _nationController,
                               labelText: '手機號碼',
-                              hintText: '請輸入電話號碼',
+                              hintText: '請輸入手機號碼(最前面的0不用輸入)',
                               isRequired: true,
                               isPhone: true,
                               onTap: () {
@@ -238,20 +240,24 @@ class _SignUpState extends State<SignUp> {
                             ),
                           if (step_ == 3)
                             ElevatedButton(
-                              onPressed: () async {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                await _signUp(
-                                    _emailController.text,
-                                    _nationController.text +
-                                        _phoneController.text,
-                                    _useridController.text,
-                                    _nameController.text,
-                                    _passwordController.text,
-                                    _confirmController.text);
-                                _signUpSuccessOrFail();
-                              },
+                              onPressed: !_isLoading
+                                  ? () async {
+                                      setState(() {
+                                        _isLoading = true;
+                                      });
+                                      await _signUp(
+                                          _emailController.text,
+                                          _phoneController.text != ""
+                                              ? _nationController.text +
+                                                  _phoneController.text
+                                              : "",
+                                          _useridController.text,
+                                          _nameController.text,
+                                          _passwordController.text,
+                                          _confirmController.text);
+                                      _signUpSuccessOrFail();
+                                    }
+                                  : null,
                               style: AppStyle.primaryBtn(),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
