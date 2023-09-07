@@ -3,6 +3,7 @@ import 'package:proj/login/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proj/login/bloc/login_bloc.dart';
+import 'package:proj/login/login_not_confirm.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,6 +23,20 @@ class _LoginState extends State<Login> {
       create: (context) => LoginBloc(),
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
+          if (state is LoginSuccess) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/home');
+            });
+          } else if (state is LoginConfirmFail) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        LoginNotConfirm(email: _accountController.text)),
+              );
+            });
+          }
           return Material(
               child: Scaffold(
                   resizeToAvoidBottomInset: true,
