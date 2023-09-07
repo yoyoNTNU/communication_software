@@ -64,6 +64,12 @@ flutter:
     - assets/icons/delete.png 
     - assets/icons/hide.png 
     - assets/icons/left.png
+    - assets/icons/not_pass.png
+    - assets/icons/pass.png
+    - assets/icons/user.png
+    - assets/icons/mail.png
+    - assets/icons/key.png
+    - assets/icons/phone.png
 
     # Animations
     - assets/animations/logo.gif
