@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>我的HTML.erb檔案</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap">
+  <style>
+        * {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .background {
+            display: flex;
+            padding: 0px var(--24, 24px);
+            flex-direction: column;
+            align-items: center;
+            flex: 1 0 0;
+            align-self: stretch;
+            background-color: var(--blue-blue-50, #E6F0F5);
+        }
+
+        .logo-and-name{
+            display: flex;
+            padding: 48px 0px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .overlay-box {
+            box-sizing: border-box;
+            display: flex;
+            width: 400px;
+            padding: var(--16, 16px) var(--24, 24px);
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--24, 24px);
+            border-radius: var(--8, 8px);
+            background: var(--White, #FFF);
+            box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-box {
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+        }
+
+        .name {
+            color: var(--blue-blue, #07689F);
+            text-align: center;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 1.28px;
+        }
+
+        .title-box{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 11px;
+            flex: 1 0 0;
+            width:100%
+        }
+
+        .title-text{
+            color: var(--gray-gray-700, #707070);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 1.28px;
+        }
+
+        .email-box{
+            display: flex;
+            padding: 0px 8px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 4px;
+            align-self: stretch;
+        }
+
+        .email-title{
+            color: var(--gray-gray-700, #707070);
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .email-text{
+            align-self: stretch;
+            color: var(--gray-gray-500, #999);
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-box{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--4, 4px);
+            align-self: stretch;
+        }
+        
+        .pwd-title-normal{
+            color: var(--blue-blue, #07689F);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-title-star{
+            color: var(--Red, #FB0C06);
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-up-tile{
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          align-items: center;
+        }
+
+
+        .pwd-hint{
+            color: var(--gray-gray-500, #999);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.4px;
+        }
+
+        .pwd-textfiled{
+            box-sizing: border-box;
+            justify-content: flex-start;
+            display: flex;
+            height: 40px;
+            padding: var(--8, 8px);
+            align-items: center;
+            gap: 10px;
+            align-self: stretch;
+            border-radius: var(--4, 4px);
+            border: 1px solid var(--blue-blue, #07689F);
+        }
+
+
+        
+
+    </style>
+</head>
+<body>
+  <div class="background">
+    <div class="logo-and-name">
+      <div class= "logo">
+        <%= image_tag("Logo.png", alt: "Logo", class: "logo") %>
+      </div>
+      <div class="name">ExpressMessage</div>
+    </div>
+    <div class="overlay-box">
+      <div class="title-box">
+        <div class="title-text">重設密碼</div>
+      </div>
+      <div class="email-box">
+        <div class="email-title">電子信箱</div>
+        <div class="email-text">yoyo102102102@gmail.com</div>
+      </div>
+      <div class="pwd-box">
+        <div class="pwd-up-tile">
+          <div>
+            <span class="pwd-title-normal">輸入密碼</span><span class="pwd-title-star">*</span>
+          </div>
+          <div class="pwd-hint">請輸入 6-24 位英數組合之密碼 (需含大小寫)</div>
+        </div>
+        <div class="pwd-textfiled">
+          <input type="password" id="password" name="password" placeholder="請輸入密碼" style= "border-color: transparent; outline:none;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= javascript_tag do %>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('showPassword').addEventListener('change', function() {
+      var passwordInput = document.getElementById('password');
+      passwordInput.type = this.checked ? 'text' : 'password';
+    });
+  });
+<% end %>
+
+</body>
+</html>

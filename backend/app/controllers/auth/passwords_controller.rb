@@ -31,6 +31,10 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
     end
   end
 
+
+  def reset
+    
+  end
     protected
 
     def render_create_error_missing_email
@@ -99,5 +103,11 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
           message: "failed to update password",
           data: resource_errors
       }.to_json, :status => 400
+    end
+    
+
+  private
+    def resource_params
+      params.permit(:email, :password, :password_confirmation,:redirect_url)
     end
 end
