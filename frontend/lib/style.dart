@@ -82,7 +82,7 @@ class AppStyle {
   static TextStyle caption(
           {int level = 1,
           Color color = AppStyle.black,
-          FontWeight weight = FontWeight.w600}) =>
+          FontWeight weight = FontWeight.w500}) =>
       TextStyle(
         color: color,
         fontSize: 18 - level * 4.0,
@@ -103,23 +103,27 @@ class AppStyle {
       );
 
   // Define Button Style
-  static ButtonStyle primaryBtn() => ButtonStyle(
+  static ButtonStyle primaryBtn(
+          {Color backgroundColor = AppStyle.teal,
+          Color pressedColor = AppStyle.blue,
+          Color textColor = AppStyle.white}) =>
+      ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return AppStyle.gray.shade300;
             }
-            if (states.contains(MaterialState.pressed)) return AppStyle.blue;
-            return AppStyle.teal;
+            if (states.contains(MaterialState.pressed)) return pressedColor;
+            return backgroundColor;
           },
         ),
-        foregroundColor: const MaterialStatePropertyAll<Color>(AppStyle.white),
+        foregroundColor: MaterialStatePropertyAll<Color>(textColor),
         textStyle: MaterialStateProperty.resolveWith(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return AppStyle.caption(color: AppStyle.gray.shade100);
             } else {
-              AppStyle.caption(color: AppStyle.white);
+              return AppStyle.caption(color: textColor);
             }
           },
         ),

@@ -18,9 +18,8 @@ class AppLogo extends StatelessWidget {
             width: 120,
             height: 120,
           ),
-          const SizedBox(height: 8),
           Text(
-            'Express Message',
+            'ExpressMessage',
             textAlign: TextAlign.center,
             style: AppStyle.header(level: 2, color: AppStyle.blue),
           ),
@@ -110,7 +109,7 @@ class _AppTextFieldState extends State<AppTextField> {
               level: 3,
               // Set Color to blue if TextField is focused
               color: _focusNode.hasFocus
-                  ? AppStyle.blue.shade400
+                  ? AppStyle.blue[500]!
                   : AppStyle.gray.shade700,
               weight: FontWeight.w400),
         ),
