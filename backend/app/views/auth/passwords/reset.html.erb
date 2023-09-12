@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ExpressMessage</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&display=swap">
+  <style>
+        * {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        .background {
+            display: flex;
+            padding: 0px var(--24, 24px);
+            flex-direction: column;
+            align-items: center;
+            flex: 1 0 0;
+            align-self: stretch;
+            background-color: var(--blue-blue-50, #E6F0F5);
+            height:flex
+        }
+
+        .logo-and-name{
+            display: flex;
+            padding: 48px 0px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .overlay-box {
+            box-sizing: border-box;
+            display: flex;
+            width: 400px;
+            padding: var(--16, 16px) var(--24, 24px);
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--24, 24px);
+            border-radius: var(--8, 8px);
+            background: var(--White, #FFF);
+            box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+        }
+
+        .input-box {
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+        }
+
+        .name {
+            color: var(--blue-blue, #07689F);
+            text-align: center;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 1.28px;
+        }
+
+        .title-box{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 11px;
+            flex: 1 0 0;
+            width:100%
+        }
+
+        .title-text{
+            color: var(--gray-gray-700, #707070);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 1.28px;
+        }
+
+        .email-box{
+            display: flex;
+            padding: 0px 8px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 4px;
+            align-self: stretch;
+        }
+
+        .email-title{
+            color: var(--gray-gray-700, #707070);
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .email-text{
+            align-self: stretch;
+            color: var(--gray-gray-500, #999);
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-box{
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--4, 4px);
+            align-self: stretch;
+        }
+        
+        .pwd-title-normal{
+            color: var(--blue-blue, #707070);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-title-normal.focused{
+            color: var(--blue-blue, #07689F);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-title-star{
+            color: var(--Red, #FB0C06);
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.56px;
+        }
+
+        .pwd-tile{
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          align-items: center;
+        }
+
+
+        .pwd-hint{
+            color: var(--gray-gray-500, #999);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.4px;
+        }
+
+        .hint-star{
+          color: var(--Red, #FB0C06);
+          text-align: center;
+          font-family: Noto Sans TC;
+          font-size: 10px;
+          font-style: normal;
+          font-weight: 350;
+          line-height: normal;
+          letter-spacing: 0.4px;
+        }
+
+        .pwd-textfiled{
+            box-sizing: border-box;
+            justify-content: space-between;
+            display: flex;
+            height: 40px;
+            padding: var(--8, 8px);
+            align-items: center;
+            gap: 10px;
+            align-self: stretch;
+            border-radius: var(--4, 4px);
+            border: 1px solid var(--blue-blue, #707070);
+        }
+
+        .pwd-textfiled.focused {
+            border: 1px solid var(--blue-blue, #07689F);
+        }
+
+        .button-box{
+            display: flex;
+            padding: var(--8, 8px) 0px;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--4, 4px);
+            align-self: stretch;
+        }
+
+        #submitButton {
+            display: flex;
+            height: 36px;
+            background-color: #40A8C4; 
+            color: var(--White, #FFF);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: normal;
+            letter-spacing: 2.24px;
+            padding: var(--8, 8px) var(--32, 32px);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #submitButton:disabled {
+            color: #EBEBEB;
+            background-color:#C2C2C2;
+            cursor: not-allowed;
+        }
+
+        .slogan{
+            color: var(--blue-blue-700, #195374);
+            text-align: center;
+            font-family: Noto Sans TC;
+            font-size: 10px;
+            font-style: normal;
+            font-weight: 350;
+            line-height: normal;
+            letter-spacing: 0.4px;
+        }
+
+        .circular-progress {
+            position: relative;
+            left: 0px;
+            width: 30px;
+            height: 20px;
+            display: none;
+        }
+
+        .circle {
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-top: 2px solid #EBEBEB;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        
+
+    </style>
+</head>
+<body>
+  <form action="/auth/member/password" method="put">
+    <div class="background">
+      <div class="logo-and-name">
+        <div class= "logo">
+          <%= image_tag("Logo.png", alt: "Logo", class: "logo") %>
+        </div>
+        <div class="name">ExpressMessage</div>
+      </div>
+      <div class="overlay-box">
+        <div class="title-box">
+          <div class="title-text">重設密碼</div>
+        </div>
+        <div class="email-box">
+          <div class="email-title">電子信箱</div>
+          <div class="email-text"><%=@uid%></div>
+        </div>
+        <div class="pwd-box">
+          <div class="pwd-tile">
+            <div>
+              <span class="pwd-title-normal">輸入密碼</span><span class="pwd-title-star">*</span>
+            </div>
+            <div class="pwd-hint">請輸入 6-24 位英數組合之密碼 (需含大小寫)</div>
+          </div>
+          <div class="pwd-textfiled">
+            <input type="password" id="password" name="password" placeholder="請輸入密碼" style= "border-color: transparent; outline:none;width: 300px;caret-color:#07689F;">
+            <%= image_tag("Eye.png", id: "password-icon") %>
+          </div>
+        </div>
+        <div class="pwd-box">
+          <div class="pwd-tile">
+            <div>
+              <span class="pwd-title-normal">確認密碼</span><span class="pwd-title-star">*</span>
+            </div>
+            <div class="pwd-hint" style="color:transparent;">※兩次輸入密碼不一致</div>
+          </div>
+          <div class="pwd-textfiled">
+            <input type="password" id="confirm" name="confirm" placeholder="請再次輸入密碼" style= "border-color: transparent; outline:none;width: 300px;caret-color:#07689F;">
+            <%= image_tag("Eye.png", id: "confirm-icon") %>
+          </div>
+        </div>
+        <div class="button-box">
+          <button type="button" id="submitButton" disabled>
+            <div id="circular-progress" class="circular-progress">
+              <div class="circle"></div>
+            </div>
+          提交</button>
+          <div>
+            <span class="hint-star">*</span><span class="pwd-hint">字欄位為必填項目</span>
+          </div>
+        </div>
+      </div>
+      <div style="height: 40px; width: 100vh;"></div>
+      <div class="slogan">Instant Communication, Delivered Express</div>
+      <div style="height: 20px; width: 100vh;"></div>
+    </div>
+  </form>
+  <%= javascript_tag do %>
+    document.addEventListener('DOMContentLoaded', function() {
+      var passwordInput = document.getElementById('password');
+      var confirmInput = document.getElementById('confirm');
+      var passwordIcon = document.getElementById('password-icon');
+      var confirmIcon = document.getElementById('confirm-icon');
+
+      passwordInput.addEventListener('focus', function() {
+        var pwdTextfield = document.querySelector('.pwd-textfiled');
+        var pwdTitle =document.querySelector('.pwd-title-normal');
+        pwdTextfield.classList.add('focused');
+        pwdTitle.classList.add('focused');
+      });
+
+      passwordInput.addEventListener('blur', function() {
+        var pwdTextfield = document.querySelector('.pwd-textfiled');
+        var pwdTitle =document.querySelector('.pwd-title-normal');
+        pwdTextfield.classList.remove('focused');
+        pwdTitle.classList.remove('focused');
+      });
+
+      confirmInput.addEventListener('focus', function() {
+        var confirmTextfield = document.querySelectorAll('.pwd-textfiled')[1];
+        var confirmTitle =document.querySelectorAll('.pwd-title-normal')[1];
+        confirmTextfield.classList.add('focused');
+        confirmTitle.classList.add('focused');
+      });
+
+      confirmInput.addEventListener('blur', function() {
+        var confirmTextfield = document.querySelectorAll('.pwd-textfiled')[1];
+        var confirmTitle =document.querySelectorAll('.pwd-title-normal')[1];
+        confirmTextfield.classList.remove('focused');
+        confirmTitle.classList.remove('focused');
+      });
+
+      passwordIcon.addEventListener('click', function() {
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          passwordIcon.src = '/assets/Close.png';
+        } else {
+          passwordInput.type = 'password';
+          passwordIcon.src = '/assets/Eye.png';
+        }
+      });
+
+      confirmIcon.addEventListener('click', function() {
+        if (confirmInput.type === 'password') {
+          confirmInput.type = 'text';
+          confirmIcon.src = '/assets/Close.png';
+        } else {
+          confirmInput.type = 'password';
+          confirmIcon.src = '/assets/Eye.png';
+        }
+      });
+
+      var submitButton = document.getElementById('submitButton');
+      
+      var hint = document.querySelectorAll('.pwd-hint')[1];
+      function checkPassword() {
+        var password = passwordInput.value;
+        var confirm = confirmInput.value;
+
+        if (password === confirm) {
+          hint.style.color = '#FFFFFF';
+          submitButton.disabled = false;
+        } else {
+          hint.style.color = '#FB0C06'; 
+          submitButton.disabled = true;
+        }
+      }
+
+      passwordInput.addEventListener('input', checkPassword);
+      confirmInput.addEventListener('input', checkPassword);
+
+      submitButton.addEventListener('click', function() {
+        var token = '<%= @token %>';
+        var client = '<%= @client %>';
+        var uid = '<%= @uid %>';
+        var password = passwordInput.value;
+        var confirm = confirmInput.value;
+        submitButton.disabled = true;
+        submitButton.style.padding = '8px 17px';
+        document.getElementById('circular-progress').style.display = 'block';
+
+        var params = new URLSearchParams();
+        params.append('password', password);
+        params.append('password_confirmation', confirm);
+        var status;
+
+        fetch('/auth/member/password', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'access-token': token,
+            'client': client,
+            'uid': uid
+          },
+          body:params.toString() 
+        })
+        .then(response => {
+          document.getElementById('circular-progress').style.display = 'none';
+          submitButton.style.padding = '8px 32px';
+          if (response.ok) {
+            status=200;
+          }else{
+            status=response.status;
+          }
+          window.location.href = '/auth/member/passwords/final?status='+status;
+        })
+        .catch(error => {
+          console.error('錯誤', error);
+        });
+      });
+    });
+  <% end %>
+</body>
+</html>
