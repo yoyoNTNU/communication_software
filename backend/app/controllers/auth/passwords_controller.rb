@@ -121,6 +121,6 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
 
   private
     def resource_params
-      params.permit(:email, :password, :password_confirmation,:redirect_url, :'access-token', :client, :uid, :status)
+      params.permit(:email, :password, :password_confirmation,:redirect_url, :'access-token', :client, :uid, :status, :reset_password_token)
     end
 end
