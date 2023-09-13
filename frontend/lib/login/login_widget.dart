@@ -153,7 +153,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         if (widget.errorText != null)
           Text(
-            '※ ${widget.errorText!}',
+            '※ 帳號或密碼錯誤 請重試',
             style: AppStyle.info(level: 1, color: AppStyle.red),
           )
         else
