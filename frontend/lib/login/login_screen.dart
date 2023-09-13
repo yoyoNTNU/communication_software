@@ -171,8 +171,8 @@ class _LoginState extends State<Login> {
                                                 // Outline Button
                                                 OutlinedButton(
                                                   onPressed: () {
-                                                    Navigator.pushNamed(
-                                                        context, '/home');
+                                                    Navigator.pushNamed(context,
+                                                        '/forget_password');
                                                   },
                                                   style: AppStyle.primaryBtn(
                                                       backgroundColor:
