@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   
   devise_scope :member do
     get 'auth/member/password/reset'=> 'auth/passwords#reset'
-    get 'auth/member/password/final'=> 'auth/passwords#final'
+    get 'auth/member/password/final'=> 'auth/passwords#final', as: 'reset_final'
   end
   namespace :api do
     get 'member/info'=> 'member#show'
