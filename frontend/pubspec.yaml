@@ -69,6 +69,7 @@ flutter:
     - assets/icons/pass.png
     - assets/icons/user.png
     - assets/icons/mail.png
+    - assets/icons/mail_white.png
     - assets/icons/key.png
     - assets/icons/phone.png
 
