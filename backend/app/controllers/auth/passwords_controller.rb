@@ -33,7 +33,7 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
 
 
   def reset
-    @uid=CGI.unescape(resource_params[:uid])
+    @uid=resource_params[:uid].nil? ? nil : CGI.unescape(resource_params[:uid])
     @client=resource_params[:client]
     @token=resource_params[:'access-token']
   end
