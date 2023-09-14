@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/signup/signup_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
+import 'package:proj/sent_reset_email/sent_reset_email_screen.dart';
 import 'package:proj/main_dependency.dart';
 
 // Define http host name
@@ -32,6 +33,7 @@ class ChatApp extends StatelessWidget {
         '/login': (context) => const Login(),
         '/home': (context) => const NavBar(),
         '/sign_up': (context) => const SignUp(),
+        '/forget_password': (context) => const SentResetEmail(),
       },
     );
   }

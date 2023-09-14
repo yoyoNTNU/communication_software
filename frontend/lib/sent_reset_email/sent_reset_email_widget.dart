@@ -32,7 +32,15 @@ class AppLogo extends StatelessWidget {
 class AppBox extends StatelessWidget {
   final String title;
   final Widget content;
-  const AppBox({super.key, required this.title, required this.content});
+  final VoidCallback? onClicked;
+  final bool needLeftButton;
+  const AppBox({
+    super.key,
+    required this.title,
+    required this.content,
+    this.onClicked,
+    required this.needLeftButton,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,8 +59,32 @@ class AppBox extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text(title,
-              style: AppStyle.header(level: 2, color: AppStyle.gray.shade700)),
+          Row(
+            children: [
+              if (needLeftButton)
+                GestureDetector(
+                    onTap: () {
+                      if (onClicked != null) {
+                        onClicked!();
+                      }
+                    },
+                    child: Image.asset(
+                      'assets/icons/left.png',
+                      width: 24,
+                      height: 24,
+                    )),
+              Expanded(
+                  child: Center(
+                      child: Text(title,
+                          style: AppStyle.header(
+                              level: 2, color: AppStyle.gray.shade700)))),
+              if (needLeftButton)
+                const SizedBox(
+                  width: 24,
+                  height: 24,
+                )
+            ],
+          ),
           const SizedBox(height: 24),
           content,
         ],
@@ -64,9 +96,9 @@ class AppBox extends StatelessWidget {
 class AppTextField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
-  final String hintText;
   final String? errorText;
-  final bool isPassword;
+  final String hintText;
+  final bool isRequired;
   final void Function(String)? onChanged;
   final VoidCallback? onTap;
 
@@ -75,7 +107,7 @@ class AppTextField extends StatefulWidget {
     required this.controller,
     required this.labelText,
     required this.hintText,
-    this.isPassword = false,
+    this.isRequired = false,
     this.errorText,
     this.onChanged,
     this.onTap,
@@ -86,7 +118,6 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  bool _isObscure = true;
   final FocusNode _focusNode = FocusNode();
 
   @override
@@ -103,23 +134,36 @@ class _AppTextFieldState extends State<AppTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.errorText == null) const SizedBox(height: 8),
-        Text(
-          widget.labelText,
-          style: AppStyle.header(
-              level: 3,
-              // Set Color to blue if TextField is focused
-              color: _focusNode.hasFocus
-                  ? AppStyle.blue[500]!
-                  : AppStyle.gray.shade700,
-              weight: FontWeight.w400),
+        Row(
+          children: [
+            Text(
+              widget.labelText,
+              style: AppStyle.header(
+                  level: 3,
+                  // Set Color to blue if TextField is focused
+                  color: _focusNode.hasFocus
+                      ? AppStyle.blue[500]!
+                      : AppStyle.gray.shade700,
+                  weight: FontWeight.w400),
+            ),
+            if (widget.isRequired)
+              Text(
+                '*',
+                style: AppStyle.header(
+                    level: 3,
+                    // Set Color to blue if TextField is focused
+                    color: AppStyle.red,
+                    weight: FontWeight.w400),
+              ),
+          ],
         ),
         const SizedBox(height: 4),
         TextField(
+          keyboardType: TextInputType.emailAddress,
           controller: widget.controller,
           onChanged: widget.onChanged,
           onTap: widget.onTap,
           focusNode: _focusNode,
-          obscureText: widget.isPassword ? _isObscure : false,
           style: AppStyle.body(
               level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
           decoration: InputDecoration(
@@ -136,24 +180,11 @@ class _AppTextFieldState extends State<AppTextField> {
             focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: AppStyle.blue, width: 1.25),
             ),
-            suffixIcon: widget.isPassword
-                ? IconButton(
-                    icon: _isObscure
-                        ? const Icon(Icons.visibility)
-                        : const Icon(Icons.visibility_off),
-                    color: AppStyle.blue.shade400,
-                    onPressed: () {
-                      setState(() {
-                        _isObscure = !_isObscure;
-                      });
-                    },
-                  )
-                : null,
           ),
         ),
         if (widget.errorText != null)
           Text(
-            '※ 帳號或密碼錯誤 請重試',
+            '※ 電子信箱錯誤或不存在 請重試',
             style: AppStyle.info(level: 1, color: AppStyle.red),
           )
         else
