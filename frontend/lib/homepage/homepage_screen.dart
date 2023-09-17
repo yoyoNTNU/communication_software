@@ -1,17 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
-import 'package:proj/homepage/friends_list.dart';
-import 'package:proj/homepage/groups_list.dart';
 import 'package:proj/homepage/homepage_widget.dart';
+import 'package:proj/homepage/homepage_api.dart';
+import 'package:proj/main.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Map<String, dynamic> info_ = {};
+
+  Future<void> _Info() async {
+    try {
+      final Map<String, dynamic> info = await GetInfoAPI.getInfo();
+      setState(() {
+        info_ = info;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _Info();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          child: const Text('Action'),
+          child: const Text('+'),
           onPressed: () {},
         ),
         body: SingleChildScrollView(
@@ -36,8 +60,11 @@ class ProfilePage extends StatelessWidget {
                     height: 180,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image:
-                            Image.asset('assets/images/Background.png').image,
+                        image: info_["background"] != null
+                            ? NetworkImage(
+                                    "https://$host${info_['background']}")
+                                as ImageProvider
+                            : const AssetImage('assets/images/Background.png'),
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -89,23 +116,27 @@ class ProfilePage extends StatelessWidget {
                     top: 90,
                     left: 12,
                     child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage:
-                          Image.asset('assets/images/Avatar.jpg').image,
-                    ),
+                        radius: 60,
+                        backgroundImage: info_["photo"] != null
+                            ? NetworkImage("https://$host${info_['photo']}")
+                                as ImageProvider
+                            : const AssetImage('assets/images/Avatar.png'),
+                        backgroundColor: Colors.transparent),
                   ),
                   Positioned(
                     top: 124.5,
                     left: 154,
                     child: Text(
-                      'Exp. Message',
+                      info_["name"] ?? "",
                       style: AppStyle.header(color: AppStyle.white),
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     top: 154.5,
                     left: 154,
-                    child: CopyableText(),
+                    child: CopyableText(
+                      text_: info_["userID"] ?? "",
+                    ),
                   ),
                 ],
               ),
@@ -135,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                           pressedColor: AppStyle.sea,
                           textColor: AppStyle.red),
                       onPressed: () {
-                        Navigator.popAndPushNamed(context, '/home');
+                        Navigator.popAndPushNamed(context, '/login');
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
