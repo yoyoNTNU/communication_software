@@ -1,7 +1,12 @@
 class Api::GroupsController < ApplicationController
-  before_action :authenticate_member!
+  before_action :authenticate_member! ,except: :show
   def index
-    @group = Group.get_groups(current_member)
+    @chatroom=ChatroomMember.where(member:current_member)
+    @group=[]
+    @chatroom.each do |c|
+      temp=Chatroom.find_by(id:c.chatroom_id,type_:"group")
+      @group<<temp
+    end
     render json: {
       error: false,
       message: "succeed to get groups respect to current member",
@@ -10,20 +15,19 @@ class Api::GroupsController < ApplicationController
   end
 
   def show
-    @group = Group.find_by(name: params[:name])
-
+    @group = Group.find_by(id:params[:id])
     if @group
       render json: {
         error: false,
-        message: "succeed to find group",
+        message: "succeed to get group",
         data: @group
       }.to_json, status: 200
     else
       render json: {
         error: true,
-        message: "failed to show group",
-        data: "group not found"
-      }.to_json, status: 404
+        message: "failed to get group",
+        data: "group isn't exist"
+      }.to_json, status: 400
     end
   end
 
