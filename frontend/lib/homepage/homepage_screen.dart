@@ -164,14 +164,12 @@ class _HomePageState extends State<HomePage> {
                 color: AppStyle.blue[50],
                 child: Column(
                   children: [
-                    FriendsList(onLoaded: _onLoaded),
+                    const FriendsList(),
                     const SizedBox(
                       height: 24,
                     ),
-                    GroupsList(),
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    GroupsList(onLoaded: _onLoaded),
+                    const SizedBox(height: 24),
                     ElevatedButton(
                       style: AppStyle.primaryBtn(
                           backgroundColor: AppStyle.white,
