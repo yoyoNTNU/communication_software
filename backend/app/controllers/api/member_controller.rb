@@ -27,12 +27,7 @@ class Api::MemberController < ApplicationController
   end
 
   def other
-    begin
-      @member=Member.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      
-    end
-    
+    @member=Member.find_by(id:params[:id])
     if @member
       render json: {
         error: false,
