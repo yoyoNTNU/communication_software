@@ -14,7 +14,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> info_ = {};
 
-  Future<void> _Info() async {
+  Future<void> _info() async {
+    Future.delayed(Duration.zero, () {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const LoadingDialog(),
+      );
+    });
     try {
       final Map<String, dynamic> info = await GetInfoAPI.getInfo();
       setState(() {
@@ -23,12 +30,19 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print('API request error: $e');
     }
+    // if (!context.mounted) return;
+    // Navigator.of(context).pop();
+  }
+
+  void _onLoaded() {
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
   @override
   void initState() {
     super.initState();
-    _Info();
+    _info();
   }
 
   @override
@@ -140,8 +154,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
-              // TODO: 好友列表 and 群組列表
               Container(
                 padding: const EdgeInsets.only(
                   top: 18,
@@ -152,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                 color: AppStyle.blue[50],
                 child: Column(
                   children: [
-                    FriendsList(),
+                    FriendsList(onLoaded: _onLoaded),
                     const SizedBox(
                       height: 24,
                     ),

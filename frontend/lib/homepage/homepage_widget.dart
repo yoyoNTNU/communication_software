@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proj/style.dart';
+import 'package:proj/homepage/homepage_api.dart';
+import 'package:proj/main.dart';
 
 class CopyableText extends StatelessWidget {
   final String text_;
@@ -13,7 +15,7 @@ class CopyableText extends StatelessWidget {
     Clipboard.setData(ClipboardData(text: text_)); //換成API
     const snackBar = SnackBar(
       content: Text('已將ID複製到剪貼板'),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -33,11 +35,7 @@ class CopyableText extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                '# ',
-                style: AppStyle.info(color: AppStyle.blue[300]!),
-              ),
-              Text(
-                text_,
+                "# $text_",
                 style: AppStyle.info(color: AppStyle.blue[300]!),
               ),
               const SizedBox(
@@ -54,14 +52,48 @@ class CopyableText extends StatelessWidget {
   }
 }
 
+class LoadingDialog extends StatelessWidget {
+  const LoadingDialog({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [Image.asset('assets/animations/loading.gif')],
+      ),
+    );
+  }
+}
+
 class FriendsList extends StatefulWidget {
-  const FriendsList({super.key});
+  final VoidCallback onLoaded;
+  const FriendsList({super.key, required this.onLoaded});
 
   @override
   State<FriendsList> createState() => _FriendsListState();
 }
 
 class _FriendsListState extends State<FriendsList> {
+  List<Map<String, dynamic>> friendList = [];
+
+  Future<void> _getFriendList() async {
+    try {
+      final List<Map<String, dynamic>> info = await GetInfoAPI.getFriend();
+      setState(() {
+        friendList = info;
+      });
+      widget.onLoaded();
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getFriendList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -89,57 +121,90 @@ class _FriendsListState extends State<FriendsList> {
                     width: 10,
                   ),
                   Text(
-                    "5位朋友",
+                    "${friendList.length}位朋友",
                     style: AppStyle.info(color: AppStyle.teal),
                   ),
                 ],
               ),
-              children: <Widget>[
-                ListTile(
-                  contentPadding: EdgeInsets.all(0),
-                  title: Text(
-                    'Adam',
-                    style:
-                        AppStyle.header(level: 3, color: AppStyle.gray[700]!),
-                  ),
-                  leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/Avatar.png'),
-                      backgroundColor: Colors.transparent),
-                ),
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: AppStyle.gray[100],
-                ),
-                ListTile(title: Text('Bob')),
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: AppStyle.gray[100],
-                ),
-                ListTile(title: Text('Ccccc')),
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: AppStyle.gray[100],
-                ),
-                ListTile(title: Text('煞氣的台灣人')),
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: AppStyle.gray[100],
-                ),
-                ListTile(title: Text('>>>>ooo<<<<')),
-                Divider(
-                  height: 0,
-                  thickness: 1,
-                  color: AppStyle.gray[100],
-                ),
-                Container(
-                  height: 16,
-                  color: AppStyle.white,
-                ),
-              ],
+              children: friendList.isNotEmpty
+                  ? <Widget>[
+                      Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppStyle.gray[100],
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: friendList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          var friend = friendList[index];
+                          return Column(
+                            children: <Widget>[
+                              ListTile(
+                                contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 0, vertical: 0),
+                                title: Text(
+                                  friend['nickname'],
+                                  style: AppStyle.header(
+                                      level: 3, color: AppStyle.gray[700]!),
+                                ),
+                                subtitle: Text(
+                                  friend['introduction'] ?? "",
+                                  style:
+                                      AppStyle.info(color: AppStyle.gray[600]!),
+                                ),
+                                leading: CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage: friend["photo"] != null
+                                      ? NetworkImage(
+                                              "https://$host${friend['photo']}")
+                                          as ImageProvider
+                                      : const AssetImage(
+                                          'assets/images/Avatar.png'),
+                                  backgroundColor: Colors.transparent,
+                                ),
+                              ),
+                              Divider(
+                                height: 1,
+                                thickness: 1,
+                                color: AppStyle.gray[100],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      )
+                    ]
+                  : <Widget>[
+                      Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppStyle.gray[100],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(top: 8, bottom: 4),
+                        height: 88,
+                        child: Image.asset("assets/images/fail_logo.png"),
+                      ),
+                      Text(
+                        "列表空空如也，趕快去新增好友吧！",
+                        style:
+                            AppStyle.info(level: 2, color: AppStyle.gray[700]!),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: AppStyle.gray[100],
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      )
+                    ],
             )));
   }
 }
