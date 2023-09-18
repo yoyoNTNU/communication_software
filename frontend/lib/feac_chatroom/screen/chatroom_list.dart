@@ -494,23 +494,24 @@ class _ChatroomPageState extends State<ChatroomPage> {
   }
 
   Future<void> _fetchChatRooms() async {
+    Future.delayed(Duration.zero, () {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => LoadingDialog(),
+      );
+    });
     try {
-      Future.delayed(Duration.zero, () {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => LoadingDialog(),
-        );
-      });
       final List<Map<String, dynamic>> fetchedChatRooms =
           await ChatRoomList.fetchChatRooms();
-      Navigator.of(context).pop();
+
       setState(() {
         chatRooms = fetchedChatRooms;
       });
     } catch (e) {
       print('API request error: $e');
     }
+    Navigator.of(context).pop();
   }
 
   final String baseUrl =
