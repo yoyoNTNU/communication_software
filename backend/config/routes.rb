@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   end
   namespace :api do
     get 'member/info'=> 'member#show'
+    get 'member/:id/info'=> 'member#other'
     patch 'member/info' => 'member#update'
     get 'search/phone' => 'search#by_phone'
     get 'search/user_id' => 'search#by_user_id'

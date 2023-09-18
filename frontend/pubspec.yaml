@@ -42,7 +42,7 @@ flutter:
   assets:
     # Images
     - assets/images/Background.png
-    - assets/images/Avatar.jpg
+    - assets/images/Avatar.png
     - assets/images/Logo.png
     - assets/images/success_logo.png
     - assets/images/fail_logo.png
@@ -72,6 +72,7 @@ flutter:
     - assets/icons/mail_white.png
     - assets/icons/key.png
     - assets/icons/phone.png
+    - assets/icons/Copy.png
 
     # Animations
     - assets/animations/logo.gif

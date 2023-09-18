@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proj/feac_profile/screen/profile.dart';
+import 'package:proj/homepage/homepage_screen.dart';
 import 'package:proj/feac_chatroom/screen/chatroom_list.dart';
 
 class NavBar extends StatefulWidget {
@@ -35,7 +35,7 @@ class _NavBarState extends State<NavBar> {
         ],
       ),
       body: <Widget>[
-        const ProfilePage(),
+        const HomePage(),
         ChatroomPage(),
       ][currentPageIndex],
     );
