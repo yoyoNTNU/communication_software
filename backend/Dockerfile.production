@@ -3,6 +3,8 @@ RUN mkdir /app
 WORKDIR /app
 COPY Gemfile /app/Gemfile
 COPY Gemfile.lock /app/Gemfile.lock
+ARG MYSQL_PASSWORD
+ENV MYSQL_PASSWORD $MYSQL_PASSWORD
 ENV RAILS_ENV=production
 RUN bundle install --without development test
 COPY . /app
