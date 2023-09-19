@@ -1,4 +1,9 @@
+import 'package:proj/style.dart';
+import 'package:proj/login/login_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:proj/login/bloc/login_bloc.dart';
+import 'package:proj/login/login_not_confirm.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -8,680 +13,209 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xFFE6F0F5),
-      padding: const EdgeInsets.only(
-        top: 44,
-        left: 24,
-        right: 24,
-        bottom: 34,
-      ),
-      child: const Center(
-        child: Column(
-          children: [
-            Logo(),
-            DialogBox(title: "使用者登入", content: Text("Hello")),
-            ElevatedButton(
-              onPressed: null,
-              child: Text("註冊"),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// class _LoginScreenState extends State<LoginScreen> {
-//   final TextEditingController _emailController = TextEditingController();
-//   final TextEditingController _passwordController = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         body: Container(
-//       clipBehavior: Clip.antiAlias,
-//       decoration: const BoxDecoration(
-//         color: Colors.white,
-//         boxShadow: [
-//           BoxShadow(
-//             color: Color(0x3F000000),
-//           blurRadius: 4,
-//             offset: Offset(0, 4),
-//             spreadRadius: 0,
-//           )
-//         ],
-//       ),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Container(
-//             width: 375,
-//             height: 44,
-//             padding: const EdgeInsets.only(
-//               top: 13,
-//               left: 32,
-//               right: 15,
-//               bottom: 10,
-//             ),
-//             clipBehavior: Clip.antiAlias,
-//             decoration: const BoxDecoration(color: Color(0xFFE6F0F5)),
-//             child: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               mainAxisAlignment: MainAxisAlignment.end,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 const Text(
-//                   '9:41',
-//                   style: TextStyle(
-//                     color: Color(0xFF020202),
-//                     fontSize: 15,
-//                     fontFamily: 'Roboto',
-//                     fontWeight: FontWeight.w500,
-//                     height: 21,
-//                     letterSpacing: -0.32,
-//                   ),
-//                 ),
-//                 Row(
-//                   mainAxisSize: MainAxisSize.min,
-//                   mainAxisAlignment: MainAxisAlignment.start,
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     SizedBox(
-//                       width: 20,
-//                       height: 16,
-//                       child: Stack(
-//                         children: [
-//                           Positioned(
-//                             left: 1,
-//                             top: 3,
-//                             child: Container(
-//                               width: 17,
-//                               height: 10.67,
-//                               decoration: const BoxDecoration(
-//                                 image: DecorationImage(
-//                                   image: NetworkImage(
-//                                       "https://via.placeholder.com/17x11"),
-//                                   fit: BoxFit.fill,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     SizedBox(
-//                       width: 16,
-//                       height: 16,
-//                       child: Stack(
-//                         children: [
-//                           Positioned(
-//                             left: 0.35,
-//                             top: 3,
-//                             child: Container(
-//                               width: 15.27,
-//                               height: 10.97,
-//                               decoration: const BoxDecoration(
-//                                 image: DecorationImage(
-//                                   image: NetworkImage(
-//                                       "https://via.placeholder.com/15x11"),
-//                                   fit: BoxFit.fill,
-//                                 ),
-//                               ),
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                     Container(
-//                       width: 25,
-//                       height: 16,
-//                       clipBehavior: Clip.antiAlias,
-//                       decoration: const BoxDecoration(),
-//                       child: const Stack(children: []),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Expanded(
-//             child: Container(
-//               width: double.infinity,
-//               padding: const EdgeInsets.symmetric(horizontal: 24),
-//               clipBehavior: Clip.antiAlias,
-//               decoration: const BoxDecoration(color: Color(0xFFE6F0F5)),
-//               child: Column(
-//                 mainAxisSize: MainAxisSize.min,
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 crossAxisAlignment: CrossAxisAlignment.center,
-//                 children: [
-//                   Container(
-//                     padding: const EdgeInsets.symmetric(vertical: 48),
-//                     child: Column(
-//                       mainAxisSize: MainAxisSize.min,
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         Container(
-//                           width: 120,
-//                           height: 120,
-//                           clipBehavior: Clip.antiAlias,
-//                           decoration: const BoxDecoration(),
-//                           child: Stack(
-//                             children: [
-//                               Positioned(
-//                                 left: 9.33,
-//                                 top: 16.62,
-//                                 child: Container(
-//                                   width: 99.48,
-//                                   height: 93.09,
-//                                   decoration: const BoxDecoration(
-//                                     image: DecorationImage(
-//                                       image: NetworkImage(
-//                                           "https://via.placeholder.com/99x93"),
-//                                       fit: BoxFit.fill,
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         const Text(
-//                           'ExpressMessage',
-//                           textAlign: TextAlign.center,
-//                           style: TextStyle(
-//                             color: Color(0xFF07689F),
-//                             fontSize: 16,
-//                             fontFamily: 'Noto Sans TC',
-//                             fontWeight: FontWeight.w500,
-//                             letterSpacing: 1.28,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   Container(
-//                     width: 327,
-//                     height: 308,
-//                     padding: const EdgeInsets.symmetric(
-//                         horizontal: 24, vertical: 16),
-//                     clipBehavior: Clip.antiAlias,
-//                     decoration: ShapeDecoration(
-//                       color: Colors.white,
-//                       shape: RoundedRectangleBorder(
-//                           borderRadius: BorderRadius.circular(8)),
-//                       shadows: const [
-//                         BoxShadow(
-//                           color: Color(0x3F000000),
-//                           blurRadius: 2,
-//                           offset: Offset(0, 1),
-//                           spreadRadius: 0,
-//                         )
-//                       ],
-//                     ),
-//                     child: Column(
-//                       mainAxisSize: MainAxisSize.min,
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         SizedBox(
-//                           width: double.infinity,
-//                           child: Row(
-//                             mainAxisSize: MainAxisSize.min,
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             children: [
-//                               Opacity(
-//                                 opacity: 0,
-//                                 child: Container(
-//                                   width: 24,
-//                                   height: 24,
-//                                   padding: const EdgeInsets.only(
-//                                       top: 6, left: 4, right: 5, bottom: 6),
-//                                   child: const Row(
-//                                     mainAxisSize: MainAxisSize.min,
-//                                     mainAxisAlignment: MainAxisAlignment.center,
-//                                     crossAxisAlignment:
-//                                         CrossAxisAlignment.center,
-//                                     children: [],
-//                                   ),
-//                                 ),
-//                               ),
-//                               const SizedBox(width: 10),
-//                               const Expanded(
-//                                 child: SizedBox(
-//                                   height: 23,
-//                                   child: Row(
-//                                     mainAxisSize: MainAxisSize.min,
-//                                     mainAxisAlignment: MainAxisAlignment.center,
-//                                     crossAxisAlignment:
-//                                         CrossAxisAlignment.center,
-//                                     children: [
-//                                       Text(
-//                                         '使用者登入',
-//                                         textAlign: TextAlign.center,
-//                                         style: TextStyle(
-//                                           color: Color(0xFF707070),
-//                                           fontSize: 16,
-//                                           fontFamily: 'Noto Sans TC',
-//                                           fontWeight: FontWeight.w500,
-//                                           letterSpacing: 1.28,
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ),
-//                               const SizedBox(width: 10),
-//                               Opacity(
-//                                 opacity: 0,
-//                                 child: SizedBox(
-//                                   width: 24,
-//                                   height: 24,
-//                                   child: Stack(
-//                                     children: [
-//                                       Positioned(
-//                                         left: 3,
-//                                         top: 3,
-//                                         child: Container(
-//                                           width: 18,
-//                                           height: 18,
-//                                           decoration: const ShapeDecoration(
-//                                             shape: OvalBorder(
-//                                               side: BorderSide(
-//                                                 width: 1,
-//                                                 strokeAlign: BorderSide
-//                                                     .strokeAlignCenter,
-//                                                 color: Color(0xFF333333),
-//                                               ),
-//                                             ),
-//                                           ),
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           width: double.infinity,
-//                           height: 64,
-//                           child: Column(
-//                             mainAxisSize: MainAxisSize.min,
-//                             mainAxisAlignment: MainAxisAlignment.start,
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               const SizedBox(
-//                                 width: 50,
-//                                 child: Row(
-//                                   mainAxisSize: MainAxisSize.min,
-//                                   mainAxisAlignment: MainAxisAlignment.start,
-//                                   crossAxisAlignment: CrossAxisAlignment.end,
-//                                   children: [
-//                                     Text(
-//                                       '帳號（電子郵件）',
-//                                       textAlign: TextAlign.center,
-//                                       style: TextStyle(
-//                                         color: Color(0xFF07689F),
-//                                         fontSize: 14,
-//                                         fontFamily: 'Noto Sans TC',
-//                                         fontWeight: FontWeight.w400,
-//                                         letterSpacing: 0.56,
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ),
-//                               Container(
-//                                 width: double.infinity,
-//                                 height: 40,
-//                                 margin: const EdgeInsets.all(8),
-//                                 padding: const EdgeInsets.all(8),
-//                                 decoration: ShapeDecoration(
-//                                   shape: RoundedRectangleBorder(
-//                                     side: const BorderSide(
-//                                         width: 0.50, color: Color(0xFF07689F)),
-//                                     borderRadius: BorderRadius.circular(4),
-//                                   ),
-//                                 ),
-//                                 child: TextFormField(
-//                                   controller: _emailController,
-//                                   keyboardType: TextInputType.emailAddress,
-//                                   decoration: const InputDecoration(
-//                                     labelText: 'Email',
-//                                     border: InputBorder.none,
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           width: double.infinity,
-//                           height: 64,
-//                           child: Column(
-//                             mainAxisSize: MainAxisSize.min,
-//                             mainAxisAlignment: MainAxisAlignment.start,
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               const SizedBox(
-//                                 width: 50,
-//                                 child: Row(
-//                                   mainAxisSize: MainAxisSize.min,
-//                                   mainAxisAlignment: MainAxisAlignment.start,
-//                                   crossAxisAlignment: CrossAxisAlignment.end,
-//                                   children: [
-//                                     Text(
-//                                       '密碼',
-//                                       textAlign: TextAlign.center,
-//                                       style: TextStyle(
-//                                         color: Color(0xFF07689F),
-//                                         fontSize: 14,
-//                                         fontFamily: 'Noto Sans TC',
-//                                         fontWeight: FontWeight.w400,
-//                                         letterSpacing: 0.56,
-//                                       ),
-//                                     ),
-//                                   ],
-//                                 ),
-//                               ),
-//                               Container(
-//                                 width: double.infinity,
-//                                 height: 40,
-//                                 margin: const EdgeInsets.all(8),
-//                                 padding: const EdgeInsets.all(8),
-//                                 decoration: ShapeDecoration(
-//                                   shape: RoundedRectangleBorder(
-//                                     side: const BorderSide(
-//                                         width: 0.50, color: Color(0xFF07689F)),
-//                                     borderRadius: BorderRadius.circular(4),
-//                                   ),
-//                                 ),
-//                                 child: TextFormField(
-//                                   controller: _passwordController,
-//                                   obscureText: true,
-//                                   decoration: const InputDecoration(
-//                                     labelText: 'Password',
-//                                     border: InputBorder.none,
-//                                     suffixIcon: Icon(Icons.visibility),
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         SizedBox(
-//                           width: double.infinity,
-//                           child: Row(
-//                             mainAxisSize: MainAxisSize.min,
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             children: [
-//                               ElevatedButton(
-//                                   onPressed: () {
-//                                     // Navigate to the SecondScreen when the button is pressed.
-//                                     Navigator.push(
-//                                       context,
-//                                       MaterialPageRoute(
-//                                           builder: (context) =>
-//                                               const SecondScreen()),
-//                                     );
-//                                   },
-//                                   style: ElevatedButton.styleFrom(
-//                                     foregroundColor: Colors.white, // Text color
-//                                     backgroundColor: const Color(
-//                                         0xFF40A8C4), // background color
-//                                     shape: RoundedRectangleBorder(
-//                                         borderRadius: BorderRadius.circular(4)),
-//                                   ),
-//                                   child: const Padding(
-//                                     padding: EdgeInsets.symmetric(
-//                                         horizontal: 32, vertical: 8),
-//                                     child: Row(
-//                                       mainAxisSize: MainAxisSize.min,
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.center,
-//                                       crossAxisAlignment:
-//                                           CrossAxisAlignment.center,
-//                                       children: [
-//                                         Text(
-//                                           '登入',
-//                                           textAlign: TextAlign.center,
-//                                           style: TextStyle(
-//                                             color: Colors.white,
-//                                             fontSize: 14,
-//                                             fontFamily: 'Noto Sans TC',
-//                                             fontWeight: FontWeight.w500,
-//                                             letterSpacing: 2.24,
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   )),
-//                               const SizedBox(width: 24),
-//                               ElevatedButton(
-//                                   onPressed: () {
-//                                     print('button');
-//                                   },
-//                                   style: ElevatedButton.styleFrom(
-//                                     foregroundColor: const Color(0xFF40A8C4),
-//                                     backgroundColor:
-//                                         Colors.white, // background color
-//                                     shape: RoundedRectangleBorder(
-//                                       side: const BorderSide(
-//                                           width: 0.50,
-//                                           color: Color(0xFFCDE1EC)),
-//                                       borderRadius: BorderRadius.circular(4),
-//                                     ),
-//                                   ),
-//                                   child: const Padding(
-//                                     padding: EdgeInsets.symmetric(
-//                                         horizontal: 32, vertical: 8),
-//                                     child: Row(
-//                                       mainAxisSize: MainAxisSize.min,
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.center,
-//                                       crossAxisAlignment:
-//                                           CrossAxisAlignment.center,
-//                                       children: [
-//                                         Text(
-//                                           '忘記密碼',
-//                                           textAlign: TextAlign.center,
-//                                           style: TextStyle(
-//                                             color: Color(0xFF40A8C4),
-//                                             fontSize: 14,
-//                                             fontFamily: 'Noto Sans TC',
-//                                             fontWeight: FontWeight.w500,
-//                                             letterSpacing: 2.24,
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   )),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   Container(
-//                     padding: const EdgeInsets.symmetric(vertical: 32),
-//                     child: Column(
-//                       mainAxisSize: MainAxisSize.min,
-//                       mainAxisAlignment: MainAxisAlignment.start,
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         Container(
-//                           padding: const EdgeInsets.symmetric(
-//                               horizontal: 32, vertical: 8),
-//                           decoration: ShapeDecoration(
-//                             color: const Color(0xFFFFC93C),
-//                             shape: RoundedRectangleBorder(
-//                                 borderRadius: BorderRadius.circular(4)),
-//                           ),
-//                           child: const Row(
-//                             mainAxisSize: MainAxisSize.min,
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             children: [
-//                               Text(
-//                                 '註冊',
-//                                 textAlign: TextAlign.center,
-//                                 style: TextStyle(
-//                                   color: Color(0xFF333333),
-//                                   fontSize: 14,
-//                                   fontFamily: 'Noto Sans TC',
-//                                   fontWeight: FontWeight.w500,
-//                                   letterSpacing: 2.24,
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                         const SizedBox(height: 4),
-//                         const Text(
-//                           '新用戶？點我註冊',
-//                           textAlign: TextAlign.center,
-//                           style: TextStyle(
-//                             color: Color(0xFF856F37),
-//                             fontSize: 10,
-//                             fontFamily: 'Noto Sans TC',
-//                             fontWeight: FontWeight.w400,
-//                             letterSpacing: 0.40,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//           Container(
-//             width: double.infinity,
-//             decoration: const BoxDecoration(color: Color(0xFFE6F0F5)),
-//             child: const Row(
-//               mainAxisSize: MainAxisSize.min,
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Text(
-//                   'Instant Communication, Delivered Express',
-//                   textAlign: TextAlign.center,
-//                   style: TextStyle(
-//                     color: Color(0xFF195374),
-//                     fontSize: 10,
-//                     fontFamily: 'Noto Sans TC',
-//                     fontWeight: FontWeight.w400,
-//                     letterSpacing: 0.40,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Container(
-//             width: 375,
-//             height: 34,
-//             padding: const EdgeInsets.only(
-//               top: 21,
-//               left: 121,
-//               right: 120,
-//               bottom: 8,
-//             ),
-//             decoration: const BoxDecoration(color: Color(0xFFE6F0F5)),
-//             child: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               crossAxisAlignment: CrossAxisAlignment.center,
-//               children: [
-//                 Container(
-//                   width: 134,
-//                   height: 5,
-//                   decoration: ShapeDecoration(
-//                     color: const Color(0xFF020202),
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(100),
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     ));
-//   }
-// }
-
-class Logo extends StatelessWidget {
-  const Logo({super.key});
+  final _accountController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 48),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/Logo.png',
-            width: 120,
-            height: 120,
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Instant Communication, Delivered Express',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF195374),
-              fontSize: 16,
-              fontFamily: 'Noto Sans TC',
-              fontWeight: FontWeight.w400,
-              letterSpacing: 0.40,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class DialogBox extends StatelessWidget {
-  final String title;
-  final Widget content;
-  const DialogBox({super.key, required this.title, required this.content});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      decoration: const BoxDecoration(
-        color: Color(0xFFFFFFFF),
-        borderRadius: BorderRadius.all(Radius.circular(4)),
-        boxShadow: [
-          BoxShadow(
-            color: Color(0x33000000),
-            offset: Offset(0, 2),
-            blurRadius: 4,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Text(title),
-          const SizedBox(height: 8),
-          content,
-        ],
+    return BlocProvider(
+      create: (context) => LoginBloc(),
+      child: BlocBuilder<LoginBloc, LoginState>(
+        builder: (context, state) {
+          if (state is LoginSuccess) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/home');
+            });
+          } else if (state is LoginConfirmFail) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        LoginNotConfirm(email: _accountController.text)),
+              );
+            });
+          }
+          return Material(
+              child: Scaffold(
+                  resizeToAvoidBottomInset: true,
+                  body: Container(
+                      height: double.infinity,
+                      color: AppStyle.blue[50],
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Container(
+                          color: AppStyle.blue[50],
+                          padding: const EdgeInsets.only(
+                            top: 44,
+                            left: 24,
+                            right: 24,
+                            bottom: 34,
+                          ),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                const AppLogo(),
+                                AppBox(
+                                    title: "使用者登入",
+                                    content: BlocBuilder<LoginBloc, LoginState>(
+                                      builder: (context, state) {
+                                        return Column(
+                                          children: [
+                                            AppTextField(
+                                              key: UniqueKey(),
+                                              controller: _accountController,
+                                              labelText: '帳號（電子信箱）',
+                                              hintText: '請輸入帳號',
+                                              errorText: state is LoginFailure
+                                                  ? state.error
+                                                  : null,
+                                              onTap: () {
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  _scrollController.animateTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                });
+                                              },
+                                              onChanged: (value) {
+                                                context.read<LoginBloc>().add(
+                                                      LoginTextFieldChanged(),
+                                                    );
+                                              },
+                                            ),
+                                            const SizedBox(height: 16),
+                                            AppTextField(
+                                              key: UniqueKey(),
+                                              controller: _passwordController,
+                                              isPassword: true,
+                                              labelText: '密碼',
+                                              hintText: '請輸入密碼',
+                                              errorText: state is LoginFailure
+                                                  ? state.error
+                                                  : null,
+                                              onTap: () {
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  _scrollController.animateTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                });
+                                              },
+                                              onChanged: (value) {
+                                                context.read<LoginBloc>().add(
+                                                      LoginTextFieldChanged(),
+                                                    );
+                                              },
+                                            ),
+                                            const SizedBox(height: 16),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // Buttons
+                                                BlocBuilder<LoginBloc,
+                                                    LoginState>(
+                                                  builder: (context, state) {
+                                                    return ElevatedButton(
+                                                      onPressed:
+                                                          state is LoginLoading
+                                                              ? null
+                                                              : () {
+                                                                  context
+                                                                      .read<
+                                                                          LoginBloc>()
+                                                                      .add(
+                                                                        LoginButtonPressed(
+                                                                            account:
+                                                                                _accountController.text,
+                                                                            password: _passwordController.text),
+                                                                      );
+                                                                },
+                                                      style:
+                                                          AppStyle.primaryBtn(),
+                                                      child: Row(
+                                                        children: [
+                                                          if (state
+                                                              is LoginLoading)
+                                                            const SizedBox(
+                                                              width: 16,
+                                                              height: 16,
+                                                              child:
+                                                                  CircularProgressIndicator(
+                                                                strokeWidth: 2,
+                                                                color: AppStyle
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                          if (state
+                                                              is LoginLoading)
+                                                            const SizedBox(
+                                                                width: 8),
+                                                          const Text("登入"),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                                const SizedBox(width: 16),
+                                                // Outline Button
+                                                OutlinedButton(
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(context,
+                                                        '/forget_password');
+                                                  },
+                                                  style: AppStyle.primaryBtn(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      pressedColor:
+                                                          AppStyle.sea,
+                                                      textColor: AppStyle.teal),
+                                                  child: const Text("忘記密碼"),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    )),
+                                const SizedBox(height: 32),
+                                ElevatedButton(
+                                  onPressed: () => Navigator.popAndPushNamed(
+                                      context, '/sign_up'),
+                                  style: AppStyle.primaryBtn(
+                                      backgroundColor: AppStyle.yellow,
+                                      pressedColor: AppStyle.yellow[300]!,
+                                      textColor: AppStyle.black),
+                                  child: const Text("註冊"),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "新用戶？點我註冊",
+                                  style: AppStyle.info(
+                                      level: 2, color: AppStyle.yellow[800]!),
+                                ),
+                                const SizedBox(height: 87),
+                                Text(
+                                  "Instant Communication, Delivered Express",
+                                  style: AppStyle.info(
+                                      level: 2, color: AppStyle.blue[700]!),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ))));
+        },
       ),
     );
   }

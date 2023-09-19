@@ -31,6 +31,26 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
     end
   end
 
+
+  def reset
+    @uid=resource_params[:uid].nil? ? nil : CGI.unescape(resource_params[:uid])
+    @client=resource_params[:client]
+    @token=resource_params[:'access-token']
+    if @uid.nil? || @client.nil? || @token.nil?
+      redirect_to reset_final_path
+    end
+  end
+
+  def final
+    temp=resource_params[:status]
+    if temp.blank?
+      @message="對不起，請由電子信箱點擊重設密碼連結進入，如有疑慮請洽管理員。"
+    elsif temp=='200'
+      @message = '您的密碼已經重新設定，請至應用程式內登入。';
+    else
+      @message = '您的密碼重新設定失敗，請確認是否有包含6~24位大小寫字母及數字，請重新點擊電子信箱重設密碼連結以重新設定密碼，如有疑慮請洽管理員。';
+    end
+  end
     protected
 
     def render_create_error_missing_email
@@ -99,5 +119,11 @@ class Auth::PasswordsController < DeviseTokenAuth::PasswordsController
           message: "failed to update password",
           data: resource_errors
       }.to_json, :status => 400
+    end
+    
+
+  private
+    def resource_params
+      params.permit(:email, :password, :password_confirmation,:redirect_url, :'access-token', :client, :uid, :status, :reset_password_token)
     end
 end

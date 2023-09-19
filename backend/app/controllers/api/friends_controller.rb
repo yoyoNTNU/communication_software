@@ -16,14 +16,40 @@ class Api::FriendsController < ApplicationController
       render json: {
         error: false,
         message: "succeed to get relationship",
-        data: "#{current_member.name} and #{@friend.name} is friends."
+        data: {
+          relationship: "Friend",
+          info:"#{current_member.name} and #{@friend.name} is friends."
+        }
       }.to_json, status: 200
     else
-      render json: {
-        error: false,
-        message: "succeed to get relationship",
-        data: "#{current_member.name} and #{@friend.name} is not friends."
-      }.to_json, status: 200
+      if FriendRequest.find_by(friend:@friend,member:current_member)
+        render json: {
+          error: false,
+          message: "succeed to get relationship",
+          data: {
+            relationship: "Sender",
+            info:"#{current_member.name} has send request to #{@friend.name}."
+          }
+        }.to_json, status: 200
+      elsif  FriendRequest.find_by(friend:current_member,member:@friend)
+        render json: {
+          error: false,
+          message: "succeed to get relationship",
+          data: {
+            relationship: "Receiver",
+            info:"#{current_member.name} has received request from #{@friend.name}."
+          }
+        }.to_json, status: 200
+      else
+        render json: {
+          error: false,
+          message: "succeed to get relationship",
+          data: {
+            relationship: "None",
+            info:"#{current_member.name} and #{@friend.name} have no relationship."
+          }
+        }.to_json, status: 200
+      end
     end
   end
 
@@ -81,10 +107,13 @@ class Api::FriendsController < ApplicationController
       return
     elsif @friend==current_member
       render json: {
-        error: true,
-        message: "failed to get relationship",
-        data: "This is yourself."
-      }.to_json, status: 400
+        error: false,
+        message: "succeed to get relationship",
+        data: {
+          relationship: "Yourself",
+          info: "#{@friend.name} is yourself."
+        }
+      }.to_json, status: 200
       return
     else 
       @friendship=Friendship.find_by(member:current_member,friend:@friend)

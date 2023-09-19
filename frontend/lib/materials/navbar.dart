@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:proj/feac_profile/screen/profile.dart';
-import 'package:proj/feac_chatroom/screen/chatroom.dart';
+import 'package:proj/homepage/homepage_screen.dart';
+import 'package:proj/feac_chatroom/screen/chatroom_list.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -16,6 +16,7 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.white,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
@@ -34,8 +35,8 @@ class _NavBarState extends State<NavBar> {
         ],
       ),
       body: <Widget>[
-        const ProfilePage(),
-        const ChatroomPage(),
+        const HomePage(),
+        ChatroomPage(),
       ][currentPageIndex],
     );
   }

@@ -7,8 +7,14 @@ Rails.application.routes.draw do
     token_validations:  'auth/token_validations'
   }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  
+  devise_scope :member do
+    get 'auth/member/password/reset'=> 'auth/passwords#reset'
+    get 'auth/member/password/final'=> 'auth/passwords#final', as: 'reset_final'
+  end
   namespace :api do
     get 'member/info'=> 'member#show'
+    get 'member/:id/info'=> 'member#other'
     patch 'member/info' => 'member#update'
     get 'search/phone' => 'search#by_phone'
     get 'search/user_id' => 'search#by_user_id'
@@ -23,7 +29,7 @@ Rails.application.routes.draw do
       delete '' => 'friends#destroy'
     end
 
-    resources :groups, param: :name, only: [:show]
-    resources :groups, except: [:show]
+    resources :chatroom, only:[:index]
+    resources :groups
   end
 end
