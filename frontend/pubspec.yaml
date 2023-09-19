@@ -73,6 +73,9 @@ flutter:
     - assets/icons/key.png
     - assets/icons/phone.png
     - assets/icons/Copy.png
+    - assets/icons/Edit_blue.png
+    - assets/icons/User_add.png
+    - assets/icons/Setting.png
 
     # Animations
     - assets/animations/logo.gif
