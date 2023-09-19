@@ -30,8 +30,6 @@ Rails.application.routes.draw do
     end
 
     resources :chatroom, only:[:index]
-
-    resources :groups, param: :name, only: [:show]
-    resources :groups, except: [:show]
+    resources :groups
   end
 end

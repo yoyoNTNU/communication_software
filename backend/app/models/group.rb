@@ -5,19 +5,6 @@ class Group < ApplicationRecord
 	mount_uploader :photo , GroupPhotoUploader
 	mount_uploader :background , GroupBackUploader
 
-	def self.get_groups(member)
-		gs = GroupMember.where(member_id: member)
-		groups = []
-
-		gs.each do |g|
-			temp = Group.find_by(id: g.group_id)
-			groups << temp	
-		end
-
-		groups
-	end
-
-
   private
   def create_chatroom 
     c=Chatroom.create(type_:"group",type_id:id)
