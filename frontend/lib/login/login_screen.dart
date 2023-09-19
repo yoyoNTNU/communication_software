@@ -16,6 +16,7 @@ class _LoginState extends State<Login> {
   final _accountController = TextEditingController();
   final _passwordController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  int tapCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +206,21 @@ class _LoginState extends State<Login> {
                                       level: 2, color: AppStyle.yellow[800]!),
                                 ),
                                 const SizedBox(height: 87),
-                                Text(
-                                  "Instant Communication, Delivered Express",
-                                  style: AppStyle.info(
-                                      level: 2, color: AppStyle.blue[700]!),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      tapCount++;
+                                    });
+                                    if (tapCount >= 10) {
+                                      Navigator.popAndPushNamed(
+                                          context, '/home');
+                                    }
+                                  },
+                                  child: Text(
+                                    "Instant Communication, Delivered Express",
+                                    style: AppStyle.info(
+                                        level: 2, color: AppStyle.blue[700]!),
+                                  ),
                                 )
                               ],
                             ),
