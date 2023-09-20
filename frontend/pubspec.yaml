@@ -76,6 +76,11 @@ flutter:
     - assets/icons/Edit_blue.png
     - assets/icons/User_add.png
     - assets/icons/Setting.png
+    - assets/icons/user_blue.png
+    - assets/icons/User_add_white.png
+    - assets/icons/Group_add.png
+    - assets/icons/X.png
+    - assets/icons/+.png
 
     # Animations
     - assets/animations/logo.gif
