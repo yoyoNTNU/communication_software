@@ -12,6 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic> info_ = {};
+  bool isExpanded = false;
 
   Future<void> _info() async {
     Future.delayed(Duration.zero, () {
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       print('API request error: $e');
     }
     if (!context.mounted) return;
-    Navigator.of(context).pop();
+    //Navigator.of(context).pop();
   }
 
   void _onLoaded() {
@@ -47,9 +48,119 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton(
-          child: const Text('+'),
-          onPressed: () {},
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isExpanded ? 56 : 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "新增好友",
+                    style: AppStyle.caption(),
+                  ),
+                  const SizedBox(
+                    width: 14,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: AppStyle.yellow,
+                    onPressed: () {
+                      setState(() {
+                        isExpanded = false;
+                      });
+                    },
+                    child: SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: Image.asset("assets/icons/User_add_white.png"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              height: isExpanded ? 56 : 0,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "建立群組",
+                    style: AppStyle.caption(),
+                  ),
+                  const SizedBox(
+                    width: 14,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: AppStyle.teal,
+                    onPressed: () {
+                      setState(() {
+                        isExpanded = false;
+                      });
+                    },
+                    child: SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: Image.asset("assets/icons/Group_add.png"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            if (isExpanded)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "取消",
+                    style: AppStyle.caption(),
+                  ),
+                  const SizedBox(
+                    width: 14,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: AppStyle.blue[200]!,
+                    onPressed: () {
+                      setState(() {
+                        isExpanded = false;
+                      });
+                    },
+                    child: SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: Image.asset("assets/icons/X.png"),
+                    ),
+                  ),
+                ],
+              ),
+            if (!isExpanded)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton(
+                    backgroundColor: AppStyle.blue,
+                    onPressed: () {
+                      setState(() {
+                        isExpanded = true;
+                      });
+                    },
+                    child: SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: Image.asset("assets/icons/+.png"),
+                    ),
+                  ),
+                ],
+              ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -74,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: info_["background"] != null
-                            ? NetworkImage(info_['background']) as ImageProvider
+                            ? NetworkImage(info_["background"]) as ImageProvider
                             : const AssetImage('assets/images/Background.png'),
                         fit: BoxFit.contain,
                       ),
@@ -106,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                     child: CircleAvatar(
                         radius: 60,
                         backgroundImage: info_["photo"] != null
-                            ? NetworkImage(info_['photo']) as ImageProvider
+                            ? NetworkImage(info_["photo"]) as ImageProvider
                             : const AssetImage('assets/images/Avatar.png'),
                         backgroundColor: Colors.transparent),
                   ),
