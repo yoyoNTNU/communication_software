@@ -30,6 +30,8 @@ Rails.application.routes.draw do
     end
 
     resources :chatroom, only:[:index]
-    resources :groups
+    resources :groups do
+      get '/member_list' => 'groups#member_list'
+    end
   end
 end
