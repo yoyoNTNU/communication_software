@@ -388,6 +388,7 @@ class PrimeSelect extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+                  //TODO: push to edit profile page
                   Navigator.popAndPushNamed(context, '/login');
                 },
                 child: Column(
@@ -407,6 +408,7 @@ class PrimeSelect extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+                  //TODO: push to friend request list page
                   Navigator.popAndPushNamed(context, '/login');
                 },
                 child: Column(
@@ -426,6 +428,7 @@ class PrimeSelect extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
+                  //TODO: push to setting page
                   Navigator.popAndPushNamed(context, '/login');
                 },
                 child: Column(

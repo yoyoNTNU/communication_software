@@ -68,6 +68,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: AppStyle.yellow,
                     onPressed: () {
                       setState(() {
+                        //TODO: push to serach friend page
                         isExpanded = false;
                       });
                     },
@@ -100,6 +101,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: AppStyle.teal,
                     onPressed: () {
                       setState(() {
+                        //TODO: push to create group page
                         isExpanded = false;
                       });
                     },
