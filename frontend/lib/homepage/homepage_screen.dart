@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/homepage/homepage_widget.dart';
 import 'package:proj/homepage/homepage_api.dart';
-import 'package:proj/main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,8 +29,8 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print('API request error: $e');
     }
-    // if (!context.mounted) return;
-    // Navigator.of(context).pop();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
   void _onLoaded() {
@@ -75,9 +74,7 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: info_["background"] != null
-                            ? NetworkImage(
-                                    "https://$host${info_['background']}")
-                                as ImageProvider
+                            ? NetworkImage(info_['background']) as ImageProvider
                             : const AssetImage('assets/images/Background.png'),
                         fit: BoxFit.contain,
                       ),
@@ -104,36 +101,12 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   Positioned(
-                    top: 12,
-                    right: 24,
-                    child: ElevatedButton(
-                      onPressed: () =>
-                          Navigator.popAndPushNamed(context, '/home'),
-                      style: AppStyle.primaryBtn(
-                        backgroundColor: AppStyle.gray[600]!.withOpacity(1),
-                        pressedColor: AppStyle.gray[800]!.withOpacity(0.4),
-                      ),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: Image.asset("assets/icons/Edit.png"),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text("編輯資料"),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
                     top: 90,
                     left: 12,
                     child: CircleAvatar(
                         radius: 60,
                         backgroundImage: info_["photo"] != null
-                            ? NetworkImage("https://$host${info_['photo']}")
-                                as ImageProvider
+                            ? NetworkImage(info_['photo']) as ImageProvider
                             : const AssetImage('assets/images/Avatar.png'),
                         backgroundColor: Colors.transparent),
                   ),
@@ -156,40 +129,23 @@ class _HomePageState extends State<HomePage> {
               ),
               Container(
                 padding: const EdgeInsets.only(
-                  top: 18,
-                  bottom: 300,
+                  top: 6,
+                  bottom: 280,
                   left: 16,
                   right: 16,
                 ),
                 color: AppStyle.blue[50],
                 child: Column(
                   children: [
+                    const PrimeSelect(),
+                    const SizedBox(
+                      height: 24,
+                    ),
                     const FriendsList(),
                     const SizedBox(
                       height: 24,
                     ),
                     GroupsList(onLoaded: _onLoaded),
-                    const SizedBox(height: 24),
-                    ElevatedButton(
-                      style: AppStyle.primaryBtn(
-                          backgroundColor: AppStyle.white,
-                          pressedColor: AppStyle.sea,
-                          textColor: AppStyle.red),
-                      onPressed: () {
-                        Navigator.popAndPushNamed(context, '/login');
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset("assets/icons/Sign_out_circle.png"),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          const Text("登出"),
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),

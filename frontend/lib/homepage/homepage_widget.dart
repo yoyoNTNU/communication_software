@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proj/style.dart';
 import 'package:proj/homepage/homepage_api.dart';
-import 'package:proj/main.dart';
 
 class CopyableText extends StatelessWidget {
   final String text_;
@@ -152,8 +151,7 @@ class _FriendsListState extends State<FriendsList> {
                             leading: CircleAvatar(
                               radius: 20,
                               backgroundImage: friend["photo"] != null
-                                  ? NetworkImage(
-                                          "https://$host${friend['photo']}")
+                                  ? NetworkImage(friend['photo'])
                                       as ImageProvider
                                   : const AssetImage(
                                       'assets/images/Avatar.png'),
@@ -225,5 +223,81 @@ class _GroupsListState extends State<GroupsList> {
         ListTile(title: Text('垃圾幹話群')),
       ],
     );
+  }
+}
+
+class PrimeSelect extends StatelessWidget {
+  const PrimeSelect({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          color: AppStyle.white,
+          borderRadius: BorderRadius.circular(4),
+        ),
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/login');
+                },
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/icons/Edit_blue.png"),
+                      Text(
+                        '編輯資料',
+                        style: AppStyle.caption(
+                            level: 2,
+                            color: AppStyle.blue,
+                            weight: FontWeight.w700),
+                      ),
+                    ]),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/login');
+                },
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/icons/User_add.png"),
+                      Text(
+                        '好友邀請',
+                        style: AppStyle.caption(
+                            level: 2,
+                            color: AppStyle.blue,
+                            weight: FontWeight.w700),
+                      ),
+                    ]),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.popAndPushNamed(context, '/login');
+                },
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset("assets/icons/Setting.png"),
+                      Text(
+                        '設定',
+                        style: AppStyle.caption(
+                            level: 2,
+                            color: AppStyle.blue,
+                            weight: FontWeight.w700),
+                      ),
+                    ]),
+              ),
+            ),
+          ],
+        ));
   }
 }
