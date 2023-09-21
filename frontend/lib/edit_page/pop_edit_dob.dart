@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'avatar_box.dart';
-import 'package:proj/edit_profile/edit_profile.dart';
 import 'package:proj/login/login_widget.dart';
+import 'package:proj/edit_page/edit_profile.dart';
 import 'package:proj/style.dart';
 
-class popEditSign extends StatefulWidget {
-  const popEditSign({super.key});
+class popEditDOB extends StatefulWidget {
+  const popEditDOB({super.key});
 
   @override
-  State<popEditSign> createState() => _popEditSignState();
+  State<popEditDOB> createState() => _popEditDOBState();
 }
 
-class _popEditSignState extends State<popEditSign> {
-
-  final TextEditingController signController = TextEditingController();
+class _popEditDOBState extends State<popEditDOB> {
+  final TextEditingController dobController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -38,12 +37,9 @@ class _popEditSignState extends State<popEditSign> {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(''),
-                        flex: 1
-                      ),
+                      Expanded(child: Text(''), flex: 1),
                       Container(
-                          child: const Text('修改個性簽名'),
+                        child: const Text('修改生日資訊'),
                       ),
                       // const SizedBox(width: 12),
                       Expanded(
@@ -56,7 +52,8 @@ class _popEditSignState extends State<popEditSign> {
                               'assets/icons/Close_round.png',
                               width: 20, // Set the size as needed
                               height: 18,
-                              color: AppStyle.blue[400], // Set the color as needed
+                              color:
+                                  AppStyle.blue[400], // Set the color as needed
                             ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -67,21 +64,19 @@ class _popEditSignState extends State<popEditSign> {
                         ),
                       ),
                     ],
-                  ), 
+                  ),
                 ),
                 Container(
                   //height: 40,
                   child: AppTextField(
                     key: UniqueKey(),
-                    controller: signController,
-                    labelText: '個性簽名',
-                    hintText: '請輸入個性簽名',
+                    controller: dobController,
+                    labelText: '生日',
+                    hintText: '請輸入生日',
                     onTap: () {
                       _scrollController.animateTo(
-                          _scrollController.position
-                              .maxScrollExtent,
-                          duration: const Duration(
-                              milliseconds: 300),
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut);
                     },
                   ),
@@ -99,7 +94,8 @@ class _popEditSignState extends State<popEditSign> {
     );
   }
 }
-Widget popButtonIcon(Color textColor, String text){
+
+Widget popButtonIcon(Color textColor, String text) {
   return ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),

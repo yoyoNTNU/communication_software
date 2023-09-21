@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proj/edit_profile/edit_profile.dart';
+import 'package:proj/edit_page/edit_profile.dart';
 import 'avatar_box.dart';
 import 'package:proj/login/login_widget.dart';
 import 'package:proj/style.dart';
@@ -12,7 +12,6 @@ class popEditUsername extends StatefulWidget {
 }
 
 class _popEditUsernameState extends State<popEditUsername> {
-
   final TextEditingController nameController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
@@ -38,12 +37,9 @@ class _popEditUsernameState extends State<popEditUsername> {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(''),
-                        flex: 1
-                      ),
+                      Expanded(child: Text(''), flex: 1),
                       Container(
-                          child: const Text('修改使用者名稱'),
+                        child: const Text('修改使用者名稱'),
                       ),
                       // const SizedBox(width: 12),
                       Expanded(
@@ -56,7 +52,8 @@ class _popEditUsernameState extends State<popEditUsername> {
                               'assets/icons/Close_round.png',
                               width: 20, // Set the size as needed
                               height: 18,
-                              color: AppStyle.blue[400], // Set the color as needed
+                              color:
+                                  AppStyle.blue[400], // Set the color as needed
                             ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -67,7 +64,7 @@ class _popEditUsernameState extends State<popEditUsername> {
                         ),
                       ),
                     ],
-                  ), 
+                  ),
                 ),
                 Container(
                   //height: 40,
@@ -78,10 +75,8 @@ class _popEditUsernameState extends State<popEditUsername> {
                     hintText: '請輸入使用者名稱',
                     onTap: () {
                       _scrollController.animateTo(
-                          _scrollController.position
-                              .maxScrollExtent,
-                          duration: const Duration(
-                              milliseconds: 300),
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut);
                     },
                   ),
@@ -100,8 +95,7 @@ class _popEditUsernameState extends State<popEditUsername> {
   }
 }
 
-
-Widget popButtonIcon(Color textColor, String text){
+Widget popButtonIcon(Color textColor, String text) {
   return ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),

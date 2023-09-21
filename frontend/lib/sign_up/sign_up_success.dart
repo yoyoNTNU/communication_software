@@ -1,7 +1,7 @@
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/signup/signup_widget.dart';
-import 'package:proj/signup/signup_api.dart';
+import 'package:proj/sign_up/sign_up_widget.dart';
+import 'package:proj/sign_up/sign_up_api.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 

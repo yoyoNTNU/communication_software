@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'account_box.dart';
 import 'package:proj/style.dart';
-import 'photo_album_android.dart';
-
 
 class AvatarBox extends StatefulWidget {
   const AvatarBox({super.key});
@@ -26,12 +24,13 @@ class _AvatarBoxState extends State<AvatarBox> {
             ),
             divider(),
             Expanded(
-              flex:192,
+              flex: 192,
               child: Container(
                 width: double.infinity,
                 height: double.infinity,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                child: const AssetImageLoader(assetPath: 'assets/images/Avatar.jpg'),
+                child: const AssetImageLoader(
+                    assetPath: 'assets/images/Avatar.jpg'),
               ),
             ),
             const SizedBox(height: 8.0),
@@ -78,54 +77,54 @@ class TextWithColorParameter extends StatelessWidget {
   }
 }
 
-Widget buttonIcon1(){
+Widget buttonIcon1() {
   return ElevatedButton.icon(
-    style: ElevatedButton.styleFrom(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-      backgroundColor: Colors.white,
-    ),
-    icon: Image.asset(
-      'assets/icons/Img_box.png', // Replace with the correct asset path
-      width: 24, // Set the width and height as needed
-      height: 24,
-      color: Color(0xFF40A8C4),
-    ),
-    onPressed: () {
-      PhotoAlbumAndroidState photoAlbum = PhotoAlbumAndroidState();
-      photoAlbum.importPhotos();
-    },
-    label: Text(
-      '修改相片', // Replace with your desired text
-      style: TextStyle(
-        color: Color(0xFF40A8C4), // Set the text color
-        fontSize: 18, // Set the text size
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+        backgroundColor: Colors.white,
       ),
-    )
-  );
+      icon: Image.asset(
+        'assets/icons/Img_box.png', // Replace with the correct asset path
+        width: 24, // Set the width and height as needed
+        height: 24,
+        color: Color(0xFF40A8C4),
+      ),
+      onPressed: () {
+        PhotoAlbumAndroidState photoAlbum = PhotoAlbumAndroidState();
+        photoAlbum.importPhotos();
+      },
+      label: Text(
+        '修改相片', // Replace with your desired text
+        style: TextStyle(
+          color: Color(0xFF40A8C4), // Set the text color
+          fontSize: 18, // Set the text size
+        ),
+      ));
 }
-Widget buttonIcon2(){
+
+Widget buttonIcon2() {
   return ElevatedButton.icon(
-    style: ElevatedButton.styleFrom(
-      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-      backgroundColor: Colors.white,
-    ),
-    icon: Image.asset(
-      'assets/icons/Trash.png', // Replace with the correct asset path
-      width: 24, // Set the width and height as needed
-      height: 24,
-      color: AppStyle.red,
-    ),
-    onPressed: () {},
-    label: Text(
-      '移除', // Replace with your desired text
-      style: TextStyle(
-        color: AppStyle.red, // Set the text color
-        fontSize: 18, // Set the text size
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+        backgroundColor: Colors.white,
       ),
-    )
-  );
+      icon: Image.asset(
+        'assets/icons/Trash.png', // Replace with the correct asset path
+        width: 24, // Set the width and height as needed
+        height: 24,
+        color: AppStyle.red,
+      ),
+      onPressed: () {},
+      label: Text(
+        '移除', // Replace with your desired text
+        style: TextStyle(
+          color: AppStyle.red, // Set the text color
+          fontSize: 18, // Set the text size
+        ),
+      ));
 }
-Widget buttonSet(){
+
+Widget buttonSet() {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [

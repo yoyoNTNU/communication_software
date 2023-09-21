@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proj/signup/signup_screen.dart';
+import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
 import 'package:proj/sent_reset_email/sent_reset_email_screen.dart';

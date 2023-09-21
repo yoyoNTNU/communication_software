@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proj/edit_profile/pop_edit_dob.dart';
-import 'package:proj/edit_profile/pop_edit_sign.dart';
-import 'package:proj/edit_profile/pop_edit_username.dart';
+import 'package:proj/edit_page/pop_edit_dob.dart';
+import 'package:proj/edit_page/pop_edit_sign.dart';
+import 'package:proj/edit_page/pop_edit_username.dart';
 import 'pop_edit_password.dart';
 
 class AccountBox extends StatefulWidget {

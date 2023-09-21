@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'avatar_box.dart';
 import 'package:proj/login/login_widget.dart';
-import 'package:proj/edit_profile/edit_profile.dart';
+import 'package:proj/edit_page/edit_profile.dart';
 import 'package:proj/style.dart';
 
-class popEditDOB extends StatefulWidget {
-  const popEditDOB({super.key});
+class popEditPassword extends StatefulWidget {
+  const popEditPassword({super.key});
 
   @override
-  State<popEditDOB> createState() => _popEditDOBState();
+  State<popEditPassword> createState() => _popEditPasswordState();
 }
 
-class _popEditDOBState extends State<popEditDOB> {
-
-  final TextEditingController dobController = TextEditingController();
+class _popEditPasswordState extends State<popEditPassword> {
+  final _oldPasswordController = TextEditingController();
+  final _newPasswordController = TextEditingController();
+  final _confirmPassController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -26,7 +27,9 @@ class _popEditDOBState extends State<popEditDOB> {
       child: AlertDialog(
         content: SingleChildScrollView(
           child: Container(
-            height: 200,
+            height: 400,
+            width: 300,
+            padding: EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,12 +41,9 @@ class _popEditDOBState extends State<popEditDOB> {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(''),
-                        flex: 1
-                      ),
+                      Expanded(child: Text(''), flex: 1),
                       Container(
-                          child: const Text('修改生日資訊'),
+                        child: const Text('修改密碼'),
                       ),
                       // const SizedBox(width: 12),
                       Expanded(
@@ -56,7 +56,8 @@ class _popEditDOBState extends State<popEditDOB> {
                               'assets/icons/Close_round.png',
                               width: 20, // Set the size as needed
                               height: 18,
-                              color: AppStyle.blue[400], // Set the color as needed
+                              color:
+                                  AppStyle.blue[400], // Set the color as needed
                             ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -67,21 +68,50 @@ class _popEditDOBState extends State<popEditDOB> {
                         ),
                       ),
                     ],
-                  ), 
+                  ),
                 ),
                 Container(
-                  //height: 40,
                   child: AppTextField(
                     key: UniqueKey(),
-                    controller: dobController,
-                    labelText: '生日',
-                    hintText: '請輸入生日',
+                    controller: _oldPasswordController,
+                    isPassword: true,
+                    labelText: '驗證舊密碼',
+                    hintText: '請輸入就密碼',
                     onTap: () {
                       _scrollController.animateTo(
-                          _scrollController.position
-                              .maxScrollExtent,
-                          duration: const Duration(
-                              milliseconds: 300),
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut);
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                Container(
+                  child: AppTextField(
+                    key: UniqueKey(),
+                    controller: _newPasswordController,
+                    isPassword: true,
+                    labelText: '設定新密碼',
+                    hintText: '請輸入新密碼',
+                    onTap: () {
+                      _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut);
+                    },
+                  ),
+                ),
+                Container(
+                  child: AppTextField(
+                    key: UniqueKey(),
+                    controller: _confirmPassController,
+                    isPassword: true,
+                    labelText: '驗證新密碼',
+                    hintText: '請輸入新密碼',
+                    onTap: () {
+                      _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut);
                     },
                   ),
@@ -100,8 +130,7 @@ class _popEditDOBState extends State<popEditDOB> {
   }
 }
 
-
-Widget popButtonIcon(Color textColor, String text){
+Widget popButtonIcon(Color textColor, String text) {
   return ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),

@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'avatar_box.dart';
+import 'package:proj/edit_page/edit_profile.dart';
 import 'package:proj/login/login_widget.dart';
-import 'package:proj/edit_profile/edit_profile.dart';
 import 'package:proj/style.dart';
 
-class popEditPassword extends StatefulWidget {
-  const popEditPassword({super.key});
+class popEditSign extends StatefulWidget {
+  const popEditSign({super.key});
 
   @override
-  State<popEditPassword> createState() => _popEditPasswordState();
+  State<popEditSign> createState() => _popEditSignState();
 }
 
-class _popEditPasswordState extends State<popEditPassword> {
-
-  final _oldPasswordController = TextEditingController();
-  final _newPasswordController = TextEditingController();
-  final _confirmPassController = TextEditingController();
+class _popEditSignState extends State<popEditSign> {
+  final TextEditingController signController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -28,9 +25,7 @@ class _popEditPasswordState extends State<popEditPassword> {
       child: AlertDialog(
         content: SingleChildScrollView(
           child: Container(
-            height: 400,
-            width: 300,
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            height: 200,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,12 +37,9 @@ class _popEditPasswordState extends State<popEditPassword> {
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(''),
-                        flex: 1
-                      ),
+                      Expanded(child: Text(''), flex: 1),
                       Container(
-                          child: const Text('修改密碼'),
+                        child: const Text('修改個性簽名'),
                       ),
                       // const SizedBox(width: 12),
                       Expanded(
@@ -60,7 +52,8 @@ class _popEditPasswordState extends State<popEditPassword> {
                               'assets/icons/Close_round.png',
                               width: 20, // Set the size as needed
                               height: 18,
-                              color: AppStyle.blue[400], // Set the color as needed
+                              color:
+                                  AppStyle.blue[400], // Set the color as needed
                             ),
                             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -71,56 +64,19 @@ class _popEditPasswordState extends State<popEditPassword> {
                         ),
                       ),
                     ],
-                  ), 
-                ),
-                Container(              
-                  child: AppTextField(
-                    key: UniqueKey(),
-                    controller: _oldPasswordController,
-                    isPassword: true,
-                    labelText: '驗證舊密碼',
-                    hintText: '請輸入就密碼',
-                    onTap: () {
-                      _scrollController.animateTo(
-                          _scrollController.position
-                              .maxScrollExtent,
-                          duration: const Duration(
-                              milliseconds: 300),
-                          curve: Curves.easeInOut);
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12.0),
-                Container(              
-                  child: AppTextField(
-                    key: UniqueKey(),
-                    controller: _newPasswordController,
-                    isPassword: true,
-                    labelText: '設定新密碼',
-                    hintText: '請輸入新密碼',
-                    onTap: () {
-                      _scrollController.animateTo(
-                          _scrollController.position
-                              .maxScrollExtent,
-                          duration: const Duration(
-                              milliseconds: 300),
-                          curve: Curves.easeInOut);
-                    },
                   ),
                 ),
                 Container(
+                  //height: 40,
                   child: AppTextField(
                     key: UniqueKey(),
-                    controller: _confirmPassController,
-                    isPassword: true,
-                    labelText: '驗證新密碼',
-                    hintText: '請輸入新密碼',
+                    controller: signController,
+                    labelText: '個性簽名',
+                    hintText: '請輸入個性簽名',
                     onTap: () {
                       _scrollController.animateTo(
-                          _scrollController.position
-                              .maxScrollExtent,
-                          duration: const Duration(
-                              milliseconds: 300),
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
                           curve: Curves.easeInOut);
                     },
                   ),
@@ -139,7 +95,7 @@ class _popEditPasswordState extends State<popEditPassword> {
   }
 }
 
-Widget popButtonIcon(Color textColor, String text){
+Widget popButtonIcon(Color textColor, String text) {
   return ElevatedButton.icon(
     style: ElevatedButton.styleFrom(
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
@@ -150,5 +106,3 @@ Widget popButtonIcon(Color textColor, String text){
     label: TextWithColorParameter(text, textColor),
   );
 }
-
-
