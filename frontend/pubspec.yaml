@@ -48,8 +48,10 @@ flutter:
     - assets/images/fail_logo.png
     # Icons
     - assets/icons/Sign_out_circle.png
-    - assets/icons/Table.png
-    - assets/icons/Chat.png
+    - assets/icons/Table_gray.png
+    - assets/icons/Chat_gray.png
+    - assets/icons/Table_blue.png
+    - assets/icons/Chat_blue.png
     - assets/icons/Edit.png
     - assets/icons/tap_check.png
     - assets/icons/tap_search.png
@@ -76,6 +78,11 @@ flutter:
     - assets/icons/Edit_blue.png
     - assets/icons/User_add.png
     - assets/icons/Setting.png
+    - assets/icons/user_blue.png
+    - assets/icons/User_add_white.png
+    - assets/icons/Group_add.png
+    - assets/icons/X.png
+    - assets/icons/+.png
 
     # Animations
     - assets/animations/logo.gif
