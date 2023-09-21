@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proj/homepage/homepage_screen.dart';
 import 'package:proj/feac_chatroom/screen/chatroom_list.dart';
+import 'package:proj/style.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -16,21 +17,96 @@ class _NavBarState extends State<NavBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: AppStyle.white,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+        height: 64,
+        indicatorColor: Colors.transparent,
         onDestinationSelected: (int index) {
           setState(() {
             currentPageIndex = index;
           });
         },
         selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
+        destinations: <Widget>[
           NavigationDestination(
-            icon: ImageIcon(AssetImage('assets/icons/Table.png')),
-            label: '個人主頁',
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Image.asset("assets/icons/Table_gray.png"),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  "主頁",
+                  style: AppStyle.caption(
+                      level: 2,
+                      color: AppStyle.gray[600]!,
+                      weight: FontWeight.w700),
+                )
+              ],
+            ),
+            selectedIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Image.asset("assets/icons/Table_blue.png"),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  "主頁",
+                  style: AppStyle.caption(
+                      level: 2, color: AppStyle.blue, weight: FontWeight.w700),
+                )
+              ],
+            ),
+            label: '主頁',
+            tooltip: '',
           ),
           NavigationDestination(
-            icon: ImageIcon(AssetImage('assets/icons/Chat.png')),
+            icon: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Image.asset("assets/icons/Chat_gray.png"),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  "聊天室",
+                  style: AppStyle.caption(
+                      level: 2,
+                      color: AppStyle.gray[600]!,
+                      weight: FontWeight.w700),
+                )
+              ],
+            ),
+            selectedIcon: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Image.asset("assets/icons/Chat_blue.png"),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  "聊天室",
+                  style: AppStyle.caption(
+                      level: 2, color: AppStyle.blue, weight: FontWeight.w700),
+                )
+              ],
+            ),
             label: '聊天室',
+            tooltip: '',
           ),
         ],
       ),
