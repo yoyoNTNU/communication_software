@@ -1,10 +1,11 @@
-development:
-  adapter: async
-
 test:
   adapter: test
 
+development:
+  adapter: async
+  url: wss://express-message-development.onrender.com/cable
+
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: wss://express-message-production-wp18.onrender.com/cable
   channel_prefix: backend_production
