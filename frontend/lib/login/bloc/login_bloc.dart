@@ -29,8 +29,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final Map<String, dynamic> headers = response.headers;
 
         if (response.statusCode == 200) {
-          final bearer_token = headers['authorization'];
-          final Token token = Token(authorization: bearer_token);
+          final bearerToken = headers['authorization'];
+          final Token token = Token(authorization: bearerToken);
           await DatabaseHelper.instance.setToken(token);
 
           emit(LoginSuccess());

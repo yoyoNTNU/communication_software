@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                     backgroundColor: AppStyle.yellow,
                     onPressed: () {
                       setState(() {
-                        //TODO: push to serach friend page
+                        //TODO: push to search friend page
                         isExpanded = false;
                       });
                     },

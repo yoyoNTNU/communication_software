@@ -85,7 +85,6 @@ flutter:
     - assets/icons/+.png
 
     # Animations
-    - assets/animations/logo.gif
     - assets/animations/loading.gif
   fonts:
     - family: NotoSansTC
