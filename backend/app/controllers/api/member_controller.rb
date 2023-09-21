@@ -1,5 +1,5 @@
 class Api::MemberController < ApplicationController
-  before_action :authenticate_member!
+  before_action :authenticate_member! , except: :other
   def update
     @member=current_member
     if @member.update(info_params)
@@ -9,11 +9,11 @@ class Api::MemberController < ApplicationController
         data: @member
       }.to_json, status: 200
     else
-      render :json => {
+      render json: {
         error: true,
         message: "failed to update member info",
         data: @member.errors
-      }.to_json, :status => 400
+      }.to_json, status: 400
     end
   end
 
@@ -25,6 +25,24 @@ class Api::MemberController < ApplicationController
       data: @member
     }.to_json, status: 200
   end
+
+  def other
+    @member=Member.find_by(id:params[:id])
+    if @member
+      render json: {
+        error: false,
+        message: "succeed to get member info",
+        data: @member
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to get member info",
+        data: "Member isn't exist."
+      }.to_json, status: 400
+    end
+  end
+
   private
 
   def info_params

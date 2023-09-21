@@ -3,6 +3,7 @@ import 'package:proj/login/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proj/login/bloc/login_bloc.dart';
+import 'package:proj/login/login_not_confirm.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,6 +16,7 @@ class _LoginState extends State<Login> {
   final _accountController = TextEditingController();
   final _passwordController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  int tapCount = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +25,24 @@ class _LoginState extends State<Login> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           if (state is LoginSuccess) {
-            Navigator.popAndPushNamed(context, '/home');
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/home');
+            });
+          } else if (state is LoginConfirmFail) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        LoginNotConfirm(email: _accountController.text)),
+              );
+            });
           }
           return Material(
               child: Scaffold(
                   resizeToAvoidBottomInset: true,
                   body: Container(
-                      height: 2000,
+                      height: double.infinity,
                       color: AppStyle.blue[50],
                       child: SingleChildScrollView(
                         controller: _scrollController,
@@ -60,12 +73,16 @@ class _LoginState extends State<Login> {
                                                   ? state.error
                                                   : null,
                                               onTap: () {
-                                                _scrollController.animateTo(
-                                                    _scrollController.position
-                                                        .maxScrollExtent,
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.easeInOut);
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  _scrollController.animateTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                });
                                               },
                                               onChanged: (value) {
                                                 context.read<LoginBloc>().add(
@@ -84,12 +101,16 @@ class _LoginState extends State<Login> {
                                                   ? state.error
                                                   : null,
                                               onTap: () {
-                                                _scrollController.animateTo(
-                                                    _scrollController.position
-                                                        .maxScrollExtent,
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.easeInOut);
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 500), () {
+                                                  _scrollController.animateTo(
+                                                      _scrollController.position
+                                                          .maxScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve: Curves.easeInOut);
+                                                });
                                               },
                                               onChanged: (value) {
                                                 context.read<LoginBloc>().add(
@@ -107,19 +128,20 @@ class _LoginState extends State<Login> {
                                                     LoginState>(
                                                   builder: (context, state) {
                                                     return ElevatedButton(
-                                                      onPressed: () {
-                                                        context
-                                                            .read<LoginBloc>()
-                                                            .add(
-                                                              LoginButtonPressed(
-                                                                  account:
-                                                                      _accountController
-                                                                          .text,
-                                                                  password:
-                                                                      _passwordController
-                                                                          .text),
-                                                            );
-                                                      },
+                                                      onPressed:
+                                                          state is LoginLoading
+                                                              ? null
+                                                              : () {
+                                                                  context
+                                                                      .read<
+                                                                          LoginBloc>()
+                                                                      .add(
+                                                                        LoginButtonPressed(
+                                                                            account:
+                                                                                _accountController.text,
+                                                                            password: _passwordController.text),
+                                                                      );
+                                                                },
                                                       style:
                                                           AppStyle.primaryBtn(),
                                                       child: Row(
@@ -149,8 +171,16 @@ class _LoginState extends State<Login> {
                                                 const SizedBox(width: 16),
                                                 // Outline Button
                                                 OutlinedButton(
-                                                  onPressed: null,
-                                                  style: AppStyle.primaryBtn(),
+                                                  onPressed: () {
+                                                    Navigator.pushNamed(context,
+                                                        '/forget_password');
+                                                  },
+                                                  style: AppStyle.primaryBtn(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      pressedColor:
+                                                          AppStyle.sea,
+                                                      textColor: AppStyle.teal),
                                                   child: const Text("忘記密碼"),
                                                 ),
                                               ],
@@ -162,8 +192,35 @@ class _LoginState extends State<Login> {
                                 const SizedBox(height: 32),
                                 ElevatedButton(
                                   onPressed: () => Navigator.popAndPushNamed(
-                                      context, '/home'),
-                                  child: const Text("檢視主畫面(DEV)"),
+                                      context, '/sign_up'),
+                                  style: AppStyle.primaryBtn(
+                                      backgroundColor: AppStyle.yellow,
+                                      pressedColor: AppStyle.yellow[300]!,
+                                      textColor: AppStyle.black),
+                                  child: const Text("註冊"),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "新用戶？點我註冊",
+                                  style: AppStyle.info(
+                                      level: 2, color: AppStyle.yellow[800]!),
+                                ),
+                                const SizedBox(height: 87),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      tapCount++;
+                                    });
+                                    if (tapCount >= 10) {
+                                      Navigator.popAndPushNamed(
+                                          context, '/home');
+                                    }
+                                  },
+                                  child: Text(
+                                    "Instant Communication, Delivered Express",
+                                    style: AppStyle.info(
+                                        level: 2, color: AppStyle.blue[700]!),
+                                  ),
                                 )
                               ],
                             ),
