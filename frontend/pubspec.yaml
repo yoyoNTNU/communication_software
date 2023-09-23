@@ -82,7 +82,9 @@ flutter:
     - assets/icons/User_add_white.png
     - assets/icons/Group_add.png
     - assets/icons/X.png
+    - assets/icons/X_blue.png
     - assets/icons/+.png
+    - assets/icons/Save.png
 
     # Animations
     - assets/animations/loading.gif
