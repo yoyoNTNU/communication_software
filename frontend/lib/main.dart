@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj/edit_page/edit_page_screen.dart';
 import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
@@ -34,6 +35,7 @@ class ChatApp extends StatelessWidget {
         '/home': (context) => const NavBar(),
         '/sign_up': (context) => const SignUp(),
         '/forget_password': (context) => const SentResetEmail(),
+        '/edit': (context) => const EditPage(),
       },
     );
   }
