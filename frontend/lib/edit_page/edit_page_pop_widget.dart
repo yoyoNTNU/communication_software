@@ -487,22 +487,18 @@ class _PopEditBDState extends State<PopEditBD> {
                       initialDate: DateTime.now(),
                       firstDate: DateTime(1911),
                       lastDate: DateTime.now(),
-                      locale: Locale('fr', 'CH'),
                       builder: (BuildContext context, Widget? child) {
                         return Theme(
                           data: ThemeData(
-                            primarySwatch: AppStyle.blue, // 主題色彩
-                            textTheme: TextTheme(
-                              displayMedium: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold), // 自定義星期文本樣式
-                            ),
-                          ),
-                          child: Container(
-                            color: Colors.blue, // 自定義上方色塊的顏色
-                            height: 50, // 自定義上方色塊的高度
-                            child: child!,
-                          ),
+                              primarySwatch: AppStyle.blue, // 主題色彩
+                              dialogBackgroundColor: AppStyle.blue[50]!
+                              //       textTheme: TextTheme(
+                              //         displayMedium: TextStyle(
+                              //             fontSize: 3,
+                              //             fontWeight: FontWeight.bold), // 自定義星期文本樣式
+                              //       ),
+                              ),
+                          child: child!,
                         );
                       },
                     );
