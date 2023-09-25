@@ -95,10 +95,7 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
                                       _sentConfirmLetter(widget.email);
                                     }
                                   : null,
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: isResentButtonEnable
                                   ? const Text("重寄驗證信")
                                   : Row(
@@ -147,10 +144,7 @@ class _SignUpSuccessState extends State<SignUpSuccess> {
                                 });
                                 Navigator.popAndPushNamed(context, '/login');
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("返回登入畫面"),
                             ),
                             const SizedBox(

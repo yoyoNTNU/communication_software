@@ -152,10 +152,7 @@ class _SignUpFailState extends State<SignUpFail> {
                               onPressed: () {
                                 Navigator.popAndPushNamed(context, '/sign_up');
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("重新註冊"),
                             ),
                             const SizedBox(
@@ -165,10 +162,7 @@ class _SignUpFailState extends State<SignUpFail> {
                               onPressed: () {
                                 Navigator.popAndPushNamed(context, '/login');
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("返回登入畫面"),
                             ),
                             const SizedBox(

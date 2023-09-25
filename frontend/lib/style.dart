@@ -103,28 +103,32 @@ class AppStyle {
       );
 
   // Define Button Style
-  static ButtonStyle primaryBtn(
-          {Color backgroundColor = AppStyle.teal,
-          Color pressedColor = AppStyle.blue,
-          Color textColor = AppStyle.white}) =>
-      ButtonStyle(
+  static ButtonStyle primaryBtn() => ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
               return AppStyle.gray.shade300;
             }
-            if (states.contains(MaterialState.pressed)) return pressedColor;
-            return backgroundColor;
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.blue[700]!;
+            }
+            return AppStyle.teal;
           },
         ),
-        foregroundColor: MaterialStatePropertyAll<Color>(textColor),
-        textStyle: MaterialStateProperty.resolveWith(
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
-              return AppStyle.caption(color: AppStyle.gray.shade100);
-            } else {
-              return AppStyle.caption(color: textColor);
+              return AppStyle.gray.shade100;
             }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.white;
+            }
+            return AppStyle.white;
+          },
+        ),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            return AppStyle.caption();
           },
         ),
         minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
@@ -133,5 +137,194 @@ class AppStyle {
             borderRadius: BorderRadius.circular(4.0),
           ),
         ),
+        side: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          return const BorderSide(color: Colors.transparent);
+        }),
+      );
+
+  static ButtonStyle secondaryBtn() => ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade300;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.blue[700]!;
+            }
+            return AppStyle.white;
+          },
+        ),
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade100;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.blue[300]!;
+            }
+            return AppStyle.teal;
+          },
+        ),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            return AppStyle.caption();
+          },
+        ),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+        side: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return const BorderSide(color: AppStyle.blue);
+          }
+          return BorderSide(color: AppStyle.blue[100]!);
+        }),
+      );
+
+  static ButtonStyle dangerBtn() => ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade300;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.yellow[100]!;
+            }
+            return AppStyle.white;
+          },
+        ),
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade100;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.red;
+            }
+            return AppStyle.red;
+          },
+        ),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            return AppStyle.caption();
+          },
+        ),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+        side: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return const BorderSide(color: AppStyle.red);
+          }
+          return BorderSide(color: AppStyle.red.withOpacity(0.2));
+        }),
+      );
+
+  static ButtonStyle popUpBtn() => ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade300;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.yellow[800]!;
+            }
+            return AppStyle.yellow;
+          },
+        ),
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade100;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.white;
+            }
+            return AppStyle.black;
+          },
+        ),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            return AppStyle.caption();
+          },
+        ),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+        side: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          return const BorderSide(color: Colors.transparent);
+        }),
+      );
+
+  static ButtonStyle textBtn() => ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade300;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.teal;
+            }
+            return Colors.transparent;
+          },
+        ),
+        foregroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return AppStyle.gray.shade100;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return AppStyle.white;
+            }
+            return AppStyle.teal;
+          },
+        ),
+        textStyle: MaterialStateProperty.resolveWith(
+          (Set<MaterialState> states) {
+            return AppStyle.caption();
+          },
+        ),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+        ),
+        side: MaterialStateProperty.resolveWith((Set<MaterialState> states) {
+          if (states.contains(MaterialState.disabled)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return const BorderSide(color: Colors.transparent);
+          }
+          return const BorderSide(color: Colors.transparent);
+        }),
       );
 }

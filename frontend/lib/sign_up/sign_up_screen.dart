@@ -232,10 +232,7 @@ class _SignUpState extends State<SignUp> {
                                   step_++;
                                 });
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("下一步"),
                             ),
                           if (step_ == 3)
