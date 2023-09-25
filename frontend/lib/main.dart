@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:proj/edit_page/edit_page_screen.dart';
 import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
@@ -29,6 +30,16 @@ class ChatApp extends StatelessWidget {
     final initialRoute = isTokenValid ? '/home' : '/login';
 
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('zh', 'TW'),
+        Locale('en', 'US'),
+      ],
+      locale: const Locale('zh'),
       initialRoute: initialRoute,
       routes: {
         '/login': (context) => const Login(),
