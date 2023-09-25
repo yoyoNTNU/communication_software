@@ -16,13 +16,7 @@ class _HomePageState extends State<HomePage> {
   bool isExpanded = false;
 
   Future<void> _info() async {
-    Future.delayed(Duration.zero, () {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const LoadingDialog(),
-      );
-    });
+    showLoading(context);
     try {
       final Map<String, dynamic> info = await GetInfoAPI.getInfo();
       setState(() {

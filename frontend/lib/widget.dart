@@ -12,3 +12,13 @@ class LoadingDialog extends StatelessWidget {
     );
   }
 }
+
+void showLoading(BuildContext context) {
+  Future.delayed(Duration.zero, () {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const LoadingDialog(),
+    );
+  });
+}
