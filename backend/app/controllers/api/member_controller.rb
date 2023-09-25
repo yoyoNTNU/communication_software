@@ -43,11 +43,36 @@ class Api::MemberController < ApplicationController
     end
   end
 
+  def feedback
+    member=current_member
+    type_=feedback_params[:type_]
+    content=feedback_params[:content]
+    if (type_.blank?||content.blank?)
+      render json: {
+        error: true,
+        message: "failed to sent feedback",
+        data: "Lost some information."
+      }.to_json, status: 400
+    else
+      time=Time.now
+      MemberMailer.sent_feedback_email(member,type_,content,time).deliver_now
+      render json: {
+        error: false,
+        message: "succeed to sent feedback",
+        data: {}
+      }.to_json, status: 200
+    end
+  end
+
   private
 
   def info_params
     #user_id,email,phone can't be modify.
     #password should though devise to modify.
     params.permit(:photo, :background, :birthday, :introduction, :name, :is_login_mail)
+  end
+
+  def feedback_params
+    params.permit(:type_,:content)
   end
 end
