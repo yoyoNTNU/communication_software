@@ -483,13 +483,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
   }
 
   Future<void> _fetchChatRooms() async {
-    Future.delayed(Duration.zero, () {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => LoadingDialog(),
-      );
-    });
+    showLoading(context);
     try {
       final List<Map<String, dynamic>> fetchedChatRooms =
           await ChatRoomList.fetchChatRooms();

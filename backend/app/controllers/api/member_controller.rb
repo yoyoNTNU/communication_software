@@ -17,6 +17,32 @@ class Api::MemberController < ApplicationController
     end
   end
 
+  def destroy_photo
+    @member=current_member
+    if !@member.photo.url.nil?
+      @member.remove_photo! 
+      @member.save
+    end
+    render json: {
+      error: false,
+      message: "succeed to update member info",
+      data: @member
+    }.to_json, status: 200
+  end
+
+  def destroy_background
+    @member=current_member
+    if !@member.background.url.nil?
+      @member.remove_background! 
+      @member.save
+    end
+    render json: {
+      error: false,
+      message: "succeed to update member info",
+      data: @member
+    }.to_json, status: 200
+  end
+
   def show
     @member=current_member
     render json: {
