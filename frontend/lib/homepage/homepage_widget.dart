@@ -51,19 +51,6 @@ class CopyableText extends StatelessWidget {
   }
 }
 
-class LoadingDialog extends StatelessWidget {
-  const LoadingDialog({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [Image.asset('assets/animations/loading.gif')],
-      ),
-    );
-  }
-}
-
 class FriendsList extends StatefulWidget {
   const FriendsList({super.key});
 

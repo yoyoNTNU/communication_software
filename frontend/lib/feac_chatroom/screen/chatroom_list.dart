@@ -3,6 +3,7 @@ import 'package:proj/style.dart';
 import '../api/chatroom_list_api.dart';
 import 'package:intl/intl.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:proj/widget.dart';
 
 //不要每次都重新叫API
 class ChatRoomCard extends StatefulWidget {
@@ -461,18 +462,6 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
                           ],
                         )),
             ])));
-  }
-}
-
-class LoadingDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [Image.asset('assets/animations/loading.gif')],
-      ),
-    );
   }
 }
 
