@@ -1,8 +1,8 @@
 import 'package:proj/style.dart';
-import 'package:proj/signup/signup_widget.dart';
-import 'package:proj/signup/signup_api.dart';
-import 'package:proj/signup/signup_success.dart';
-import 'package:proj/signup/signup_fail.dart';
+import 'package:proj/sign_up/sign_up_widget.dart';
+import 'package:proj/sign_up/sign_up_api.dart';
+import 'package:proj/sign_up/sign_up_success.dart';
+import 'package:proj/sign_up/sign_up_fail.dart';
 import 'package:flutter/material.dart';
 
 class SignUp extends StatefulWidget {
@@ -232,10 +232,7 @@ class _SignUpState extends State<SignUp> {
                                   step_++;
                                 });
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("下一步"),
                             ),
                           if (step_ == 3)

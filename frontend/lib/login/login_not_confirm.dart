@@ -1,7 +1,7 @@
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/signup/signup_widget.dart';
-import 'package:proj/signup/signup_api.dart';
+import 'package:proj/sign_up/sign_up_widget.dart';
+import 'package:proj/sign_up/sign_up_api.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 
@@ -95,10 +95,7 @@ class _LoginNotConfirmState extends State<LoginNotConfirm> {
                                       _sentConfirmLetter(widget.email);
                                     }
                                   : null,
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: isResentButtonEnable
                                   ? const Text("重寄驗證信")
                                   : Row(
@@ -147,10 +144,7 @@ class _LoginNotConfirmState extends State<LoginNotConfirm> {
                                 });
                                 Navigator.popAndPushNamed(context, '/login');
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("返回登入畫面"),
                             ),
                             const SizedBox(

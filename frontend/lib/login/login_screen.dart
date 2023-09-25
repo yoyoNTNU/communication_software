@@ -175,12 +175,8 @@ class _LoginState extends State<Login> {
                                                     Navigator.pushNamed(context,
                                                         '/forget_password');
                                                   },
-                                                  style: AppStyle.primaryBtn(
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      pressedColor:
-                                                          AppStyle.sea,
-                                                      textColor: AppStyle.teal),
+                                                  style:
+                                                      AppStyle.secondaryBtn(),
                                                   child: const Text("忘記密碼"),
                                                 ),
                                               ],
@@ -193,10 +189,7 @@ class _LoginState extends State<Login> {
                                 ElevatedButton(
                                   onPressed: () => Navigator.popAndPushNamed(
                                       context, '/sign_up'),
-                                  style: AppStyle.primaryBtn(
-                                      backgroundColor: AppStyle.yellow,
-                                      pressedColor: AppStyle.yellow[300]!,
-                                      textColor: AppStyle.black),
+                                  style: AppStyle.popUpBtn(),
                                   child: const Text("註冊"),
                                 ),
                                 const SizedBox(height: 4),

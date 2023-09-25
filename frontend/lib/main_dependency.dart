@@ -1,4 +1,3 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:proj/data.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +28,7 @@ Future<bool> verifyToken(String? token) async {
   if (response.statusCode == 200) {
     return true; // 令牌有效
   } else {
+    await DatabaseHelper.instance.cleanToken();
     return false; // 令牌无效
   }
 }

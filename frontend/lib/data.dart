@@ -55,7 +55,7 @@ class DatabaseHelper {
     }
   }
 
-  Future<void> cleanToken(Token data) async {
+  Future<void> cleanToken() async {
     final db = await initDatabase();
     await db.delete('sign_in_token');
   }

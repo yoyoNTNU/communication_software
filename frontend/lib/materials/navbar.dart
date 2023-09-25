@@ -42,9 +42,9 @@ class _NavBarState extends State<NavBar> {
                 Text(
                   "主頁",
                   style: AppStyle.caption(
-                      level: 2,
-                      color: AppStyle.gray[600]!,
-                      weight: FontWeight.w700),
+                    level: 2,
+                    color: AppStyle.gray[600]!,
+                  ),
                 )
               ],
             ),
@@ -60,8 +60,7 @@ class _NavBarState extends State<NavBar> {
                 ),
                 Text(
                   "主頁",
-                  style: AppStyle.caption(
-                      level: 2, color: AppStyle.blue, weight: FontWeight.w700),
+                  style: AppStyle.caption(level: 2, color: AppStyle.blue),
                 )
               ],
             ),

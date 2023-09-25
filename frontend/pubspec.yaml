@@ -17,12 +17,14 @@ dependencies:
   equatable: ^2.0.5
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_bloc: ^8.0.0
   http: ^1.1.0
   logging: ^1.2.0
   meta: ^1.9.1
   web_socket_channel: ^2.0.0
-  intl: ^0.17.0
+  intl: ^0.18.1
   sqflite: ^2.0.0
   path: ^1.8.0
   path_provider: ^2.0.5
@@ -30,6 +32,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.16
   intl_phone_number_input: ^0.7.3
   flutter_countdown_timer: ^4.1.0
+  calendar_date_picker2: ^0.5.3
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -82,10 +85,12 @@ flutter:
     - assets/icons/User_add_white.png
     - assets/icons/Group_add.png
     - assets/icons/X.png
+    - assets/icons/X_blue.png
     - assets/icons/+.png
+    - assets/icons/Save.png
+    - assets/icons/img_box.png
 
     # Animations
-    - assets/animations/logo.gif
     - assets/animations/loading.gif
   fonts:
     - family: NotoSansTC

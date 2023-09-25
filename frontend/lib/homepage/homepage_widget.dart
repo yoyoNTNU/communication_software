@@ -388,8 +388,7 @@ class PrimeSelect extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  //TODO: push to edit profile page
-                  Navigator.popAndPushNamed(context, '/login');
+                  Navigator.popAndPushNamed(context, '/edit');
                 },
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -398,9 +397,9 @@ class PrimeSelect extends StatelessWidget {
                       Text(
                         '編輯資料',
                         style: AppStyle.caption(
-                            level: 2,
-                            color: AppStyle.blue,
-                            weight: FontWeight.w700),
+                          level: 2,
+                          color: AppStyle.blue,
+                        ),
                       ),
                     ]),
               ),
@@ -418,9 +417,9 @@ class PrimeSelect extends StatelessWidget {
                       Text(
                         '好友邀請',
                         style: AppStyle.caption(
-                            level: 2,
-                            color: AppStyle.blue,
-                            weight: FontWeight.w700),
+                          level: 2,
+                          color: AppStyle.blue,
+                        ),
                       ),
                     ]),
               ),
@@ -438,9 +437,9 @@ class PrimeSelect extends StatelessWidget {
                       Text(
                         '設定',
                         style: AppStyle.caption(
-                            level: 2,
-                            color: AppStyle.blue,
-                            weight: FontWeight.w700),
+                          level: 2,
+                          color: AppStyle.blue,
+                        ),
                       ),
                     ]),
               ),

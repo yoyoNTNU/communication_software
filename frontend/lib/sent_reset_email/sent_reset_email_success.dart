@@ -62,10 +62,7 @@ class _SentSuccessState extends State<SentSuccess> {
                               onPressed: () {
                                 Navigator.popAndPushNamed(context, '/login');
                               },
-                              style: AppStyle.primaryBtn(
-                                  backgroundColor: Colors.transparent,
-                                  pressedColor: AppStyle.sea,
-                                  textColor: AppStyle.teal),
+                              style: AppStyle.secondaryBtn(),
                               child: const Text("返回登入畫面"),
                             ),
                             const SizedBox(
