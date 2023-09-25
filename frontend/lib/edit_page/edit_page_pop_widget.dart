@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proj/login/login_widget.dart';
 import 'package:proj/style.dart';
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 
 class PopEditPassword extends StatefulWidget {
   const PopEditPassword({super.key});
@@ -477,35 +478,63 @@ class _PopEditBDState extends State<PopEditBD> {
                   labelText: '生日',
                   hintText: '請選擇出生日期',
                   onTap: () async {
-                    var result = await showDatePicker(
+                    var result = await showCalendarDatePicker2Dialog(
                       context: context,
-                      cancelText: "清空",
-                      confirmText: "確定",
-                      helpText: "",
-                      initialEntryMode: DatePickerEntryMode.calendarOnly,
-                      currentDate: DateTime.now(),
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1911),
-                      lastDate: DateTime.now(),
-                      builder: (BuildContext context, Widget? child) {
-                        return Theme(
-                          data: ThemeData(
-                              primarySwatch: AppStyle.blue, // 主題色彩
-                              dialogBackgroundColor: AppStyle.blue[50]!
-                              //       textTheme: TextTheme(
-                              //         displayMedium: TextStyle(
-                              //             fontSize: 3,
-                              //             fontWeight: FontWeight.bold), // 自定義星期文本樣式
-                              //       ),
-                              ),
-                          child: child!,
-                        );
-                      },
+                      config: CalendarDatePicker2WithActionButtonsConfig(
+                        firstDayOfWeek: 0,
+                        firstDate: DateTime(1945),
+                        lastDate: DateTime.now(),
+                        currentDate: DateTime.now(),
+                        weekdayLabelTextStyle: AppStyle.header(),
+                        //customModePickerIcon: Text("v"),//向下展開icon
+                        controlsTextStyle: AppStyle.header(),
+                        dayTextStyle: AppStyle.header(),
+                        selectedDayTextStyle:
+                            AppStyle.header(color: AppStyle.blue[50]!),
+                        selectedDayHighlightColor: AppStyle.blue,
+                        disabledDayTextStyle:
+                            AppStyle.header(color: AppStyle.gray),
+                        todayTextStyle:
+                            (DateTime.now().weekday == DateTime.saturday ||
+                                    DateTime.now().weekday == DateTime.sunday)
+                                ? AppStyle.header(color: AppStyle.red)
+                                : AppStyle.header(),
+                        yearTextStyle: AppStyle.header(),
+                        selectedYearTextStyle:
+                            AppStyle.header(color: AppStyle.blue[50]!),
+                        centerAlignModePicker: true,
+                        dayBorderRadius: BorderRadius.circular(100),
+                        yearBorderRadius: BorderRadius.circular(4),
+                        dayTextStylePredicate: ({required date}) {
+                          TextStyle? textStyle;
+                          if (date.weekday == DateTime.saturday ||
+                              date.weekday == DateTime.sunday) {
+                            textStyle = AppStyle.header(color: AppStyle.red);
+                          }
+                          return textStyle;
+                        },
+                        cancelButton: Text(
+                          "清空",
+                          style: AppStyle.header(color: AppStyle.red),
+                        ),
+                        okButton: Text(
+                          "確定",
+                          style: AppStyle.header(color: AppStyle.blue),
+                        ),
+                      ),
+                      dialogSize: const Size(325, 400),
+                      borderRadius: BorderRadius.circular(8),
+                      dialogBackgroundColor: AppStyle.blue[50]!,
                     );
 
                     setState(() {
-                      _bdController.text =
-                          result == null ? "" : result.toString();
+                      _bdController.text = (result == null || result.isEmpty)
+                          ? ""
+                          : (() {
+                              String formattedDate =
+                                  '${result[0]!.year}/${result[0]!.month.toString().padLeft(2, '0')}/${result[0]!.day.toString().padLeft(2, '0')}';
+                              return formattedDate;
+                            })();
                     });
                   },
                 ),

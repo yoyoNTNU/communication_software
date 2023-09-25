@@ -16,6 +16,9 @@ class _EditPageState extends State<EditPage> {
     return Scaffold(
         backgroundColor: AppStyle.blue[50],
         appBar: AppBar(
+          leading: GestureDetector(
+              onTap: () => Navigator.popAndPushNamed(context, '/home'),
+              child: Image.asset("assets/icons/left.png")),
           title: Text(
             '編輯個人資料',
             style: AppStyle.header(),
@@ -32,31 +35,15 @@ class _EditPageState extends State<EditPage> {
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: Column(
                   children: [
-                    Container(
-                      color: AppStyle.blue[50],
-                      child: accountBox(context),
-                    ),
+                    accountBox(context),
                     const SizedBox(height: 24.0),
-                    Container(
-                      color: AppStyle.blue[50],
-                      child: infoBox(context),
-                    ),
+                    infoBox(context),
                     const SizedBox(height: 24.0),
-                    Container(
-                      color: AppStyle.blue[50],
-                      child: communityBox(),
-                    ),
-                    // SizedBox(height: 24.0),
-                    // Container(
-                    //   height: 316,
-                    //   child: AvatarBox(),
-                    // ),
-                    // SizedBox(height: 24.0),
-                    // Container(
-                    //   height: 336,
-                    //   child: BackgroundBox(),
-                    // ),
-                    // SizedBox(height: 24.0),
+                    communityBox(),
+                    const SizedBox(height: 24.0),
+                    const AvatarBox(),
+                    const SizedBox(height: 24.0),
+                    const BackgroundBox(),
                   ],
                 ),
               ),

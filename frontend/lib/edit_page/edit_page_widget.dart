@@ -175,3 +175,193 @@ Widget communityBox() {
     ),
   );
 }
+
+class AvatarBox extends StatefulWidget {
+  const AvatarBox({super.key});
+  @override
+  State<AvatarBox> createState() => _AvatarBoxState();
+}
+
+class _AvatarBoxState extends State<AvatarBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppStyle.white,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Column(
+        children: [
+          title("個人頭像"),
+          const SizedBox(
+            height: 12,
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppStyle.gray[100],
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Container(
+            height: 192,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Image.asset(
+              "assets/images/Avatar.png",
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                  style: AppStyle.secondaryBtn().copyWith(
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(95, 40),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/icons/img_box.png"),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Text("修改相片")
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 24,
+              ),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                  style: AppStyle.dangerBtn().copyWith(
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(95, 40),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/icons/delete.png"),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Text("移除")
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BackgroundBox extends StatefulWidget {
+  const BackgroundBox({super.key});
+  @override
+  State<BackgroundBox> createState() => _BackgroundBoxState();
+}
+
+class _BackgroundBoxState extends State<BackgroundBox> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppStyle.white,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Column(
+        children: [
+          title("背景相片"),
+          const SizedBox(
+            height: 12,
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppStyle.gray[100],
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Container(
+            height: 192,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Image.asset(
+              "assets/images/Background.png",
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                  style: AppStyle.secondaryBtn().copyWith(
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(95, 40),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/icons/img_box.png"),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Text("修改相片")
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 24,
+              ),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                  style: AppStyle.dangerBtn().copyWith(
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      const Size(95, 40),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/icons/delete.png"),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      const Text("移除")
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
