@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get 'member/info'=> 'member#show'
     get 'member/:id/info'=> 'member#other'
     patch 'member/info' => 'member#update'
+    post 'member/feedback' =>'member#feedback'
     get 'search/phone' => 'search#by_phone'
     get 'search/user_id' => 'search#by_user_id'
     resources :friend_requests ,only:[:index,:create] do
