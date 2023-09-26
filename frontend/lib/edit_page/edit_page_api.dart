@@ -37,3 +37,43 @@ class GetDetailAPI {
     }
   }
 }
+
+class SetDetailAPI {
+  static String? token;
+  static bool isTokenInitialized = false;
+
+  static Future<int> modifyInfo(
+      {String? name,
+      String? birthday,
+      String? intro,
+      String? photo,
+      String? background,
+      String? isLoginMail}) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final Map<String, String> body_ = {};
+    if (name != null) {
+      body_["name"] = name;
+    }
+    if (birthday != null) {
+      body_["birthday"] = birthday;
+    }
+    if (intro != null) {
+      body_["intro"] = intro;
+    }
+    if (photo != null) {
+      body_["photo"] = photo;
+    }
+    if (background != null) {
+      body_["background"] = background;
+    }
+    if (isLoginMail != null) {
+      body_["isLoginMail"] = isLoginMail;
+    }
+    final response = await http.patch(
+        Uri(scheme: 'https', host: host, path: '/api/member/info'),
+        headers: {'Authorization': token ?? ""},
+        body: body_);
+    return response.statusCode;
+  }
+}

@@ -86,8 +86,8 @@ Widget accountBox(BuildContext context, String? userID) {
   );
 }
 
-Widget infoBox(
-    BuildContext context, String? birthday, String? name, String? intro) {
+Widget infoBox(BuildContext context, String? birthday, String? name,
+    String? intro, Function(String) updateName) {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     decoration: BoxDecoration(
@@ -108,12 +108,15 @@ Widget infoBox(
         const SizedBox(
           height: 8,
         ),
-        unitLine("使用者名稱", name ?? "", () {
-          showDialog(
+        unitLine("使用者名稱", name ?? "", () async {
+          final temp = await showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) => const PopEditName(),
           );
+          if (temp != null) {
+            updateName(temp);
+          }
         }),
         const SizedBox(
           height: 8,
@@ -128,7 +131,8 @@ Widget infoBox(
         const SizedBox(
           height: 8,
         ),
-        unitLine("生日", birthday == null ? "" : birthday.replaceAll('-', ' / '),
+        unitLine(
+            "生日", birthday == null ? "未設定" : birthday.replaceAll('-', ' / '),
             () {
           showDialog(
             context: context,
@@ -426,9 +430,24 @@ class _BackgroundBoxState extends State<BackgroundBox> {
 
 void showSuccess(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('修改成功'),
-      duration: Duration(seconds: 1),
+    SnackBar(
+      content: Text(
+        '修改成功',
+        style: AppStyle.body(color: AppStyle.white),
+      ),
+      duration: const Duration(milliseconds: 1500),
+    ),
+  );
+}
+
+void showFail(BuildContext context, String? hintText) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        "修改失敗，請再試一次 提醒您：$hintText",
+        style: AppStyle.body(color: AppStyle.white),
+      ),
+      duration: const Duration(milliseconds: 1500),
     ),
   );
 }

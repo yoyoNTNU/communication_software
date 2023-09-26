@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:proj/login/login_widget.dart';
 import 'package:proj/style.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:proj/edit_page/edit_page_api.dart';
+import 'package:proj/edit_page/edit_page_widget.dart';
 
 class PopEditPassword extends StatefulWidget {
   const PopEditPassword({super.key});
@@ -167,6 +169,36 @@ class _PopEditNameState extends State<PopEditName> {
   final _nameController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  int _responseCode = 400;
+
+  Future<void> _setInfo(
+      {String? name,
+      String? birthday,
+      String? intro,
+      String? photo,
+      String? background,
+      String? isLoginMail}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await SetDetailAPI.modifyInfo(
+          name: name,
+          birthday: birthday,
+          intro: intro,
+          photo: photo,
+          background: background,
+          isLoginMail: isLoginMail);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -238,16 +270,17 @@ class _PopEditNameState extends State<PopEditName> {
                 ElevatedButton(
                   onPressed: _isLoading
                       ? null
-                      // : () async {
-                      //     setState(() {
-                      //       _isLoading = true;
-                      //     });
-                      //     await _sentResetEmail(_emailController.text);
-                      //     _sentSuccessOrFail();
-                      //   },
-                      : () {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
+                      : () async {
+                          await _setInfo(name: _nameController.text);
+                          if (_responseCode == 200) {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop(_nameController.text);
+                            showSuccess(context);
+                          } else {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                            showFail(context, "使用者名稱不可為空");
+                          }
                         },
                   style: AppStyle.primaryBtn(),
                   child: Row(
@@ -485,41 +518,45 @@ class _PopEditBDState extends State<PopEditBD> {
                         firstDate: DateTime(1945),
                         lastDate: DateTime.now(),
                         currentDate: DateTime.now(),
-                        weekdayLabelTextStyle: AppStyle.header(),
-                        //customModePickerIcon: Text("v"),//向下展開icon
-                        controlsTextStyle: AppStyle.header(),
-                        dayTextStyle: AppStyle.header(),
-                        selectedDayTextStyle:
-                            AppStyle.header(color: AppStyle.blue[50]!),
-                        selectedDayHighlightColor: AppStyle.blue,
+                        weekdayLabelTextStyle: AppStyle.header(level: 3),
+                        controlsTextStyle: AppStyle.body(),
+                        dayTextStyle: AppStyle.body(),
+                        selectedDayTextStyle: AppStyle.header(level: 3),
+                        selectedDayHighlightColor: AppStyle.yellow,
                         disabledDayTextStyle:
-                            AppStyle.header(color: AppStyle.gray),
+                            AppStyle.body(color: AppStyle.sea),
                         todayTextStyle:
                             (DateTime.now().weekday == DateTime.saturday ||
                                     DateTime.now().weekday == DateTime.sunday)
                                 ? AppStyle.header(color: AppStyle.red)
                                 : AppStyle.header(),
-                        yearTextStyle: AppStyle.header(),
-                        selectedYearTextStyle:
-                            AppStyle.header(color: AppStyle.blue[50]!),
+                        yearTextStyle: AppStyle.header(level: 3),
+                        selectedYearTextStyle: AppStyle.header(level: 3),
                         centerAlignModePicker: true,
                         dayBorderRadius: BorderRadius.circular(100),
                         yearBorderRadius: BorderRadius.circular(4),
                         dayTextStylePredicate: ({required date}) {
-                          TextStyle? textStyle;
                           if (date.weekday == DateTime.saturday ||
                               date.weekday == DateTime.sunday) {
-                            textStyle = AppStyle.header(color: AppStyle.red);
+                            return AppStyle.body(color: AppStyle.teal);
                           }
-                          return textStyle;
+                          return AppStyle.body();
                         },
-                        cancelButton: Text(
-                          "清空",
-                          style: AppStyle.header(color: AppStyle.red),
+                        cancelButton: SizedBox(
+                          width: 130,
+                          child: Text(
+                            "清空日期",
+                            style: AppStyle.caption(color: AppStyle.gray),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                        okButton: Text(
-                          "確定",
-                          style: AppStyle.header(color: AppStyle.blue),
+                        okButton: SizedBox(
+                          width: 130,
+                          child: Text(
+                            "確定日期",
+                            style: AppStyle.caption(color: AppStyle.teal),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       dialogSize: const Size(325, 400),
