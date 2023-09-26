@@ -18,6 +18,25 @@ class _PopEditPasswordState extends State<PopEditPassword> {
   final _confirmPassController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  int _responseCode = 400;
+
+  Future<void> _setPwd(String oldPwd, String newPed, String confirmPwd) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode =
+          await SetDetailAPI.modifyPwd(oldPwd, newPed, confirmPwd);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,16 +134,21 @@ class _PopEditPasswordState extends State<PopEditPassword> {
                 ElevatedButton(
                   onPressed: _isLoading
                       ? null
-                      // : () async {
-                      //     setState(() {
-                      //       _isLoading = true;
-                      //     });
-                      //     await _sentResetEmail(_emailController.text);
-                      //     _sentSuccessOrFail();
-                      //   },
-                      : () {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
+                      : () async {
+                          await _setPwd(
+                              _oldPasswordController.text,
+                              _newPasswordController.text,
+                              _confirmPassController.text);
+                          if (_responseCode == 200) {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                            showSuccess(context, "使用者密碼");
+                          } else {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                            showFail(context,
+                                "\n密碼需6~24位大小寫英數組合而成，\n同時請確認舊密碼輸入正確及兩次新密碼輸入一致");
+                          }
                         },
                   style: AppStyle.primaryBtn(),
                   child: Row(

@@ -5,7 +5,6 @@ import 'package:proj/data.dart';
 
 class GetDetailAPI {
   static String? token;
-  static bool isTokenInitialized = false;
 
   static Future<Map<String, dynamic>> getInfo() async {
     final dbToken = await DatabaseHelper.instance.getToken();
@@ -40,7 +39,6 @@ class GetDetailAPI {
 
 class SetDetailAPI {
   static String? token;
-  static bool isTokenInitialized = false;
 
   static Future<int> modifyInfo(
       {String? name,
@@ -72,6 +70,22 @@ class SetDetailAPI {
     }
     final response = await http.patch(
         Uri(scheme: 'https', host: host, path: '/api/member/info'),
+        headers: {'Authorization': token ?? ""},
+        body: body_);
+    return response.statusCode;
+  }
+
+  static Future<int> modifyPwd(
+      String oldPwd, String newPed, String confirmPwd) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final Map<String, String> body_ = {
+      "current_password": oldPwd,
+      "password": newPed,
+      "password_confirmation": confirmPwd
+    };
+    final response = await http.put(
+        Uri(scheme: 'https', host: host, path: '/auth/member/password'),
         headers: {'Authorization': token ?? ""},
         body: body_);
     return response.statusCode;
