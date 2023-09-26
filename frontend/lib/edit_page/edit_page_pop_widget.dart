@@ -325,6 +325,36 @@ class _PopEditIntroState extends State<PopEditIntro> {
   final _introController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  int _responseCode = 400;
+
+  Future<void> _setInfo(
+      {String? name,
+      String? birthday,
+      String? intro,
+      String? photo,
+      String? background,
+      String? isLoginMail}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await SetDetailAPI.modifyInfo(
+          name: name,
+          birthday: birthday,
+          intro: intro,
+          photo: photo,
+          background: background,
+          isLoginMail: isLoginMail);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -396,16 +426,17 @@ class _PopEditIntroState extends State<PopEditIntro> {
                 ElevatedButton(
                   onPressed: _isLoading
                       ? null
-                      // : () async {
-                      //     setState(() {
-                      //       _isLoading = true;
-                      //     });
-                      //     await _sentResetEmail(_emailController.text);
-                      //     _sentSuccessOrFail();
-                      //   },
-                      : () {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
+                      : () async {
+                          await _setInfo(intro: _introController.text);
+                          if (_responseCode == 200) {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop(_introController.text);
+                            showSuccess(context);
+                          } else {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                            showFail(context, "發生非預期錯誤，請回報相關人員");
+                          }
                         },
                   style: AppStyle.primaryBtn(),
                   child: Row(
@@ -450,6 +481,36 @@ class _PopEditBDState extends State<PopEditBD> {
   final _bdController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  int _responseCode = 400;
+
+  Future<void> _setInfo(
+      {String? name,
+      String? birthday,
+      String? intro,
+      String? photo,
+      String? background,
+      String? isLoginMail}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await SetDetailAPI.modifyInfo(
+          name: name,
+          birthday: birthday,
+          intro: intro,
+          photo: photo,
+          background: background,
+          isLoginMail: isLoginMail);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -579,16 +640,17 @@ class _PopEditBDState extends State<PopEditBD> {
                 ElevatedButton(
                   onPressed: _isLoading
                       ? null
-                      // : () async {
-                      //     setState(() {
-                      //       _isLoading = true;
-                      //     });
-                      //     await _sentResetEmail(_emailController.text);
-                      //     _sentSuccessOrFail();
-                      //   },
-                      : () {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
+                      : () async {
+                          await _setInfo(birthday: _bdController.text);
+                          if (_responseCode == 200) {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop(_bdController.text);
+                            showSuccess(context);
+                          } else {
+                            if (!context.mounted) return;
+                            Navigator.of(context).pop();
+                            showFail(context, "發生非預期錯誤，請回報相關人員");
+                          }
                         },
                   style: AppStyle.primaryBtn(),
                   child: Row(

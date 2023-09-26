@@ -87,7 +87,7 @@ Widget accountBox(BuildContext context, String? userID) {
 }
 
 Widget infoBox(BuildContext context, String? birthday, String? name,
-    String? intro, Function(String) updateName) {
+    String? intro, Function(String, String) update) {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     decoration: BoxDecoration(
@@ -115,30 +115,38 @@ Widget infoBox(BuildContext context, String? birthday, String? name,
             builder: (context) => const PopEditName(),
           );
           if (temp != null) {
-            updateName(temp);
+            update("name", temp);
           }
         }),
         const SizedBox(
           height: 8,
         ),
-        unitLine("個性簽名", intro ?? "", () {
-          showDialog(
+        unitLine("個性簽名", intro ?? "", () async {
+          final temp = await showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) => const PopEditIntro(),
           );
+          if (temp != null) {
+            update("intro", temp);
+          }
         }),
         const SizedBox(
           height: 8,
         ),
         unitLine(
-            "生日", birthday == null ? "未設定" : birthday.replaceAll('-', ' / '),
-            () {
-          showDialog(
+            "生日",
+            (birthday == null || birthday == "")
+                ? "未設定"
+                : birthday.replaceAll('-', ' / '), () async {
+          final temp = await showDialog(
             context: context,
             barrierDismissible: false,
             builder: (context) => const PopEditBD(),
           );
+          if (temp != null) {
+            update("birthday", temp);
+          }
         }),
       ],
     ),
