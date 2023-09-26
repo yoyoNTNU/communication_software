@@ -59,7 +59,7 @@ class SetDetailAPI {
       body_["birthday"] = birthday;
     }
     if (intro != null) {
-      body_["intro"] = intro;
+      body_["introduction"] = intro;
     }
     if (photo != null) {
       body_["photo"] = photo;
