@@ -12,9 +12,12 @@ class CopyableText extends StatelessWidget {
 
   void _copyToClipboard(BuildContext context) {
     Clipboard.setData(ClipboardData(text: text_)); //換成API
-    const snackBar = SnackBar(
-      content: Text('已將ID複製到剪貼板'),
-      duration: Duration(seconds: 1),
+    SnackBar snackBar = SnackBar(
+      content: Text(
+        '已將ID複製到剪貼板',
+        style: AppStyle.body(color: AppStyle.white),
+      ),
+      duration: const Duration(seconds: 1),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
