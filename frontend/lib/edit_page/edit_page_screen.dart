@@ -28,9 +28,9 @@ class _EditPageState extends State<EditPage> {
     Navigator.of(context).pop();
   }
 
-  void updateName(String newName) {
+  void update(String key, String newValue) {
     setState(() {
-      info_['name'] = newName;
+      info_[key] = newValue;
     });
   }
 
@@ -67,7 +67,7 @@ class _EditPageState extends State<EditPage> {
                     accountBox(context, info_['userID']),
                     const SizedBox(height: 24.0),
                     infoBox(context, info_['birthday'], info_['name'],
-                        info_['intro'], updateName),
+                        info_['intro'], update),
                     const SizedBox(height: 24.0),
                     communityBox(info_['email'], info_['phone']),
                     const SizedBox(height: 24.0),
