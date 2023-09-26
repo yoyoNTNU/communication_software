@@ -436,11 +436,11 @@ class _BackgroundBoxState extends State<BackgroundBox> {
   }
 }
 
-void showSuccess(BuildContext context) {
+void showSuccess(BuildContext context, String? type) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
-        '修改成功',
+        '修改$type成功',
         style: AppStyle.body(color: AppStyle.white),
       ),
       duration: const Duration(milliseconds: 1500),

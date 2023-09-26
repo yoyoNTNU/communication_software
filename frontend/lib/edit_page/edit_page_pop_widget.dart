@@ -275,7 +275,7 @@ class _PopEditNameState extends State<PopEditName> {
                           if (_responseCode == 200) {
                             if (!context.mounted) return;
                             Navigator.of(context).pop(_nameController.text);
-                            showSuccess(context);
+                            showSuccess(context, "使用者名稱");
                           } else {
                             if (!context.mounted) return;
                             Navigator.of(context).pop();
@@ -431,7 +431,7 @@ class _PopEditIntroState extends State<PopEditIntro> {
                           if (_responseCode == 200) {
                             if (!context.mounted) return;
                             Navigator.of(context).pop(_introController.text);
-                            showSuccess(context);
+                            showSuccess(context, "個性簽名");
                           } else {
                             if (!context.mounted) return;
                             Navigator.of(context).pop();
@@ -579,20 +579,17 @@ class _PopEditBDState extends State<PopEditBD> {
                         firstDate: DateTime(1945),
                         lastDate: DateTime.now(),
                         currentDate: DateTime.now(),
-                        weekdayLabelTextStyle: AppStyle.header(level: 3),
-                        controlsTextStyle: AppStyle.body(),
+                        weekdayLabelTextStyle: AppStyle.header(level: 2),
+                        controlsTextStyle: AppStyle.header(level: 2),
                         dayTextStyle: AppStyle.body(),
-                        selectedDayTextStyle: AppStyle.header(level: 3),
+                        selectedDayTextStyle: AppStyle.header(level: 2),
                         selectedDayHighlightColor: AppStyle.yellow,
                         disabledDayTextStyle:
-                            AppStyle.body(color: AppStyle.sea),
+                            AppStyle.body(color: AppStyle.gray),
                         todayTextStyle:
-                            (DateTime.now().weekday == DateTime.saturday ||
-                                    DateTime.now().weekday == DateTime.sunday)
-                                ? AppStyle.header(color: AppStyle.red)
-                                : AppStyle.header(),
-                        yearTextStyle: AppStyle.header(level: 3),
-                        selectedYearTextStyle: AppStyle.header(level: 3),
+                            AppStyle.header(level: 2, color: AppStyle.blue),
+                        yearTextStyle: AppStyle.header(level: 2),
+                        selectedYearTextStyle: AppStyle.header(level: 2),
                         centerAlignModePicker: true,
                         dayBorderRadius: BorderRadius.circular(100),
                         yearBorderRadius: BorderRadius.circular(4),
@@ -624,7 +621,6 @@ class _PopEditBDState extends State<PopEditBD> {
                       borderRadius: BorderRadius.circular(8),
                       dialogBackgroundColor: AppStyle.blue[50]!,
                     );
-
                     setState(() {
                       _bdController.text = (result == null || result.isEmpty)
                           ? ""
@@ -645,7 +641,7 @@ class _PopEditBDState extends State<PopEditBD> {
                           if (_responseCode == 200) {
                             if (!context.mounted) return;
                             Navigator.of(context).pop(_bdController.text);
-                            showSuccess(context);
+                            showSuccess(context, "生日");
                           } else {
                             if (!context.mounted) return;
                             Navigator.of(context).pop();
