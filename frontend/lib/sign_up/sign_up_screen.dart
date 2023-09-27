@@ -245,8 +245,13 @@ class _SignUpState extends State<SignUp> {
                                       await _signUp(
                                           _emailController.text,
                                           _phoneController.text != ""
-                                              ? _nationController.text +
-                                                  _phoneController.text
+                                              ? _phoneController.text
+                                                      .startsWith('0')
+                                                  ? _nationController.text +
+                                                      _phoneController.text
+                                                          .substring(1)
+                                                  : _nationController.text +
+                                                      _phoneController.text
                                               : "",
                                           _useridController.text,
                                           _nameController.text,

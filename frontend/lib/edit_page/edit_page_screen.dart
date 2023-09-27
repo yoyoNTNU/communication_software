@@ -11,6 +11,31 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   final ScrollController _scrollController = ScrollController();
+  Map<String, dynamic> info_ = {};
+
+  Future<void> _info() async {
+    try {
+      final Map<String, dynamic> info = await GetDetailAPI.getInfo();
+      setState(() {
+        info_ = info;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  void update(String key, String newValue) {
+    setState(() {
+      info_[key] = newValue;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _info();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,15 +60,20 @@ class _EditPageState extends State<EditPage> {
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: Column(
                   children: [
-                    accountBox(context),
+                    accountBox(context, info_['userID']),
                     const SizedBox(height: 24.0),
-                    infoBox(context),
+                    infoBox(context, info_['birthday'], info_['name'],
+                        info_['intro'], update),
                     const SizedBox(height: 24.0),
-                    communityBox(),
+                    communityBox(info_['email'], info_['phone']),
                     const SizedBox(height: 24.0),
-                    const AvatarBox(),
+                    AvatarBox(
+                      avatar: info_['photo'],
+                    ),
                     const SizedBox(height: 24.0),
-                    const BackgroundBox(),
+                    BackgroundBox(
+                      background: info_['background'],
+                    ),
                   ],
                 ),
               ),
