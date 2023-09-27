@@ -284,6 +284,8 @@ class AppStyle {
       );
 
   static ButtonStyle textBtn() => ButtonStyle(
+        padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(horizontal: 8, vertical: 0)),
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.disabled)) {
@@ -311,7 +313,7 @@ class AppStyle {
             return AppStyle.caption();
           },
         ),
-        minimumSize: MaterialStateProperty.all<Size>(const Size(95, 36)),
+        minimumSize: MaterialStateProperty.all<Size>(const Size(47, 28)),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4.0),
