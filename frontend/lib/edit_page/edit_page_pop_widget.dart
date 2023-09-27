@@ -199,8 +199,6 @@ class _PopEditNameState extends State<PopEditName> {
       {String? name,
       String? birthday,
       String? intro,
-      String? photo,
-      String? background,
       String? isLoginMail}) async {
     setState(() {
       _isLoading = true;
@@ -210,8 +208,6 @@ class _PopEditNameState extends State<PopEditName> {
           name: name,
           birthday: birthday,
           intro: intro,
-          photo: photo,
-          background: background,
           isLoginMail: isLoginMail);
       setState(() {
         _responseCode = responseCode;
@@ -355,8 +351,6 @@ class _PopEditIntroState extends State<PopEditIntro> {
       {String? name,
       String? birthday,
       String? intro,
-      String? photo,
-      String? background,
       String? isLoginMail}) async {
     setState(() {
       _isLoading = true;
@@ -366,8 +360,6 @@ class _PopEditIntroState extends State<PopEditIntro> {
           name: name,
           birthday: birthday,
           intro: intro,
-          photo: photo,
-          background: background,
           isLoginMail: isLoginMail);
       setState(() {
         _responseCode = responseCode;
@@ -511,8 +503,6 @@ class _PopEditBDState extends State<PopEditBD> {
       {String? name,
       String? birthday,
       String? intro,
-      String? photo,
-      String? background,
       String? isLoginMail}) async {
     setState(() {
       _isLoading = true;
@@ -522,8 +512,6 @@ class _PopEditBDState extends State<PopEditBD> {
           name: name,
           birthday: birthday,
           intro: intro,
-          photo: photo,
-          background: background,
           isLoginMail: isLoginMail);
       setState(() {
         _responseCode = responseCode;

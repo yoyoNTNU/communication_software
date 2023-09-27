@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:proj/edit_page/edit_page_widget.dart';
 import 'package:proj/style.dart';
-import 'package:proj/widget.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -15,7 +14,6 @@ class _EditPageState extends State<EditPage> {
   Map<String, dynamic> info_ = {};
 
   Future<void> _info() async {
-    showLoading(context);
     try {
       final Map<String, dynamic> info = await GetDetailAPI.getInfo();
       setState(() {
@@ -24,8 +22,6 @@ class _EditPageState extends State<EditPage> {
     } catch (e) {
       print('API request error: $e');
     }
-    if (!context.mounted) return;
-    Navigator.of(context).pop();
   }
 
   void update(String key, String newValue) {
@@ -75,7 +71,9 @@ class _EditPageState extends State<EditPage> {
                       avatar: info_['photo'],
                     ),
                     const SizedBox(height: 24.0),
-                    const BackgroundBox(),
+                    BackgroundBox(
+                      background: info_['background'],
+                    ),
                   ],
                 ),
               ),

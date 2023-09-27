@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/edit_page/edit_page_pop_widget.dart';
+import 'package:proj/edit_page/edit_page_api.dart';
+import 'package:proj/widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 Widget unitLine(String key, String value, [VoidCallback? onPress]) {
   return Container(
@@ -21,16 +24,13 @@ Widget unitLine(String key, String value, [VoidCallback? onPress]) {
         ),
       ),
       if (onPress != null)
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-          child: TextButton(
-            style: AppStyle.textBtn(),
-            onPressed: onPress,
-            child: const Text(
-              '修改',
-            ),
+        TextButton(
+          style: AppStyle.textBtn(),
+          onPressed: onPress,
+          child: const Text(
+            '修改',
           ),
-        )
+        ),
     ]),
   );
 }
@@ -201,6 +201,44 @@ class AvatarBox extends StatefulWidget {
 }
 
 class _AvatarBoxState extends State<AvatarBox> {
+  bool _isLoading = false;
+  int _responseCode = 400;
+
+  Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await SetDetailAPI.modifyPhoto(
+          avatar: avatar, background: background);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _deletePhoto() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await SetDetailAPI.removeAvatar();
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -227,7 +265,7 @@ class _AvatarBoxState extends State<AvatarBox> {
             Container(
               height: 192,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Image.asset(
+              child: Image.network(
                 widget.avatar!,
                 fit: BoxFit.contain,
               ),
@@ -241,8 +279,17 @@ class _AvatarBoxState extends State<AvatarBox> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () =>
-                            Navigator.popAndPushNamed(context, '/home'),
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                final avatar = await selectSinglePhoto();
+                                if (avatar != null) {
+                                  await _setPhoto(avatar: avatar);
+                                  Future.delayed(const Duration(seconds: 1));
+                                  if (!context.mounted) return;
+                                  Navigator.popAndPushNamed(context, '/edit');
+                                }
+                              },
                         style: AppStyle.secondaryBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
                             const Size(95, 40),
@@ -252,7 +299,20 @@ class _AvatarBoxState extends State<AvatarBox> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset("assets/icons/img_box.png"),
+                            _isLoading
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppStyle.white,
+                                    ))
+                                : SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child:
+                                        Image.asset("assets/icons/img_box.png"),
+                                  ),
                             const SizedBox(
                               width: 8,
                             ),
@@ -266,8 +326,13 @@ class _AvatarBoxState extends State<AvatarBox> {
                     ),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () =>
-                            Navigator.popAndPushNamed(context, '/home'),
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                await _deletePhoto();
+                                if (!context.mounted) return;
+                                Navigator.popAndPushNamed(context, '/edit');
+                              },
                         style: AppStyle.dangerBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
                             const Size(95, 40),
@@ -277,7 +342,20 @@ class _AvatarBoxState extends State<AvatarBox> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset("assets/icons/delete.png"),
+                            _isLoading
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppStyle.white,
+                                    ))
+                                : SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child:
+                                        Image.asset("assets/icons/delete.png"),
+                                  ),
                             const SizedBox(
                               width: 8,
                             ),
@@ -289,7 +367,25 @@ class _AvatarBoxState extends State<AvatarBox> {
                   ],
                 )
               : OutlinedButton(
-                  onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                  onPressed: _isLoading
+                      ? null
+                      : () async {
+                          final avatar = await selectSinglePhoto();
+                          if (avatar != null) {
+                            await _setPhoto(avatar: avatar);
+                          }
+                          if (_responseCode == 200 && avatar != null) {
+                            if (!context.mounted) return;
+                            showSuccess(context, "個人頭像");
+                            Future.delayed(const Duration(seconds: 1));
+                            if (!context.mounted) return;
+                            Navigator.popAndPushNamed(context, '/edit');
+                          } else if (avatar == null) {
+                          } else {
+                            if (!context.mounted) return;
+                            showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                          }
+                        },
                   style: AppStyle.secondaryBtn().copyWith(
                     minimumSize: MaterialStateProperty.all<Size>(
                       const Size(160, 40),
@@ -299,7 +395,19 @@ class _AvatarBoxState extends State<AvatarBox> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset("assets/icons/img_box.png"),
+                      _isLoading
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppStyle.white,
+                              ))
+                          : SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: Image.asset("assets/icons/img_box.png"),
+                            ),
                       const SizedBox(
                         width: 8,
                       ),
@@ -324,6 +432,44 @@ class BackgroundBox extends StatefulWidget {
 }
 
 class _BackgroundBoxState extends State<BackgroundBox> {
+  bool _isLoading = false;
+  int _responseCode = 400;
+
+  Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode =
+          await SetDetailAPI.modifyPhoto(background: background);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _deletePhoto() async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await SetDetailAPI.removeBackground();
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -350,7 +496,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
             Container(
               height: 192,
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Image.asset(
+              child: Image.network(
                 widget.background!,
                 fit: BoxFit.contain,
               ),
@@ -364,8 +510,26 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () =>
-                            Navigator.popAndPushNamed(context, '/home'),
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                final background = await selectSinglePhoto();
+                                if (background != null) {
+                                  await _setPhoto(background: background);
+                                }
+                                if (_responseCode == 200 &&
+                                    background != null) {
+                                  if (!context.mounted) return;
+                                  showSuccess(context, "背景相片");
+                                  Future.delayed(const Duration(seconds: 1));
+                                  if (!context.mounted) return;
+                                  Navigator.popAndPushNamed(context, '/edit');
+                                } else if (background == null) {
+                                } else {
+                                  if (!context.mounted) return;
+                                  showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                                }
+                              },
                         style: AppStyle.secondaryBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
                             const Size(95, 40),
@@ -375,7 +539,20 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset("assets/icons/img_box.png"),
+                            _isLoading
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppStyle.white,
+                                    ))
+                                : SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child:
+                                        Image.asset("assets/icons/img_box.png"),
+                                  ),
                             const SizedBox(
                               width: 8,
                             ),
@@ -389,8 +566,13 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                     ),
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () =>
-                            Navigator.popAndPushNamed(context, '/home'),
+                        onPressed: _isLoading
+                            ? null
+                            : () async {
+                                await _deletePhoto();
+                                if (!context.mounted) return;
+                                Navigator.popAndPushNamed(context, '/edit');
+                              },
                         style: AppStyle.dangerBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
                             const Size(95, 40),
@@ -400,7 +582,20 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset("assets/icons/delete.png"),
+                            _isLoading
+                                ? const SizedBox(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppStyle.white,
+                                    ))
+                                : SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child:
+                                        Image.asset("assets/icons/delete.png"),
+                                  ),
                             const SizedBox(
                               width: 8,
                             ),
@@ -412,7 +607,25 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                   ],
                 )
               : OutlinedButton(
-                  onPressed: () => Navigator.popAndPushNamed(context, '/home'),
+                  onPressed: _isLoading
+                      ? null
+                      : () async {
+                          final background = await selectSinglePhoto();
+                          if (background != null) {
+                            await _setPhoto(background: background);
+                          }
+                          if (_responseCode == 200 && background != null) {
+                            if (!context.mounted) return;
+                            showSuccess(context, "背景相片");
+                            Future.delayed(const Duration(seconds: 1));
+                            if (!context.mounted) return;
+                            Navigator.popAndPushNamed(context, '/edit');
+                          } else if (background == null) {
+                          } else {
+                            if (!context.mounted) return;
+                            showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                          }
+                        },
                   style: AppStyle.secondaryBtn().copyWith(
                     minimumSize: MaterialStateProperty.all<Size>(
                       const Size(160, 40),
@@ -422,7 +635,19 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset("assets/icons/img_box.png"),
+                      _isLoading
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppStyle.white,
+                              ))
+                          : SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: Image.asset("assets/icons/img_box.png"),
+                            ),
                       const SizedBox(
                         width: 8,
                       ),

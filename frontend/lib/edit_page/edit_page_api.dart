@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:proj/main.dart';
 import 'package:proj/data.dart';
@@ -44,8 +45,6 @@ class SetDetailAPI {
       {String? name,
       String? birthday,
       String? intro,
-      String? photo,
-      String? background,
       String? isLoginMail}) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
@@ -58,12 +57,6 @@ class SetDetailAPI {
     }
     if (intro != null) {
       body_["introduction"] = intro;
-    }
-    if (photo != null) {
-      body_["photo"] = photo;
-    }
-    if (background != null) {
-      body_["background"] = background;
     }
     if (isLoginMail != null) {
       body_["isLoginMail"] = isLoginMail;
@@ -88,6 +81,43 @@ class SetDetailAPI {
         Uri(scheme: 'https', host: host, path: '/auth/member/password'),
         headers: {'Authorization': token ?? ""},
         body: body_);
+    return response.statusCode;
+  }
+
+  static Future<int> modifyPhoto({XFile? avatar, XFile? background}) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    var request = http.MultipartRequest(
+        'PATCH', Uri(scheme: 'https', host: host, path: '/api/member/info'));
+    request.headers['Authorization'] = token ?? "";
+    if (avatar != null) {
+      var file = await http.MultipartFile.fromPath('photo', avatar.path);
+      request.files.add(file);
+    }
+    if (background != null) {
+      var file =
+          await http.MultipartFile.fromPath('background', background.path);
+      request.files.add(file);
+    }
+    var response = await request.send();
+    return response.statusCode;
+  }
+
+  static Future<int> removeAvatar() async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+        Uri(scheme: 'https', host: host, path: '/api/member/delete_avatar'),
+        headers: {'Authorization': token ?? ""});
+    return response.statusCode;
+  }
+
+  static Future<int> removeBackground() async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+        Uri(scheme: 'https', host: host, path: '/api/member/delete_background'),
+        headers: {'Authorization': token ?? ""});
     return response.statusCode;
   }
 }
