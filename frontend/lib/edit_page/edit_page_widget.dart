@@ -208,12 +208,6 @@ class _AvatarBoxState extends State<AvatarBox> {
   int _responseCode = 400;
   String? copyAvatar;
 
-  @override
-  void initState() {
-    super.initState();
-    copyAvatar = widget.avatar;
-  }
-
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
     setState(() {
       _isLoading = true;
@@ -469,12 +463,6 @@ class _BackgroundBoxState extends State<BackgroundBox> {
   bool _isLoading = false;
   int _responseCode = 400;
   String? copyBackground;
-
-  @override
-  void initState() {
-    super.initState();
-    copyBackground = widget.background;
-  }
 
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
     setState(() {
