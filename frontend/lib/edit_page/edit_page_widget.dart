@@ -249,8 +249,15 @@ class _AvatarBoxState extends State<AvatarBox> {
     });
   }
 
+  int step = 0;
   @override
   Widget build(BuildContext context) {
+    if (step == 1) {
+      setState(() {
+        copyAvatar = widget.avatar;
+      });
+    }
+    ++step;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
@@ -461,6 +468,13 @@ class BackgroundBox extends StatefulWidget {
 class _BackgroundBoxState extends State<BackgroundBox> {
   bool _isLoading = false;
   int _responseCode = 400;
+  String? copyBackground;
+
+  @override
+  void initState() {
+    super.initState();
+    copyBackground = widget.background;
+  }
 
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
     setState(() {
@@ -497,8 +511,15 @@ class _BackgroundBoxState extends State<BackgroundBox> {
     });
   }
 
+  int step = 0;
   @override
   Widget build(BuildContext context) {
+    if (step == 1) {
+      setState(() {
+        copyBackground = widget.background;
+      });
+    }
+    ++step;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
@@ -519,20 +540,20 @@ class _BackgroundBoxState extends State<BackgroundBox> {
           const SizedBox(
             height: 8,
           ),
-          if (widget.background != null)
+          if (copyBackground != null)
             Container(
               height: 192,
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Image.network(
-                widget.background!,
+                copyBackground!,
                 fit: BoxFit.contain,
               ),
             ),
-          if (widget.background != null)
+          if (copyBackground != null)
             const SizedBox(
               height: 8,
             ),
-          widget.background != null
+          copyBackground != null
               ? Row(
                   children: [
                     Expanded(
@@ -546,11 +567,14 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                                 }
                                 if (_responseCode == 200 &&
                                     background != null) {
+                                  List<String> parts =
+                                      background.path.split("\\");
+                                  setState(() {
+                                    copyBackground =
+                                        "$imgPath/member/background/${widget.id}/${parts.last}";
+                                  });
                                   if (!context.mounted) return;
                                   showSuccess(context, "背景相片");
-                                  Future.delayed(const Duration(seconds: 1));
-                                  if (!context.mounted) return;
-                                  Navigator.popAndPushNamed(context, '/edit');
                                 } else if (background == null) {
                                 } else {
                                   if (!context.mounted) return;
@@ -597,8 +621,11 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             ? null
                             : () async {
                                 await _deletePhoto();
+                                setState(() {
+                                  copyBackground = null;
+                                });
                                 if (!context.mounted) return;
-                                Navigator.popAndPushNamed(context, '/edit');
+                                showSuccess(context, "背景相片");
                               },
                         style: AppStyle.dangerBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
@@ -642,11 +669,13 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             await _setPhoto(background: background);
                           }
                           if (_responseCode == 200 && background != null) {
+                            List<String> parts = background.path.split("\\");
+                            setState(() {
+                              copyBackground =
+                                  "$imgPath/member/background/${widget.id}/${parts.last}";
+                            });
                             if (!context.mounted) return;
                             showSuccess(context, "背景相片");
-                            Future.delayed(const Duration(seconds: 1));
-                            if (!context.mounted) return;
-                            Navigator.popAndPushNamed(context, '/edit');
                           } else if (background == null) {
                           } else {
                             if (!context.mounted) return;
