@@ -20,8 +20,6 @@ class _EditPageState extends State<EditPage> {
       final Map<String, dynamic> info = await GetDetailAPI.getInfo();
       setState(() {
         info_ = info;
-
-        print(info_['memberID']);
       });
     } catch (e) {
       print('API request error: $e');
