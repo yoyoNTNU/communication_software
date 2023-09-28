@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj/main.dart';
 import 'package:proj/style.dart';
 import 'package:proj/edit_page/edit_page_pop_widget.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
@@ -192,8 +193,10 @@ Widget communityBox(String? email, String? phone) {
 
 class AvatarBox extends StatefulWidget {
   final String? avatar;
+  final int id;
   const AvatarBox({
     super.key,
+    required this.id,
     this.avatar,
   });
   @override
@@ -203,6 +206,7 @@ class AvatarBox extends StatefulWidget {
 class _AvatarBoxState extends State<AvatarBox> {
   bool _isLoading = false;
   int _responseCode = 400;
+  String? copyAvatar;
 
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
     setState(() {
@@ -239,8 +243,15 @@ class _AvatarBoxState extends State<AvatarBox> {
     });
   }
 
+  int step = 0;
   @override
   Widget build(BuildContext context) {
+    if (step == 1) {
+      setState(() {
+        copyAvatar = widget.avatar;
+      });
+    }
+    ++step;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
@@ -261,20 +272,20 @@ class _AvatarBoxState extends State<AvatarBox> {
           const SizedBox(
             height: 8,
           ),
-          if (widget.avatar != null)
+          if (copyAvatar != null)
             Container(
               height: 192,
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Image.network(
-                widget.avatar!,
+                copyAvatar!,
                 fit: BoxFit.contain,
               ),
             ),
-          if (widget.avatar != null)
+          if (copyAvatar != null)
             const SizedBox(
               height: 8,
             ),
-          widget.avatar != null
+          copyAvatar != null
               ? Row(
                   children: [
                     Expanded(
@@ -285,9 +296,19 @@ class _AvatarBoxState extends State<AvatarBox> {
                                 final avatar = await selectSinglePhoto();
                                 if (avatar != null) {
                                   await _setPhoto(avatar: avatar);
-                                  Future.delayed(const Duration(seconds: 1));
+                                }
+                                if (_responseCode == 200 && avatar != null) {
+                                  List<String> parts = avatar.path.split("\\");
+                                  setState(() {
+                                    copyAvatar =
+                                        "$imgPath/member/photo/${widget.id}/${parts.last}";
+                                  });
                                   if (!context.mounted) return;
-                                  Navigator.popAndPushNamed(context, '/edit');
+                                  showSuccess(context, "個人頭像");
+                                } else if (avatar == null) {
+                                } else {
+                                  if (!context.mounted) return;
+                                  showFail(context, "檔案格式僅接受 jpg jpeg gif png");
                                 }
                               },
                         style: AppStyle.secondaryBtn().copyWith(
@@ -330,8 +351,11 @@ class _AvatarBoxState extends State<AvatarBox> {
                             ? null
                             : () async {
                                 await _deletePhoto();
+                                setState(() {
+                                  copyAvatar = null;
+                                });
                                 if (!context.mounted) return;
-                                Navigator.popAndPushNamed(context, '/edit');
+                                showSuccess(context, "個人頭像");
                               },
                         style: AppStyle.dangerBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
@@ -375,11 +399,13 @@ class _AvatarBoxState extends State<AvatarBox> {
                             await _setPhoto(avatar: avatar);
                           }
                           if (_responseCode == 200 && avatar != null) {
+                            List<String> parts = avatar.path.split("\\");
+                            setState(() {
+                              copyAvatar =
+                                  "$imgPath/member/photo/${widget.id}/${parts.last}";
+                            });
                             if (!context.mounted) return;
                             showSuccess(context, "個人頭像");
-                            Future.delayed(const Duration(seconds: 1));
-                            if (!context.mounted) return;
-                            Navigator.popAndPushNamed(context, '/edit');
                           } else if (avatar == null) {
                           } else {
                             if (!context.mounted) return;
@@ -423,8 +449,10 @@ class _AvatarBoxState extends State<AvatarBox> {
 
 class BackgroundBox extends StatefulWidget {
   final String? background;
+  final int id;
   const BackgroundBox({
     super.key,
+    required this.id,
     this.background,
   });
   @override
@@ -434,6 +462,7 @@ class BackgroundBox extends StatefulWidget {
 class _BackgroundBoxState extends State<BackgroundBox> {
   bool _isLoading = false;
   int _responseCode = 400;
+  String? copyBackground;
 
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
     setState(() {
@@ -470,8 +499,15 @@ class _BackgroundBoxState extends State<BackgroundBox> {
     });
   }
 
+  int step = 0;
   @override
   Widget build(BuildContext context) {
+    if (step == 1) {
+      setState(() {
+        copyBackground = widget.background;
+      });
+    }
+    ++step;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
@@ -492,20 +528,20 @@ class _BackgroundBoxState extends State<BackgroundBox> {
           const SizedBox(
             height: 8,
           ),
-          if (widget.background != null)
+          if (copyBackground != null)
             Container(
               height: 192,
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Image.network(
-                widget.background!,
+                copyBackground!,
                 fit: BoxFit.contain,
               ),
             ),
-          if (widget.background != null)
+          if (copyBackground != null)
             const SizedBox(
               height: 8,
             ),
-          widget.background != null
+          copyBackground != null
               ? Row(
                   children: [
                     Expanded(
@@ -519,11 +555,14 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                                 }
                                 if (_responseCode == 200 &&
                                     background != null) {
+                                  List<String> parts =
+                                      background.path.split("\\");
+                                  setState(() {
+                                    copyBackground =
+                                        "$imgPath/member/background/${widget.id}/${parts.last}";
+                                  });
                                   if (!context.mounted) return;
                                   showSuccess(context, "背景相片");
-                                  Future.delayed(const Duration(seconds: 1));
-                                  if (!context.mounted) return;
-                                  Navigator.popAndPushNamed(context, '/edit');
                                 } else if (background == null) {
                                 } else {
                                   if (!context.mounted) return;
@@ -570,8 +609,11 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             ? null
                             : () async {
                                 await _deletePhoto();
+                                setState(() {
+                                  copyBackground = null;
+                                });
                                 if (!context.mounted) return;
-                                Navigator.popAndPushNamed(context, '/edit');
+                                showSuccess(context, "背景相片");
                               },
                         style: AppStyle.dangerBtn().copyWith(
                           minimumSize: MaterialStateProperty.all<Size>(
@@ -615,11 +657,13 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             await _setPhoto(background: background);
                           }
                           if (_responseCode == 200 && background != null) {
+                            List<String> parts = background.path.split("\\");
+                            setState(() {
+                              copyBackground =
+                                  "$imgPath/member/background/${widget.id}/${parts.last}";
+                            });
                             if (!context.mounted) return;
                             showSuccess(context, "背景相片");
-                            Future.delayed(const Duration(seconds: 1));
-                            if (!context.mounted) return;
-                            Navigator.popAndPushNamed(context, '/edit');
                           } else if (background == null) {
                           } else {
                             if (!context.mounted) return;
@@ -665,7 +709,7 @@ void showSuccess(BuildContext context, String? type) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Text(
-        '修改$type成功',
+        '編輯$type成功，資訊已更新',
         style: AppStyle.body(color: AppStyle.white),
       ),
       duration: const Duration(milliseconds: 1500),
