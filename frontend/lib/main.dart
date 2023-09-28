@@ -8,8 +8,15 @@ import 'package:proj/sent_reset_email/sent_reset_email_screen.dart';
 import 'package:proj/main_dependency.dart';
 
 // Define http host name
+//backend develop server
 const String host = 'express-message-development.onrender.com';
-
+//backend product server
+//const String host = 'express-message-production-wp18.onrender.com';
+//develop google cloud image host
+const String imgPath =
+    'https://storage.googleapis.com/express_message_uploader/uploads';
+//product google cloud image host
+//const String imgPath ='https://storage.googleapis.com/express_message_production_uploader/uploads';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
