@@ -75,7 +75,7 @@ class _EditPageState extends State<EditPage> {
                     infoBox(context, info_['birthday'], info_['name'],
                         info_['intro'], update),
                     const SizedBox(height: 24.0),
-                    communityBox(info_['email'], info_['phone']),
+                    communityBox(context, info_['email'], info_['phone']),
                     const SizedBox(height: 24.0),
                     AvatarBox(
                       id: info_['memberID'] ?? 1,

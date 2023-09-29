@@ -91,6 +91,7 @@ flutter:
     - assets/icons/Save.png
     - assets/icons/img_box.png
     - assets/icons/Refresh.png
+    - assets/icons/Tips.png
 
     # Animations
     - assets/animations/loading.gif
