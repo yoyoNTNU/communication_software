@@ -172,7 +172,8 @@ class _LoginState extends State<Login> {
                                                 // Outline Button
                                                 OutlinedButton(
                                                   onPressed: () {
-                                                    Navigator.pushNamed(context,
+                                                    Navigator.popAndPushNamed(
+                                                        context,
                                                         '/forget_password');
                                                   },
                                                   style:

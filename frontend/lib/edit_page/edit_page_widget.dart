@@ -5,6 +5,7 @@ import 'package:proj/edit_page/edit_page_pop_widget.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:proj/widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 Widget unitLine(String key, String value, [VoidCallback? onPress]) {
   return Container(
@@ -278,6 +279,12 @@ class _AvatarBoxState extends State<AvatarBox> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Image.network(
                 copyAvatar!,
+                errorBuilder: (context, error, stackTrace) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.popAndPushNamed(context, '/edit');
+                  });
+                  return const SizedBox();
+                },
                 fit: BoxFit.contain,
               ),
             ),
@@ -298,7 +305,10 @@ class _AvatarBoxState extends State<AvatarBox> {
                                   await _setPhoto(avatar: avatar);
                                 }
                                 if (_responseCode == 200 && avatar != null) {
-                                  List<String> parts = avatar.path.split("\\");
+                                  String normalizedPath =
+                                      path.normalize(avatar.path);
+                                  List<String> parts =
+                                      path.split(normalizedPath);
                                   setState(() {
                                     copyAvatar =
                                         "$imgPath/member/photo/${widget.id}/${parts.last}";
@@ -399,7 +409,8 @@ class _AvatarBoxState extends State<AvatarBox> {
                             await _setPhoto(avatar: avatar);
                           }
                           if (_responseCode == 200 && avatar != null) {
-                            List<String> parts = avatar.path.split("\\");
+                            String normalizedPath = path.normalize(avatar.path);
+                            List<String> parts = path.split(normalizedPath);
                             setState(() {
                               copyAvatar =
                                   "$imgPath/member/photo/${widget.id}/${parts.last}";
@@ -534,6 +545,12 @@ class _BackgroundBoxState extends State<BackgroundBox> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Image.network(
                 copyBackground!,
+                errorBuilder: (context, error, stackTrace) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.popAndPushNamed(context, '/edit');
+                  });
+                  return const SizedBox();
+                },
                 fit: BoxFit.contain,
               ),
             ),
@@ -555,8 +572,10 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                                 }
                                 if (_responseCode == 200 &&
                                     background != null) {
+                                  String normalizedPath =
+                                      path.normalize(background.path);
                                   List<String> parts =
-                                      background.path.split("\\");
+                                      path.split(normalizedPath);
                                   setState(() {
                                     copyBackground =
                                         "$imgPath/member/background/${widget.id}/${parts.last}";
@@ -657,7 +676,9 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             await _setPhoto(background: background);
                           }
                           if (_responseCode == 200 && background != null) {
-                            List<String> parts = background.path.split("\\");
+                            String normalizedPath =
+                                path.normalize(background.path);
+                            List<String> parts = path.split(normalizedPath);
                             setState(() {
                               copyBackground =
                                   "$imgPath/member/background/${widget.id}/${parts.last}";

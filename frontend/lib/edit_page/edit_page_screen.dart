@@ -46,12 +46,18 @@ class _EditPageState extends State<EditPage> {
         backgroundColor: AppStyle.blue[50],
         appBar: AppBar(
           leading: GestureDetector(
-              onTap: () => Navigator.popAndPushNamed(context, '/home'),
-              child: Image.asset("assets/icons/left.png")),
+            onTap: () => Navigator.popAndPushNamed(context, '/home'),
+            child: Image.asset("assets/icons/left.png"),
+          ),
           title: Text(
             '編輯個人資料',
             style: AppStyle.header(),
           ),
+          actions: [
+            GestureDetector(
+                onTap: () => Navigator.popAndPushNamed(context, '/edit'),
+                child: Image.asset("assets/icons/Refresh.png")),
+          ],
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0.0,
