@@ -5,6 +5,7 @@ import 'package:proj/edit_page/edit_page_pop_widget.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:proj/widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as path;
 
 Widget unitLine(String key, String value, [VoidCallback? onPress]) {
@@ -37,15 +38,63 @@ Widget unitLine(String key, String value, [VoidCallback? onPress]) {
   );
 }
 
-Widget title(String text) {
-  return SizedBox(
-    width: double.infinity,
-    child: Text(
-      text,
-      style: AppStyle.header(color: AppStyle.gray[700]!),
-      textAlign: TextAlign.left,
-    ),
+Widget title(String text, [String? tips, BuildContext? context]) {
+  TextStyle linkStyle = TextStyle(
+    color: AppStyle.blue[200]!,
+    fontSize: 12,
+    fontFamily: 'NotoSansTC',
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.4,
+    decoration: TextDecoration.underline,
+    decorationColor: AppStyle.blue[200]!,
   );
+  TapGestureRecognizer tapDirect;
+  if (tips != null && context != null) {
+    tapDirect = TapGestureRecognizer()
+      ..onTap = () {
+        //TODO 改為回報問題頁面
+        Navigator.pushNamed(context, '/home');
+      };
+  } else {
+    tapDirect = TapGestureRecognizer()..onTap = () {};
+  }
+  return tips == null
+      ? SizedBox(
+          width: double.infinity,
+          child: Text(
+            text,
+            style: AppStyle.header(color: AppStyle.gray[700]!),
+            textAlign: TextAlign.left,
+          ),
+        )
+      : Row(
+          children: [
+            Expanded(
+              child: Text(
+                text,
+                style: AppStyle.header(color: AppStyle.gray[700]!),
+                textAlign: TextAlign.left,
+              ),
+            ),
+            Tooltip(
+                triggerMode: TooltipTriggerMode.tap,
+                showDuration: const Duration(seconds: 10),
+                richMessage: TextSpan(children: [
+                  TextSpan(
+                      text: "$tips無法修改\n若需修改請至 ",
+                      style: AppStyle.info(color: AppStyle.white)),
+                  TextSpan(
+                    text: '回報問題',
+                    style: linkStyle,
+                    recognizer: tapDirect,
+                  ),
+                  TextSpan(
+                      text: " 提出修改申請",
+                      style: AppStyle.info(color: AppStyle.white)),
+                ]),
+                child: Image.asset("assets/icons/Tips.png")),
+          ],
+        );
 }
 
 Widget accountBox(BuildContext context, String? userID) {
@@ -57,7 +106,7 @@ Widget accountBox(BuildContext context, String? userID) {
     ),
     child: Column(
       children: [
-        title("帳戶資料"),
+        title("帳戶資料", "用戶ID", context),
         const SizedBox(
           height: 12,
         ),
@@ -155,7 +204,7 @@ Widget infoBox(BuildContext context, String? birthday, String? name,
   );
 }
 
-Widget communityBox(String? email, String? phone) {
+Widget communityBox(BuildContext context, String? email, String? phone) {
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
     decoration: BoxDecoration(
@@ -164,7 +213,7 @@ Widget communityBox(String? email, String? phone) {
     ),
     child: Column(
       children: [
-        title("通訊資料"),
+        title("通訊資料", "通訊資料", context),
         const SizedBox(
           height: 12,
         ),
@@ -480,8 +529,8 @@ class _BackgroundBoxState extends State<BackgroundBox> {
       _isLoading = true;
     });
     try {
-      final int responseCode =
-          await SetDetailAPI.modifyPhoto(background: background);
+      final int responseCode = await SetDetailAPI.modifyPhoto(
+          avatar: avatar, background: background);
       setState(() {
         _responseCode = responseCode;
       });
