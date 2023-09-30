@@ -51,3 +51,9 @@ Future<XFile?> selectSinglePhoto() async {
   final XFile? image = await picker.pickImage(source: ImageSource.gallery);
   return image;
 }
+
+Future<XFile?> takeSinglePhoto() async {
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(source: ImageSource.camera);
+  return image;
+}
