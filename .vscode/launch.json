@@ -1,28 +1,44 @@
 {
-    // 使用 IntelliSense 以得知可用的屬性。
-    // 暫留以檢視現有屬性的描述。
-    // 如需詳細資訊，請瀏覽: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "frontend",
+      "cwd": "frontend",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "frontend (profile mode)",
+      "cwd": "frontend",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile"
+    },
+    {
+      "name": "frontend (release mode)",
+      "cwd": "frontend",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/yoyo1/projects/communication_software/frontend/windows/runner",
+      "program": "c:/Users/yoyo1/projects/communication_software/frontend/windows/runner/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
         {
-            "name": "frontend",
-            "cwd": "frontend",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "frontend (profile mode)",
-            "cwd": "frontend",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "frontend (release mode)",
-            "cwd": "frontend",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
         }
-    ]
+      ]
+    }
+  ]
 }
