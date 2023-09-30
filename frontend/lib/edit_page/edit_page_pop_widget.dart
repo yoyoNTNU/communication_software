@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:proj/login/login_widget.dart';
 import 'package:proj/style.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:proj/edit_page/edit_page_widget.dart';
+import 'package:proj/widget.dart';
+import 'dart:io';
 
 class PopEditPassword extends StatefulWidget {
   const PopEditPassword({super.key});
@@ -689,5 +692,77 @@ class _PopEditBDState extends State<PopEditBD> {
         ),
       ),
     );
+  }
+}
+
+Future<XFile?> photoSource(BuildContext context) async {
+  final String? temp;
+  if (Platform.isAndroid || Platform.isIOS) {
+    temp = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          contentPadding: const EdgeInsets.symmetric(vertical: 4),
+          children: [
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop("take");
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset("assets/icons/Camera.png"),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "透過相機拍攝",
+                    style: AppStyle.body(),
+                  )
+                ],
+              ),
+            ),
+            const Divider(
+              height: 1,
+              thickness: 1,
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop("pick");
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset("assets/icons/img_box_black.png"),
+                  const SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "透過相簿選擇",
+                    style: AppStyle.body(),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+    temp = "pick";
+  }
+  if (temp != null) {
+    XFile? photo;
+    if (temp == "pick") {
+      photo = await selectSinglePhoto();
+    } else {
+      photo = await takeSinglePhoto();
+    }
+    return photo;
+  } else {
+    return null;
   }
 }
