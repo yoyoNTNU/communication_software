@@ -3,7 +3,6 @@ import 'package:proj/main.dart';
 import 'package:proj/style.dart';
 import 'package:proj/edit_page/edit_page_pop_widget.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
-import 'package:proj/widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as path;
@@ -349,7 +348,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                         onPressed: _isLoading
                             ? null
                             : () async {
-                                final avatar = await selectSinglePhoto();
+                                final avatar = await photoSource(context);
                                 if (avatar != null) {
                                   await _setPhoto(avatar: avatar);
                                 }
@@ -453,7 +452,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                   onPressed: _isLoading
                       ? null
                       : () async {
-                          final avatar = await selectSinglePhoto();
+                          final avatar = await photoSource(context);
                           if (avatar != null) {
                             await _setPhoto(avatar: avatar);
                           }
@@ -615,7 +614,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                         onPressed: _isLoading
                             ? null
                             : () async {
-                                final background = await selectSinglePhoto();
+                                final background = await photoSource(context);
                                 if (background != null) {
                                   await _setPhoto(background: background);
                                 }
@@ -720,7 +719,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                   onPressed: _isLoading
                       ? null
                       : () async {
-                          final background = await selectSinglePhoto();
+                          final background = await photoSource(context);
                           if (background != null) {
                             await _setPhoto(background: background);
                           }
