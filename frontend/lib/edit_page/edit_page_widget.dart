@@ -6,6 +6,7 @@ import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as path;
+import 'package:proj/widget.dart';
 
 Widget unitLine(String key, String value, [VoidCallback? onPress]) {
   return Container(
