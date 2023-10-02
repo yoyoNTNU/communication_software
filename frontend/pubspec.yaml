@@ -94,6 +94,9 @@ flutter:
     - assets/icons/Tips.png
     - assets/icons/img_box_black.png
     - assets/icons/Camera.png
+    - assets/icons/Search.png
+    - assets/icons/select.png
+    - assets/icons/unselect.png
 
     # Animations
     - assets/animations/loading.gif
