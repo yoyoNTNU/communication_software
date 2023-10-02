@@ -36,6 +36,7 @@ class GetInfoAPI {
             "id": id,
             "nickname": friend['nickname'],
             "photo": infoInfoData['photo']['url'],
+            "check": false,
           };
           friendsWithInfo.add(friendInfo);
         } else {

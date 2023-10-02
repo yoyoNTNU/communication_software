@@ -71,7 +71,7 @@ class _GroupPageState extends State<GroupPage> {
             padding: const EdgeInsets.symmetric(vertical: 4),
             color: AppStyle.blue[50],
             child: Text(
-              "已選擇 3 位成員",
+              "已選擇 ${copyFriendList.where((friend) => friend["check"] == true).length} 位成員",
               style: AppStyle.body(color: AppStyle.gray),
               textAlign: TextAlign.center,
             ),
@@ -121,6 +121,9 @@ class _GroupPageState extends State<GroupPage> {
                       onTapX: () {
                         setState(() {
                           friendList = List.from(copyFriendList);
+
+                          // print(friendList);
+                          // print(copyFriendList);
                         });
                       },
                       onChanged: (value) {
@@ -137,6 +140,9 @@ class _GroupPageState extends State<GroupPage> {
                           }
                           setState(() {
                             friendList = filteredList;
+                            // print(filteredList);
+                            // print(friendList);
+                            // print(copyFriendList);
                           });
                         });
                       },
@@ -157,9 +163,19 @@ class _GroupPageState extends State<GroupPage> {
                 return Column(
                   children: [
                     MemberCard(
-                        id: friendList[index]["id"],
-                        avatar: friendList[index]["photo"],
-                        name: friendList[index]["nickname"]),
+                      id: friendList[index]["id"],
+                      avatar: friendList[index]["photo"],
+                      name: friendList[index]["nickname"],
+                      check: friendList[index]["check"],
+                      onTap: () {
+                        setState(() {
+                          friendList[index]["check"] =
+                              !friendList[index]["check"];
+                          // print(friendList);
+                          // print(copyFriendList);
+                        });
+                      },
+                    ),
                     Container(
                       color: Colors.transparent,
                       height: 12,

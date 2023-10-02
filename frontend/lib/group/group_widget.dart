@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:proj/style.dart';
 
 class StepProgressIndicator extends StatefulWidget {
@@ -177,27 +176,26 @@ class MemberCard extends StatefulWidget {
   final int id;
   final String? avatar;
   final String name;
+  final bool check;
+  final void Function() onTap;
 
   const MemberCard({
     super.key,
     required this.id,
     required this.avatar,
     required this.name,
+    required this.check,
+    required this.onTap,
   });
   @override
   State<MemberCard> createState() => _MemberCardState();
 }
 
 class _MemberCardState extends State<MemberCard> {
-  bool check = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          check = !check;
-        });
-      },
+      onTap: widget.onTap,
       child: Container(
           height: 72,
           decoration: BoxDecoration(
@@ -207,7 +205,7 @@ class _MemberCardState extends State<MemberCard> {
               Container(
                 width: 48,
                 padding: const EdgeInsets.only(left: 24),
-                child: check
+                child: widget.check
                     ? Image.asset("assets/icons/select.png")
                     : Image.asset("assets/icons/unselect.png"),
               ),
