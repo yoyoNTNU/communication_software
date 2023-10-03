@@ -33,7 +33,7 @@ class _StepProgressIndicatorState extends State<StepProgressIndicator> {
       });
     }
     return SizedBox(
-      height: 46,
+      height: 52,
       width: 223,
       child: Column(
         children: [
@@ -269,12 +269,13 @@ Widget unitLine(String key, TextEditingController controller) {
           controller: controller,
           focusNode: focusNode,
           style: AppStyle.body(
-              level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
+              level: 2, color: AppStyle.gray.shade900, weight: FontWeight.w500),
           decoration: InputDecoration(
-            hintStyle: AppStyle.body(level: 1, color: AppStyle.gray.shade500),
+            hintStyle: AppStyle.body(level: 2, color: AppStyle.gray.shade500),
             filled: true,
             fillColor: AppStyle.white,
-            contentPadding: const EdgeInsets.all(8),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: AppStyle.gray, width: 1.0),
             ),

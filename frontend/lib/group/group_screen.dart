@@ -68,7 +68,7 @@ class _GroupPageState extends State<GroupPage> {
         children: [
           if (step == 0)
             Container(
-              height: 28,
+              height: 32,
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 4),
               color: AppStyle.blue[50],
