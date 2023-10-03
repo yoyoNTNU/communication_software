@@ -50,6 +50,7 @@ flutter:
     - assets/images/Logo.png
     - assets/images/success_logo.png
     - assets/images/fail_logo.png
+    - assets/images/fail_logo_dark.png
     # Icons
     - assets/icons/Sign_out_circle.png
     - assets/icons/Table_gray.png
@@ -94,6 +95,9 @@ flutter:
     - assets/icons/Tips.png
     - assets/icons/img_box_black.png
     - assets/icons/Camera.png
+    - assets/icons/Search.png
+    - assets/icons/select.png
+    - assets/icons/unselect.png
 
     # Animations
     - assets/animations/loading.gif

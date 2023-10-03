@@ -6,6 +6,7 @@ import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as path;
+import 'package:proj/widget.dart';
 
 Widget unitLine(String key, String value, [VoidCallback? onPress]) {
   return Container(
@@ -366,7 +367,8 @@ class _AvatarBoxState extends State<AvatarBox> {
                                 } else if (avatar == null) {
                                 } else {
                                   if (!context.mounted) return;
-                                  showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                                  showFail(
+                                      context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                                 }
                               },
                         style: AppStyle.secondaryBtn().copyWith(
@@ -468,7 +470,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                           } else if (avatar == null) {
                           } else {
                             if (!context.mounted) return;
-                            showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                            showFail(context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                           }
                         },
                   style: AppStyle.secondaryBtn().copyWith(
@@ -633,7 +635,8 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                                 } else if (background == null) {
                                 } else {
                                   if (!context.mounted) return;
-                                  showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                                  showFail(
+                                      context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                                 }
                               },
                         style: AppStyle.secondaryBtn().copyWith(
@@ -736,7 +739,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                           } else if (background == null) {
                           } else {
                             if (!context.mounted) return;
-                            showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                            showFail(context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                           }
                         },
                   style: AppStyle.secondaryBtn().copyWith(

@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
     } catch (e) {
       print('API request error: $e');
     }
-    if (!context.mounted) return;
+    //if (!context.mounted) return;
     //Navigator.of(context).pop();
   }
 
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: AppStyle.teal,
                   onPressed: () {
                     setState(() {
-                      //TODO: push to create group page
+                      Navigator.popAndPushNamed(context, '/group');
                       isExpanded = false;
                     });
                   },
