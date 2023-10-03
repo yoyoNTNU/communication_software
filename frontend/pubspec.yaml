@@ -50,6 +50,7 @@ flutter:
     - assets/images/Logo.png
     - assets/images/success_logo.png
     - assets/images/fail_logo.png
+    - assets/images/fail_logo_dark.png
     # Icons
     - assets/icons/Sign_out_circle.png
     - assets/icons/Table_gray.png
