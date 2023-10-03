@@ -367,7 +367,8 @@ class _AvatarBoxState extends State<AvatarBox> {
                                 } else if (avatar == null) {
                                 } else {
                                   if (!context.mounted) return;
-                                  showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                                  showFail(
+                                      context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                                 }
                               },
                         style: AppStyle.secondaryBtn().copyWith(
@@ -469,7 +470,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                           } else if (avatar == null) {
                           } else {
                             if (!context.mounted) return;
-                            showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                            showFail(context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                           }
                         },
                   style: AppStyle.secondaryBtn().copyWith(
@@ -634,7 +635,8 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                                 } else if (background == null) {
                                 } else {
                                   if (!context.mounted) return;
-                                  showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                                  showFail(
+                                      context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                                 }
                               },
                         style: AppStyle.secondaryBtn().copyWith(
@@ -737,7 +739,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                           } else if (background == null) {
                           } else {
                             if (!context.mounted) return;
-                            showFail(context, "檔案格式僅接受 jpg jpeg gif png");
+                            showFail(context, "\n檔案格式僅接受:jpg、jpeg、gif、png");
                           }
                         },
                   style: AppStyle.secondaryBtn().copyWith(
