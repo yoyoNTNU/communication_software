@@ -12,6 +12,7 @@ class GroupPage extends StatefulWidget {
 
 class _GroupPageState extends State<GroupPage> {
   final _searchController = TextEditingController();
+  final _nameController = TextEditingController();
   int step = 0;
   List<Map<String, dynamic>> friendList = [];
   List<Map<String, dynamic>> copyFriendList = [];
@@ -65,31 +66,37 @@ class _GroupPageState extends State<GroupPage> {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            height: 28,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            color: AppStyle.blue[50],
-            child: Text(
-              "已選擇 ${copyFriendList.where((friend) => friend["check"] == true).length} 位成員",
-              style: AppStyle.body(color: AppStyle.gray),
-              textAlign: TextAlign.center,
+          if (step == 0)
+            Container(
+              height: 28,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              color: AppStyle.blue[50],
+              child: Text(
+                "已選擇 ${copyFriendList.where((friend) => friend["check"] == true).length} 位成員",
+                style: AppStyle.body(color: AppStyle.gray),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
           Container(
             alignment: Alignment.center,
             height: 52,
             width: double.infinity,
             color: AppStyle.white,
-            child: OutlinedButton(
-              style: AppStyle.secondaryBtn(),
-              onPressed: () {
-                setState(() {
-                  ++step;
-                });
-              },
-              child: const Text("下一步"),
-            ),
+            child: step == 0
+                ? OutlinedButton(
+                    style: AppStyle.secondaryBtn(),
+                    onPressed: () {
+                      setState(() {
+                        ++step;
+                      });
+                    },
+                    child: const Text("下一步"),
+                  )
+                : ElevatedButton(
+                    onPressed: () {},
+                    style: AppStyle.primaryBtn(),
+                    child: const Text("創建群組")),
           ),
         ],
       ),
@@ -151,46 +158,135 @@ class _GroupPageState extends State<GroupPage> {
               ],
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 16,
-              color: Colors.transparent,
+          if (step == 0 && friendList.isNotEmpty)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 16,
+                color: Colors.transparent,
+              ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              List.generate(friendList.length, (int index) {
-                return Column(
+          if (step == 0 && friendList.isNotEmpty)
+            SliverList(
+              delegate: SliverChildListDelegate(
+                List.generate(friendList.length, (int index) {
+                  return Column(
+                    children: [
+                      MemberCard(
+                        id: friendList[index]["id"],
+                        avatar: friendList[index]["photo"],
+                        name: friendList[index]["nickname"],
+                        check: friendList[index]["check"],
+                        onTap: () {
+                          setState(() {
+                            friendList[index]["check"] =
+                                !friendList[index]["check"];
+                            // print(friendList);
+                            // print(copyFriendList);
+                          });
+                        },
+                      ),
+                      Container(
+                        color: Colors.transparent,
+                        height: 12,
+                      )
+                    ],
+                  );
+                }),
+              ),
+            ),
+          if (step == 0 && friendList.isEmpty)
+            SliverFillRemaining(
+              child: Container(
+                alignment: Alignment.center,
+                color: AppStyle.blue[50],
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset("assets/images/fail_logo_dark.png"),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Text(
+                        "查無結果",
+                        style: AppStyle.info(color: AppStyle.gray[700]!),
+                      )
+                    ]),
+              ),
+            ),
+          if (step == 0 && friendList.isNotEmpty)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 4,
+                color: Colors.transparent,
+              ),
+            ),
+          if (step == 1)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 24,
+                color: Colors.transparent,
+              ),
+            ),
+          if (step == 1)
+            SliverToBoxAdapter(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                decoration: BoxDecoration(
+                  color: AppStyle.white,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Column(
                   children: [
-                    MemberCard(
-                      id: friendList[index]["id"],
-                      avatar: friendList[index]["photo"],
-                      name: friendList[index]["nickname"],
-                      check: friendList[index]["check"],
-                      onTap: () {
-                        setState(() {
-                          friendList[index]["check"] =
-                              !friendList[index]["check"];
-                          // print(friendList);
-                          // print(copyFriendList);
-                        });
-                      },
-                    ),
-                    Container(
-                      color: Colors.transparent,
+                    title("聊天室資料"),
+                    const SizedBox(
                       height: 12,
-                    )
+                    ),
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: AppStyle.gray[100],
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    unitLine("群組名稱", _nameController),
                   ],
-                );
-              }),
+                ),
+              ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 4,
-              color: Colors.transparent,
+          if (step == 1)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 24,
+                color: Colors.transparent,
+              ),
             ),
-          ),
+          if (step == 1)
+            const SliverToBoxAdapter(
+                child: PhotoBox(
+              title: "群組頭像",
+            )),
+          if (step == 1)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 24,
+                color: Colors.transparent,
+              ),
+            ),
+          if (step == 1)
+            const SliverToBoxAdapter(
+                child: PhotoBox(
+              title: "背景相片",
+            )),
+          if (step == 1)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 24,
+                color: Colors.transparent,
+              ),
+            ),
         ],
       ),
     );
