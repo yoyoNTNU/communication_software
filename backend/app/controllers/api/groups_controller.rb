@@ -89,7 +89,7 @@ class Api::GroupsController < ApplicationController
   end
 
   def destroy
-    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom=Chatroom.find_by(type_id:params[:id],type_:"group")
     @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
     if @chatroom_members
       @chatroom_members.destroy
@@ -172,7 +172,7 @@ class Api::GroupsController < ApplicationController
   end
 
   def update
-    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom=Chatroom.find_by(type_id:params[:id],type_:"group")
     @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
     if @chatroom_members
       temp=Chatroom.find_by(id:@chatroom_members.chatroom_id)
