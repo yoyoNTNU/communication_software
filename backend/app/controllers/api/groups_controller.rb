@@ -89,7 +89,8 @@ class Api::GroupsController < ApplicationController
   end
 
   def destroy
-    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom_id: params[:id])
+    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
     if @chatroom_members
       @chatroom_members.destroy
       render json: {
@@ -107,9 +108,10 @@ class Api::GroupsController < ApplicationController
   end
 
   def invite
-    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom_id: params[:group_id])
+    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom: @chatroom)
     if @chatroom_members
-      temp=ChatroomMember.find_by(member_id:params[:id],chatroom_id: params[:group_id])
+      temp=ChatroomMember.find_by(member_id:params[:id],chatroom: @chatroom)
       if temp
         render json: {
           error: true,
@@ -117,7 +119,7 @@ class Api::GroupsController < ApplicationController
           data: "This member is already in this group."
         }.to_json, status: 400
       else
-        @new_chatroom_members=ChatroomMember.new(member_id:params[:id],chatroom_id: params[:group_id])
+        @new_chatroom_members=ChatroomMember.new(member_id:params[:id],chatroom: @chatroom)
         if @new_chatroom_members.save
           render json: {
             error: false,
@@ -142,9 +144,10 @@ class Api::GroupsController < ApplicationController
   end
 
   def kick_out
-    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom_id: params[:group_id])
+    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
     if @chatroom_members
-      temp=ChatroomMember.find_by(member_id:params[:id],chatroom_id: params[:group_id])
+      temp=ChatroomMember.find_by(member_id:params[:id],chatroom:@chatroom)
       if !temp
         render json: {
           error: true,
@@ -169,7 +172,8 @@ class Api::GroupsController < ApplicationController
   end
 
   def update
-    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom_id: params[:id])
+    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
     if @chatroom_members
       temp=Chatroom.find_by(id:@chatroom_members.chatroom_id)
       @group = Group.find_by(id:temp.type_id)
