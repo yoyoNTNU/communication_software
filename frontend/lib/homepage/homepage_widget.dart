@@ -17,7 +17,7 @@ class CopyableText extends StatelessWidget {
         '已將ID複製到剪貼板',
         style: AppStyle.body(color: AppStyle.white),
       ),
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 1500),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
