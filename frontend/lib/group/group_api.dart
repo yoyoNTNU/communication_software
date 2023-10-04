@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:proj/main.dart';
 import 'package:proj/data.dart';
+import 'package:image_picker/image_picker.dart';
 
 class GetInfoAPI {
   static String? token;
@@ -49,5 +50,31 @@ class GetInfoAPI {
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }
+  }
+}
+
+class GroupAPI {
+  static String? token;
+  static Future<int> createGroup(
+      {String? name, XFile? avatar, XFile? background}) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    var request = http.MultipartRequest(
+        'POST', Uri(scheme: 'https', host: host, path: '/api/groups'));
+    request.headers['Authorization'] = token ?? "";
+    if (name != null) {
+      request.fields['name'] = name;
+    }
+    if (avatar != null) {
+      var file = await http.MultipartFile.fromPath('photo', avatar.path);
+      request.files.add(file);
+    }
+    if (background != null) {
+      var file =
+          await http.MultipartFile.fromPath('background', background.path);
+      request.files.add(file);
+    }
+    var response = await request.send();
+    return response.statusCode;
   }
 }

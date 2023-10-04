@@ -3,6 +3,7 @@ import 'package:proj/style.dart';
 import 'package:proj/group/group_api.dart';
 import 'package:proj/group/group_widget.dart';
 import 'package:proj/widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key});
@@ -14,6 +15,10 @@ class _GroupPageState extends State<GroupPage> {
   final _searchController = TextEditingController();
   final _nameController = TextEditingController();
   int step = 0;
+  XFile? avatar;
+  XFile? background;
+  bool _isLoading = false;
+  int _responseCode = 400;
   List<Map<String, dynamic>> friendList = [];
   List<Map<String, dynamic>> copyFriendList = [];
 
@@ -30,6 +35,53 @@ class _GroupPageState extends State<GroupPage> {
     }
     if (!context.mounted) return;
     Navigator.of(context).pop();
+  }
+
+  Future<void> _createGroup(
+      {String? name, XFile? avatar, XFile? background}) async {
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final int responseCode = await GroupAPI.createGroup(
+          name: name, avatar: avatar, background: background);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _createSuccessOrFail() {
+    if (_responseCode == 200) {
+      Navigator.popAndPushNamed(context, '/home');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '群組創建成功',
+            style: AppStyle.body(color: AppStyle.white),
+          ),
+          duration: const Duration(milliseconds: 1500),
+        ),
+      );
+    } else {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '群組創建失敗，發生非預期錯誤，請回報相關人員',
+            style: AppStyle.body(color: AppStyle.white),
+          ),
+          duration: const Duration(milliseconds: 1500),
+        ),
+      );
+    }
   }
 
   @override
@@ -94,9 +146,46 @@ class _GroupPageState extends State<GroupPage> {
                     child: const Text("下一步"),
                   )
                 : ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _isLoading
+                        ? null
+                        : () async {
+                            if (_nameController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '群組創建失敗，群組名稱為必填',
+                                    style: AppStyle.body(color: AppStyle.white),
+                                  ),
+                                  duration: const Duration(milliseconds: 1500),
+                                ),
+                              );
+                            } else {
+                              await _createGroup(
+                                  name: _nameController.text,
+                                  avatar: avatar,
+                                  background: background);
+                              _createSuccessOrFail();
+                            }
+                          },
                     style: AppStyle.primaryBtn(),
-                    child: const Text("創建群組")),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (_isLoading)
+                          const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: AppStyle.white,
+                            ),
+                          ),
+                        if (_isLoading) const SizedBox(width: 8),
+                        const Text("創建群組"),
+                      ],
+                    ),
+                  ),
           ),
         ],
       ),
@@ -264,9 +353,14 @@ class _GroupPageState extends State<GroupPage> {
               ),
             ),
           if (step == 1)
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
                 child: PhotoBox(
               title: "群組頭像",
+              onChanged: (value) {
+                setState(() {
+                  avatar = value;
+                });
+              },
             )),
           if (step == 1)
             SliverToBoxAdapter(
@@ -276,10 +370,16 @@ class _GroupPageState extends State<GroupPage> {
               ),
             ),
           if (step == 1)
-            const SliverToBoxAdapter(
-                child: PhotoBox(
-              title: "背景相片",
-            )),
+            SliverToBoxAdapter(
+              child: PhotoBox(
+                title: "背景相片",
+                onChanged: (value) {
+                  setState(() {
+                    background = value;
+                  });
+                },
+              ),
+            ),
           if (step == 1)
             SliverToBoxAdapter(
               child: Container(

@@ -291,9 +291,11 @@ Widget unitLine(String key, TextEditingController controller) {
 
 class PhotoBox extends StatefulWidget {
   final String title;
+  final void Function(XFile?) onChanged;
   const PhotoBox({
     super.key,
     required this.title,
+    required this.onChanged,
   });
   @override
   State<PhotoBox> createState() => _PhotoBoxState();
@@ -347,6 +349,7 @@ class _PhotoBoxState extends State<PhotoBox> {
                             if (checkFileType(newPhoto)) {
                               setState(() {
                                 photo = newPhoto;
+                                widget.onChanged(photo);
                               });
                               if (!context.mounted) return;
                               showSuccess(context, widget.title);
@@ -386,6 +389,7 @@ class _PhotoBoxState extends State<PhotoBox> {
                         onPressed: () {
                           setState(() {
                             photo = null;
+                            widget.onChanged(photo);
                           });
                           if (!context.mounted) return;
                           showSuccess(context, widget.title);
@@ -421,6 +425,7 @@ class _PhotoBoxState extends State<PhotoBox> {
                       if (checkFileType(newPhoto)) {
                         setState(() {
                           photo = newPhoto;
+                          widget.onChanged(photo);
                         });
                         if (!context.mounted) return;
                         showSuccess(context, widget.title);
