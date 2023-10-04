@@ -55,7 +55,7 @@ class GetInfoAPI {
 
 class GroupAPI {
   static String? token;
-  static Future<int> createGroup(
+  static Future<Map<String, dynamic>> createGroup(
       {String? name, XFile? avatar, XFile? background}) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
@@ -74,7 +74,24 @@ class GroupAPI {
           await http.MultipartFile.fromPath('background', background.path);
       request.files.add(file);
     }
-    var response = await request.send();
+    var response_ = await request.send();
+    var response = await http.Response.fromStream(response_);
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    final dynamic data = responseData['data'];
+    return {"responseCode": response.statusCode, "groupID": data['id']};
+  }
+
+  static Future<int> invite({int? groupID, int? friendID}) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.post(
+      Uri(
+          scheme: 'https',
+          host: host,
+          path:
+              "/api/groups/${groupID.toString()}/invite/${friendID.toString()}"),
+      headers: {'Authorization': token ?? ""},
+    );
     return response.statusCode;
   }
 }
