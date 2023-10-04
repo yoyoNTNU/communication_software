@@ -175,8 +175,7 @@ class Api::GroupsController < ApplicationController
     @chatroom=Chatroom.find_by(type_id:params[:id],type_:"group")
     @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
     if @chatroom_members
-      temp=Chatroom.find_by(id:@chatroom_members.chatroom_id)
-      @group = Group.find_by(id:temp.type_id)
+      @group = Group.find_by(id:params[:id])
       @group.update(group_params)
       if @group.save
         render json: {
@@ -200,6 +199,51 @@ class Api::GroupsController < ApplicationController
     end
   end
 
+  def destroy_photo
+    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
+    if @chatroom_members
+      @group = Group.find_by(id:params[:group_id])
+      if !@group.photo.url.nil?
+        @group.remove_photo! 
+        @group.save
+      end
+      render json: {
+        error: false,
+        message: "succeed to update group info",
+        data: @group
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to update group info",
+        data: "You aren't in this group"
+      }.to_json, status: 400
+    end
+  end
+
+  def destroy_background
+    @chatroom=Chatroom.find_by(type_id:params[:group_id],type_:"group")
+    @chatroom_members = ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
+    if @chatroom_members
+      @group = Group.find_by(id:params[:group_id])
+      if !@group.background.url.nil?
+        @group.remove_background! 
+        @group.save
+      end
+      render json: {
+        error: false,
+        message: "succeed to update group info",
+        data: @group
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to update group info",
+        data: "You aren't in this group"
+      }.to_json, status: 400
+    end
+  end
   
 
   private

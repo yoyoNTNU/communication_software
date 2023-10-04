@@ -43,11 +43,26 @@ class _GroupPageState extends State<GroupPage> {
       _isLoading = true;
     });
     try {
-      final int responseCode = await GroupAPI.createGroup(
+      final Map<String, dynamic> response = await GroupAPI.createGroup(
           name: name, avatar: avatar, background: background);
+      int responseCode = response['responseCode']!;
+      dynamic groupID = response['groupID']!;
       setState(() {
         _responseCode = responseCode;
       });
+      for (var friend in copyFriendList) {
+        if (friend['check']) {
+          try {
+            final int secResponse =
+                await GroupAPI.invite(groupID: groupID, friendID: friend['id']);
+            setState(() {
+              _responseCode = secResponse;
+            });
+          } catch (e) {
+            print('API request error: $e');
+          }
+        }
+      }
     } catch (e) {
       print('API request error: $e');
     }
