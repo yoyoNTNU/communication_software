@@ -58,13 +58,13 @@ class _GroupPageState extends State<GroupPage> {
             setState(() {
               _responseCode = secResponse;
             });
-          } catch (i) {
-            print('API request error2: $i');
+          } catch (e) {
+            print('API request error: $e');
           }
         }
       }
     } catch (e) {
-      print('API request error1: $e');
+      print('API request error: $e');
     }
     setState(() {
       _isLoading = false;
