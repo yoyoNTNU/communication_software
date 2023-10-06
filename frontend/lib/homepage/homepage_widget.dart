@@ -69,7 +69,7 @@ class _FriendsListState extends State<FriendsList> {
     friendList = await DatabaseHelper.instance.getCachedFriendData();
 
     if (friendList[0]['empty'] == true) {
-      print("f:API");
+      //print("f:API");
       try {
         final List<Map<String, dynamic>> info = await GetInfoAPI.getFriend();
         setState(() {
@@ -80,7 +80,7 @@ class _FriendsListState extends State<FriendsList> {
         print('API request error: $e');
       }
     } else {
-      print("f:Cache");
+      //print("f:Cache");
     }
     setState(() {});
   }
@@ -219,7 +219,7 @@ class _GroupsListState extends State<GroupsList> {
     groupList = await DatabaseHelper.instance.getCachedGroupData();
 
     if (groupList[0]['empty'] == true) {
-      print("g:API");
+      //print("g:API");
       try {
         final List<Map<String, dynamic>> info = await GetInfoAPI.getGroup();
         setState(() {
@@ -231,7 +231,7 @@ class _GroupsListState extends State<GroupsList> {
         print('API request error: $e');
       }
     } else {
-      print("g:Cache");
+      //print("g:Cache");
     }
     setState(() {});
   }

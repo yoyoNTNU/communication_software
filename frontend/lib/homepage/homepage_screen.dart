@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     if (info_ == null) {
       if (!context.mounted) return;
       showLoading(context);
-      print("API");
+      //print("API");
       try {
         final Map<String, dynamic> info = await GetInfoAPI.getInfo();
         setState(() {
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
         print('API request error: $e');
       }
     } else {
-      print("Cache");
+      //print("Cache");
     }
     setState(() {});
 
