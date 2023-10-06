@@ -62,7 +62,7 @@ class _SearchPageState extends State<SearchPage> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-            height: 104,
+            height: 112,
             width: double.infinity,
             color: AppStyle.white,
             child: Column(
@@ -79,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 _isChecked
                     ? SizedBox(
-                        height: 40,
+                        height: 48,
                         child: PhoneTextField(
                           controller: _phoneController,
                           controller2: _nationController,
@@ -99,7 +99,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       )
                     : SizedBox(
-                        height: 40,
+                        height: 48,
                         child: IDTextField(
                           controller: _iDController,
                           onChanged: (value) {
