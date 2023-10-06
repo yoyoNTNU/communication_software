@@ -221,7 +221,7 @@ class _GroupPageState extends State<GroupPage> {
             centerTitle: true,
             flexibleSpace: Column(
               children: [
-                const SizedBox(height: 62),
+                const SizedBox(height: 61),
                 if (step == 0)
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -259,6 +259,10 @@ class _GroupPageState extends State<GroupPage> {
                       },
                     ),
                   ),
+                Container(
+                  height: 1,
+                  color: AppStyle.blue[100],
+                )
               ],
             ),
           ),
