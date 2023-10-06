@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/search/search_widget.dart';
+import 'package:proj/search/search_api.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,6 +14,30 @@ class _SearchPageState extends State<SearchPage> {
   final _iDController = TextEditingController();
   final _phoneController = TextEditingController();
   final _nationController = TextEditingController();
+  int? friendID;
+
+  Future<void> _searchByPhone(String phone) async {
+    try {
+      final Map<String, dynamic> searcher = await SearchAPI.byPhone(phone);
+      setState(() {
+        friendID = searcher['id'];
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  Future<void> _searchByUserID(String userID) async {
+    try {
+      final Map<String, dynamic> searcher = await SearchAPI.byUserID(userID);
+      setState(() {
+        friendID = searcher['id'];
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +86,16 @@ class _SearchPageState extends State<SearchPage> {
                           onChanged: (value) {
                             setState(() {});
                           },
+                          onSubmit: () async {
+                            await _searchByPhone(_phoneController.text != ""
+                                ? _phoneController.text.startsWith('0')
+                                    ? _nationController.text +
+                                        _phoneController.text.substring(1)
+                                    : _nationController.text +
+                                        _phoneController.text
+                                : "");
+                            print(friendID);
+                          },
                         ),
                       )
                     : SizedBox(
@@ -69,6 +104,10 @@ class _SearchPageState extends State<SearchPage> {
                           controller: _iDController,
                           onChanged: (value) {
                             setState(() {});
+                          },
+                          onSubmit: (value) async {
+                            await _searchByUserID(_iDController.text);
+                            print(friendID);
                           },
                         ),
                       )

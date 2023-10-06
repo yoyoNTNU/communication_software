@@ -64,12 +64,14 @@ class _SwitcherState extends State<Switcher> {
 
 class IDTextField extends StatefulWidget {
   final TextEditingController controller;
-  final void Function(String)? onChanged;
+  final void Function(String) onChanged;
+  final void Function(String) onSubmit;
 
   const IDTextField({
     super.key,
     required this.controller,
-    this.onChanged,
+    required this.onChanged,
+    required this.onSubmit,
   });
 
   @override
@@ -94,7 +96,7 @@ class _IDTextFieldState extends State<IDTextField> {
       controller: widget.controller,
       onChanged: widget.onChanged,
       onSubmitted: (value) {
-        print(123);
+        widget.onSubmit(value);
         FocusScope.of(context).unfocus();
       },
       focusNode: _focusNode,
@@ -131,12 +133,14 @@ class PhoneTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController controller2;
   final void Function(String) onChanged;
+  final void Function() onSubmit;
 
   const PhoneTextField({
     super.key,
     required this.controller,
     required this.controller2,
     required this.onChanged,
+    required this.onSubmit,
   });
 
   @override
@@ -179,7 +183,7 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
         widget.onChanged(number.toString());
       },
       onSubmit: () {
-        print(123);
+        widget.onSubmit();
         FocusScope.of(context).unfocus();
       },
       selectorConfig: const SelectorConfig(
