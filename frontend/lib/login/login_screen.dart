@@ -117,6 +117,17 @@ class _LoginState extends State<Login> {
                                                       LoginTextFieldChanged(),
                                                     );
                                               },
+                                              onSubmit: (value) {
+                                                context.read<LoginBloc>().add(
+                                                      LoginButtonPressed(
+                                                          account:
+                                                              _accountController
+                                                                  .text,
+                                                          password:
+                                                              _passwordController
+                                                                  .text),
+                                                    );
+                                              },
                                             ),
                                             const SizedBox(height: 16),
                                             Row(

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proj/style.dart';
@@ -115,13 +114,13 @@ class _StepProgressIndicatorState extends State<StepProgressIndicator> {
 class AppTextField extends StatefulWidget {
   final TextEditingController controller;
   final void Function(String)? onChanged;
-  final void Function()? onTapX;
+  final void Function() onTapX;
 
   const AppTextField({
     super.key,
     required this.controller,
     this.onChanged,
-    this.onTapX,
+    required this.onTapX,
   });
 
   @override
@@ -156,12 +155,11 @@ class _AppTextFieldState extends State<AppTextField> {
                 onPressed: () {
                   setState(() {
                     widget.controller.text = "";
-                    widget.onTapX!();
+                    widget.onTapX();
                   });
                 },
               )
             : null,
-        hintStyle: AppStyle.body(level: 1, color: AppStyle.gray.shade500),
         filled: true,
         fillColor: AppStyle.white,
         contentPadding: const EdgeInsets.all(8),
