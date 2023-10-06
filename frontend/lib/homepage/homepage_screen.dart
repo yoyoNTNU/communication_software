@@ -3,6 +3,7 @@ import 'package:proj/style.dart';
 import 'package:proj/homepage/homepage_widget.dart';
 import 'package:proj/homepage/homepage_api.dart';
 import 'package:proj/widget.dart';
+import 'package:proj/data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,19 +13,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Map<String, dynamic> info_ = {};
+  Map<String, dynamic>? info_ = {};
   bool isExpanded = false;
 
   Future<void> _info() async {
-    showLoading(context);
-    try {
-      final Map<String, dynamic> info = await GetInfoAPI.getInfo();
-      setState(() {
-        info_ = info;
-      });
-    } catch (e) {
-      print('API request error: $e');
+    info_ = await DatabaseHelper.instance.getCachedSelfData();
+
+    if (info_ == null) {
+      if (!context.mounted) return;
+      showLoading(context);
+      print("API");
+      try {
+        final Map<String, dynamic> info = await GetInfoAPI.getInfo();
+        setState(() {
+          info_ = info;
+        });
+        await DatabaseHelper.instance.cacheSelfData(info_!);
+      } catch (e) {
+        print('API request error: $e');
+      }
+    } else {
+      print("Cache");
     }
+    setState(() {});
+
     //if (!context.mounted) return;
     //Navigator.of(context).pop();
   }
@@ -183,8 +195,8 @@ class _HomePageState extends State<HomePage> {
                   height: 180,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: info_["background"] != null
-                          ? NetworkImage(info_["background"]) as ImageProvider
+                      image: info_!["background"] != null
+                          ? NetworkImage(info_!["background"]) as ImageProvider
                           : const AssetImage('assets/images/Background.png'),
                       fit: BoxFit.contain,
                     ),
@@ -215,8 +227,8 @@ class _HomePageState extends State<HomePage> {
                   left: 12,
                   child: CircleAvatar(
                       radius: 60,
-                      backgroundImage: info_["photo"] != null
-                          ? NetworkImage(info_["photo"]) as ImageProvider
+                      backgroundImage: info_!["photo"] != null
+                          ? NetworkImage(info_!["photo"]) as ImageProvider
                           : const AssetImage('assets/images/Avatar.png'),
                       backgroundColor: Colors.transparent),
                 ),
@@ -224,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                   top: 124.5,
                   left: 154,
                   child: Text(
-                    info_["name"] ?? "",
+                    info_!["name"] ?? "",
                     style: AppStyle.header(color: AppStyle.white),
                   ),
                 ),
@@ -232,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                   top: 154.5,
                   left: 154,
                   child: CopyableText(
-                    text_: info_["userID"] ?? "",
+                    text_: info_!["userID"] ?? "",
                   ),
                 ),
               ],
