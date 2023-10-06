@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: AppStyle.yellow,
                   onPressed: () {
                     setState(() {
-                      //TODO: push to search friend page
+                      Navigator.popAndPushNamed(context, '/search');
                       isExpanded = false;
                     });
                   },

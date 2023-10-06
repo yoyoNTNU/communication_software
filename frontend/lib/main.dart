@@ -7,6 +7,7 @@ import 'package:proj/login/login_screen.dart';
 import 'package:proj/sent_reset_email/sent_reset_email_screen.dart';
 import 'package:proj/main_dependency.dart';
 import 'package:proj/group/group_screen.dart';
+import 'package:proj/search/search_screen.dart';
 
 // Define http host name
 //backend develop server
@@ -56,6 +57,7 @@ class ChatApp extends StatelessWidget {
         '/forget_password': (context) => const SentResetEmail(),
         '/edit': (context) => const EditPage(),
         '/group': (context) => const GroupPage(),
+        '/search': (context) => const SearchPage(),
       },
     );
   }
