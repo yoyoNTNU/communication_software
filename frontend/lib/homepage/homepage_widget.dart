@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proj/style.dart';
 import 'package:proj/homepage/homepage_api.dart';
+import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 
 class CopyableText extends StatelessWidget {
   final String text_;
@@ -126,26 +127,31 @@ class _FriendsListState extends State<FriendsList> {
                       var friend = friendList[index];
                       return Column(
                         children: <Widget>[
-                          ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            title: Text(
-                              friend['nickname'],
-                              style: AppStyle.header(
-                                  level: 3, color: AppStyle.gray[700]!),
-                            ),
-                            subtitle: Text(
-                              friend['introduction'] ?? "",
-                              style: AppStyle.info(color: AppStyle.gray[600]!),
-                            ),
-                            leading: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: friend["photo"] != null
-                                  ? NetworkImage(friend['photo'])
-                                      as ImageProvider
-                                  : const AssetImage(
-                                      'assets/images/Avatar.png'),
-                              backgroundColor: Colors.transparent,
+                          GestureDetector(
+                            onTap: () =>
+                                showProfileDialog(context, friend['id']),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              title: Text(
+                                friend['nickname'],
+                                style: AppStyle.header(
+                                    level: 3, color: AppStyle.gray[700]!),
+                              ),
+                              subtitle: Text(
+                                friend['introduction'] ?? "",
+                                style:
+                                    AppStyle.info(color: AppStyle.gray[600]!),
+                              ),
+                              leading: CircleAvatar(
+                                radius: 20,
+                                backgroundImage: friend["photo"] != null
+                                    ? NetworkImage(friend['photo'])
+                                        as ImageProvider
+                                    : const AssetImage(
+                                        'assets/images/Avatar.png'),
+                                backgroundColor: Colors.transparent,
+                              ),
                             ),
                           ),
                           Divider(
