@@ -37,17 +37,16 @@ class GetInfoAPI {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.get(
-      Uri(scheme: 'https', host: host, path: '/api/friends'),
+      Uri(scheme: 'https', host: host, path: '/api/friend_requests'),
       headers: {'Authorization': token ?? ""},
     );
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> friendsWithInfo = [];
       final Map<String, dynamic> responseData = json.decode(response.body);
-      final List<dynamic> infoData = responseData['data'];
+      final List<dynamic> infoData = responseData['data']['received'];
       final List<Map<String, dynamic>> friendsID = infoData.map((friend) {
         return {
-          "id": friend['friend_id'],
-          "nickname": friend['nickname'],
+          "id": friend['member_id'],
         };
       }).toList();
 
@@ -62,7 +61,7 @@ class GetInfoAPI {
           final Map<String, dynamic> infoInfoData = infoResponseData['data'];
           Map<String, dynamic> friendInfo = {
             "id": id,
-            "nickname": friend['nickname'],
+            "nickname": infoInfoData['name'],
             "photo": infoInfoData['photo']['url'],
             "introduction": infoInfoData['introduction'],
           };
@@ -83,17 +82,16 @@ class GetInfoAPI {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.get(
-      Uri(scheme: 'https', host: host, path: '/api/friends'),
+      Uri(scheme: 'https', host: host, path: '/api/friend_requests'),
       headers: {'Authorization': token ?? ""},
     );
     if (response.statusCode == 200) {
       List<Map<String, dynamic>> friendsWithInfo = [];
       final Map<String, dynamic> responseData = json.decode(response.body);
-      final List<dynamic> infoData = responseData['data'];
+      final List<dynamic> infoData = responseData['data']['send'];
       final List<Map<String, dynamic>> friendsID = infoData.map((friend) {
         return {
           "id": friend['friend_id'],
-          "nickname": friend['nickname'],
         };
       }).toList();
 
@@ -108,7 +106,7 @@ class GetInfoAPI {
           final Map<String, dynamic> infoInfoData = infoResponseData['data'];
           Map<String, dynamic> friendInfo = {
             "id": id,
-            "nickname": friend['nickname'],
+            "nickname": infoInfoData['name'],
             "photo": infoInfoData['photo']['url'],
             "introduction": infoInfoData['introduction'],
           };

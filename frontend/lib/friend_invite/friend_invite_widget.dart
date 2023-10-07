@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proj/style.dart';
 import 'package:proj/friend_invite/friend_invite_api.dart';
+import 'package:proj/widget.dart';
 
 class ConfirmList extends StatefulWidget {
   const ConfirmList({super.key});
@@ -15,6 +16,7 @@ class _ConfirmListState extends State<ConfirmList> {
 
   Future<void> _getConfirmList() async {
     try {
+      showLoading(context);
       final List<Map<String, dynamic>> info = await GetInfoAPI.getConfirm();
       setState(() {
         confirmList = info;
@@ -139,7 +141,8 @@ class _ConfirmListState extends State<ConfirmList> {
 }
 
 class SentList extends StatefulWidget {
-  const SentList({super.key});
+  final VoidCallback onLoaded;
+  const SentList({super.key, required this.onLoaded});
 
   @override
   State<SentList> createState() => _SentListState();
@@ -154,6 +157,7 @@ class _SentListState extends State<SentList> {
       setState(() {
         sentList = info;
       });
+      widget.onLoaded();
     } catch (e) {
       print('API request error: $e');
     }

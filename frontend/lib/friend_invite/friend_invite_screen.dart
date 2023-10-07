@@ -1,6 +1,7 @@
 import 'package:proj/friend_invite/friend_invite_widget.dart';
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
+import 'package:proj/widget.dart';
 
 class FriendInvite extends StatefulWidget {
   const FriendInvite({super.key});
@@ -10,6 +11,11 @@ class FriendInvite extends StatefulWidget {
 
 class _FriendInviteState extends State<FriendInvite> {
   final ScrollController _scrollController = ScrollController();
+  void _onLoaded() {
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +43,7 @@ class _FriendInviteState extends State<FriendInvite> {
                     const SizedBox(height: 24),
                     ConfirmList(),
                     const SizedBox(height: 24),
-                    SentList(),
+                    SentList(onLoaded: _onLoaded),
                     const SizedBox(height: 24),
                     
                   ],
@@ -45,7 +51,9 @@ class _FriendInviteState extends State<FriendInvite> {
               ),
             ],
           ),
+          
         )
-    );  
+        
+    );
   }
 }
