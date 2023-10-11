@@ -32,6 +32,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           final bearerToken = headers['authorization'];
           final Token token = Token(authorization: bearerToken);
           await DatabaseHelper.instance.setToken(token);
+          await DatabaseHelper.instance.clearCache();
 
           emit(LoginSuccess());
         } else if (data['data'].toString().startsWith("A")) {

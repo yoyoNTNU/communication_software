@@ -33,6 +33,8 @@ dependencies:
   intl_phone_number_input: ^0.7.3
   flutter_countdown_timer: ^4.1.0
   calendar_date_picker2: ^0.5.3
+  image_picker: ^1.0.4
+  animated_toggle_switch: ^0.8.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -49,6 +51,7 @@ flutter:
     - assets/images/Logo.png
     - assets/images/success_logo.png
     - assets/images/fail_logo.png
+    - assets/images/fail_logo_dark.png
     # Icons
     - assets/icons/Sign_out_circle.png
     - assets/icons/Table_gray.png
@@ -89,6 +92,13 @@ flutter:
     - assets/icons/+.png
     - assets/icons/Save.png
     - assets/icons/img_box.png
+    - assets/icons/Refresh.png
+    - assets/icons/Tips.png
+    - assets/icons/img_box_black.png
+    - assets/icons/Camera.png
+    - assets/icons/Search.png
+    - assets/icons/select.png
+    - assets/icons/unselect.png
 
     # Animations
     - assets/animations/loading.gif

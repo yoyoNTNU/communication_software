@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:proj/edit_page/edit_page_widget.dart';
 import 'package:proj/style.dart';
+import 'package:proj/widget.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -11,18 +12,52 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   final ScrollController _scrollController = ScrollController();
+  Map<String, dynamic> info_ = {};
+
+  Future<void> _info() async {
+    showLoading(context);
+    try {
+      final Map<String, dynamic> info = await GetDetailAPI.getInfo();
+      setState(() {
+        info_ = info;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+  }
+
+  void update(String key, String newValue) {
+    setState(() {
+      info_[key] = newValue;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _info();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppStyle.blue[50],
         appBar: AppBar(
           leading: GestureDetector(
-              onTap: () => Navigator.popAndPushNamed(context, '/home'),
-              child: Image.asset("assets/icons/left.png")),
+            onTap: () => Navigator.popAndPushNamed(context, '/home'),
+            child: Image.asset("assets/icons/left.png"),
+          ),
           title: Text(
             '編輯個人資料',
             style: AppStyle.header(),
           ),
+          actions: [
+            GestureDetector(
+                onTap: () => Navigator.popAndPushNamed(context, '/edit'),
+                child: Image.asset("assets/icons/Refresh.png")),
+          ],
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0.0,
@@ -35,15 +70,22 @@ class _EditPageState extends State<EditPage> {
                 padding: const EdgeInsets.symmetric(vertical: 24.0),
                 child: Column(
                   children: [
-                    accountBox(context),
+                    accountBox(context, info_['userID']),
                     const SizedBox(height: 24.0),
-                    infoBox(context),
+                    infoBox(context, info_['birthday'], info_['name'],
+                        info_['intro'], update),
                     const SizedBox(height: 24.0),
-                    communityBox(),
+                    communityBox(context, info_['email'], info_['phone']),
                     const SizedBox(height: 24.0),
-                    const AvatarBox(),
+                    AvatarBox(
+                      id: info_['memberID'] ?? 1,
+                      avatar: info_['photo'],
+                    ),
                     const SizedBox(height: 24.0),
-                    const BackgroundBox(),
+                    BackgroundBox(
+                      id: info_['memberID'] ?? 1,
+                      background: info_['background'],
+                    ),
                   ],
                 ),
               ),

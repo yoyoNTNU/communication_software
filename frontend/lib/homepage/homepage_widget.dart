@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:proj/data.dart';
 import 'package:proj/style.dart';
 import 'package:proj/homepage/homepage_api.dart';
 
@@ -12,9 +13,12 @@ class CopyableText extends StatelessWidget {
 
   void _copyToClipboard(BuildContext context) {
     Clipboard.setData(ClipboardData(text: text_)); //換成API
-    const snackBar = SnackBar(
-      content: Text('已將ID複製到剪貼板'),
-      duration: Duration(seconds: 1),
+    SnackBar snackBar = SnackBar(
+      content: Text(
+        '已將ID複製到剪貼板',
+        style: AppStyle.body(color: AppStyle.white),
+      ),
+      duration: const Duration(milliseconds: 1500),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -62,14 +66,23 @@ class _FriendsListState extends State<FriendsList> {
   List<Map<String, dynamic>> friendList = [];
 
   Future<void> _getFriendList() async {
-    try {
-      final List<Map<String, dynamic>> info = await GetInfoAPI.getFriend();
-      setState(() {
-        friendList = info;
-      });
-    } catch (e) {
-      print('API request error: $e');
+    friendList = await DatabaseHelper.instance.getCachedFriendData();
+
+    if (friendList[0]['empty'] == true) {
+      //print("f:API");
+      try {
+        final List<Map<String, dynamic>> info = await GetInfoAPI.getFriend();
+        setState(() {
+          friendList = info;
+        });
+        await DatabaseHelper.instance.cacheFriendData(friendList);
+      } catch (e) {
+        print('API request error: $e');
+      }
+    } else {
+      //print("f:Cache");
     }
+    setState(() {});
   }
 
   @override
@@ -203,15 +216,24 @@ class _GroupsListState extends State<GroupsList> {
   List<Map<String, dynamic>> groupList = [];
 
   Future<void> _getGroupList() async {
-    try {
-      final List<Map<String, dynamic>> info = await GetInfoAPI.getGroup();
-      setState(() {
-        groupList = info;
-      });
-      widget.onLoaded();
-    } catch (e) {
-      print('API request error: $e');
+    groupList = await DatabaseHelper.instance.getCachedGroupData();
+
+    if (groupList[0]['empty'] == true) {
+      //print("g:API");
+      try {
+        final List<Map<String, dynamic>> info = await GetInfoAPI.getGroup();
+        setState(() {
+          groupList = info;
+        });
+        await DatabaseHelper.instance.cacheGroupData(groupList);
+        widget.onLoaded();
+      } catch (e) {
+        print('API request error: $e');
+      }
+    } else {
+      //print("g:Cache");
     }
+    setState(() {});
   }
 
   @override

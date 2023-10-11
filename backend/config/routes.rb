@@ -35,6 +35,10 @@ Rails.application.routes.draw do
     resources :chatroom, only:[:index]
     resources :groups do
       get '/member_list' => 'groups#member_list'
+      post '/invite/:id'=> 'groups#invite'
+      delete '/kickout/:id'=> 'groups#kick_out'
+      delete '/delete_avatar'=>'groups#destroy_photo'
+      delete '/delete_background'=>'groups#destroy_background'
     end
   end
 end

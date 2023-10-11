@@ -11,19 +11,19 @@ Group.destroy_all
 Member.destroy_all
 
 p "create member"
-m1=Member.new(user_id:"test1",name:"範例1號",phone:"0900000000",email:"example1@gmail.com",password:"Example123",is_login_mail:true)
+m1=Member.new(user_id:"test1",name:"範例1號",phone:"+886900000000",email:"example1@gmail.com",password:"Example123",is_login_mail:false)
 m1.skip_confirmation!
 m1.save
-m2=Member.new(user_id:"test2",name:"範例2號",phone:"0911111111",email:"example2@gmail.com",password:"Example123",is_login_mail:true)
+m2=Member.new(user_id:"test2",name:"範例2號",phone:"+886911111111",email:"example2@gmail.com",password:"Example123",is_login_mail:false)
 m2.skip_confirmation!
 m2.save
-m3=Member.new(user_id:"test3",name:"範例3號",phone:"0922222222",email:"example3@gmail.com",password:"Example123",is_login_mail:true)
+m3=Member.new(user_id:"test3",name:"範例3號",phone:"+886922222222",email:"example3@gmail.com",password:"Example123",is_login_mail:false)
 m3.skip_confirmation!
 m3.save
-m4=Member.new(user_id:"test4",name:"範例4號",phone:"0933333333",email:"example4@gmail.com",password:"Example123",is_login_mail:true)
+m4=Member.new(user_id:"test4",name:"範例4號",phone:"+886933333333",email:"example4@gmail.com",password:"Example123",is_login_mail:true)
 m4.skip_confirmation!
 m4.save
-m5=Member.new(user_id:"test5",name:"範例5號",phone:"0944444444",email:"example5@gmail.com",password:"Example123",is_login_mail:true)
+m5=Member.new(user_id:"test5",name:"範例5號",phone:"+886944444444",email:"example5@gmail.com",password:"Example123",is_login_mail:true)
 m5.skip_confirmation!
 m5.save
 

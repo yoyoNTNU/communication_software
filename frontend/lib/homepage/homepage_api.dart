@@ -5,7 +5,6 @@ import 'package:proj/data.dart';
 
 class GetInfoAPI {
   static String? token;
-  static bool isTokenInitialized = false;
 
   static Future<Map<String, dynamic>> getInfo() async {
     final dbToken = await DatabaseHelper.instance.getToken();

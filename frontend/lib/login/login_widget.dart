@@ -69,6 +69,7 @@ class AppTextField extends StatefulWidget {
   final bool isPassword;
   final void Function(String)? onChanged;
   final VoidCallback? onTap;
+  final void Function(String)? onSubmit;
 
   const AppTextField({
     super.key,
@@ -79,6 +80,7 @@ class AppTextField extends StatefulWidget {
     this.errorText,
     this.onChanged,
     this.onTap,
+    this.onSubmit,
   });
 
   @override
@@ -120,6 +122,9 @@ class _AppTextFieldState extends State<AppTextField> {
           onTap: widget.onTap,
           focusNode: _focusNode,
           obscureText: widget.isPassword ? _isObscure : false,
+          textInputAction:
+              widget.isPassword ? TextInputAction.done : TextInputAction.none,
+          onSubmitted: widget.onSubmit,
           style: AppStyle.body(
               level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
           decoration: InputDecoration(
