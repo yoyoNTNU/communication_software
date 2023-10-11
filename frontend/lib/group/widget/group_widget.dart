@@ -6,10 +6,10 @@ import 'package:proj/widget.dart';
 
 part 'app_text_field.dart';
 part 'member_card.dart';
-part 'photobox.dart';
+part 'photo_box.dart';
 part 'title.dart';
 part 'step_process_indicator.dart';
-part 'unitline.dart';
+part 'unit_line.dart';
 part 'show_success.dart';
 part 'show_fail.dart';
 part 'check_file_type.dart';
