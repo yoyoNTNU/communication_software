@@ -5,10 +5,10 @@ import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
 import 'package:proj/sent_reset_email/sent_reset_email_screen.dart';
-
 import 'package:proj/group/group_screen.dart';
 import 'package:proj/search/search_screen.dart';
 import 'package:proj/materials/animated_screen.dart';
+import 'package:proj/friend_invite/friend_invite_screen.dart';
 
 // Define http host name
 //backend develop server
@@ -45,7 +45,6 @@ class ChatApp extends StatelessWidget {
       ],
       locale: const Locale('zh'),
       home: const AnimatedPage(),
-      //initialRoute: initialRoute,
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const NavBar(),
@@ -54,6 +53,7 @@ class ChatApp extends StatelessWidget {
         '/edit': (context) => const EditPage(),
         '/group': (context) => const GroupPage(),
         '/search': (context) => const SearchPage(),
+        '/invite': (context) => const FriendInvite(),
       },
     );
   }

@@ -226,13 +226,13 @@ class _GroupsListState extends State<GroupsList> {
           groupList = info;
         });
         await DatabaseHelper.instance.cacheGroupData(groupList);
-        widget.onLoaded();
       } catch (e) {
         print('API request error: $e');
       }
     } else {
       //print("g:Cache");
     }
+    widget.onLoaded();
     setState(() {});
   }
 
@@ -416,8 +416,7 @@ class PrimeSelect extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  //TODO: push to friend request list page
-                  Navigator.popAndPushNamed(context, '/login');
+                  Navigator.popAndPushNamed(context, '/invite');
                 },
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
