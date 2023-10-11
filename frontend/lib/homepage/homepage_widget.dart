@@ -226,13 +226,13 @@ class _GroupsListState extends State<GroupsList> {
           groupList = info;
         });
         await DatabaseHelper.instance.cacheGroupData(groupList);
-        widget.onLoaded();
       } catch (e) {
         print('API request error: $e');
       }
     } else {
       //print("g:Cache");
     }
+    widget.onLoaded();
     setState(() {});
   }
 

@@ -19,10 +19,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _info() async {
     info_ = await DatabaseHelper.instance.getCachedSelfData();
-
+    if (!context.mounted) return;
+    showLoading(context);
     if (info_ == null) {
-      if (!context.mounted) return;
-      showLoading(context);
       //print("API");
       try {
         final Map<String, dynamic> info = await GetInfoAPI.getInfo();
