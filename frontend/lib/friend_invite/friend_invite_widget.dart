@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:proj/style.dart';
 import 'package:proj/friend_invite/friend_invite_api.dart';
 import 'package:proj/widget.dart';
@@ -84,10 +83,6 @@ class _ConfirmListState extends State<ConfirmList> {
                               friend['nickname'],
                               style: AppStyle.header(
                                   level: 3, color: AppStyle.gray[700]!),
-                            ),
-                            subtitle: Text(
-                              friend['introduction'] ?? "",
-                              style: AppStyle.info(color: AppStyle.gray[600]!),
                             ),
                             leading: CircleAvatar(
                               radius: 20,
@@ -221,10 +216,6 @@ class _SentListState extends State<SentList> {
                               friend['nickname'],
                               style: AppStyle.header(
                                   level: 3, color: AppStyle.gray[700]!),
-                            ),
-                            subtitle: Text(
-                              friend['introduction'] ?? "",
-                              style: AppStyle.info(color: AppStyle.gray[600]!),
                             ),
                             leading: CircleAvatar(
                               radius: 20,

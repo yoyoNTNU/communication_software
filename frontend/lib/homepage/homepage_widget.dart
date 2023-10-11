@@ -416,8 +416,7 @@ class PrimeSelect extends StatelessWidget {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  //TODO: push to friend request list page
-                  Navigator.popAndPushNamed(context, '/login');
+                  Navigator.popAndPushNamed(context, '/invite');
                 },
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

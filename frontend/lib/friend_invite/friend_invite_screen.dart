@@ -1,7 +1,6 @@
 import 'package:proj/friend_invite/friend_invite_widget.dart';
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/widget.dart';
 
 class FriendInvite extends StatefulWidget {
   const FriendInvite({super.key});
@@ -41,19 +40,15 @@ class _FriendInviteState extends State<FriendInvite> {
                 child: Column(
                   children: [
                     const SizedBox(height: 24),
-                    ConfirmList(),
+                    const ConfirmList(),
                     const SizedBox(height: 24),
                     SentList(onLoaded: _onLoaded),
                     const SizedBox(height: 24),
-                    
                   ],
                 ),
               ),
             ],
           ),
-          
-        )
-        
-    );
+        ));
   }
 }
