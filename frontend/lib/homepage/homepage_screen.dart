@@ -266,6 +266,17 @@ class _HomePageState extends State<HomePage> {
                       text_: info_!["userID"] ?? "",
                     ),
                   ),
+                  Positioned(
+                    top: 10,
+                    right: 12,
+                    child: GestureDetector(
+                        onTap: () async {
+                          await DatabaseHelper.instance.clearCache();
+                          if (!context.mounted) return;
+                          Navigator.popAndPushNamed(context, '/home');
+                        },
+                        child: Image.asset("assets/icons/Refresh.png")),
+                  )
                 ],
               ),
               Container(

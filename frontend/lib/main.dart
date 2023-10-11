@@ -5,9 +5,10 @@ import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
 import 'package:proj/sent_reset_email/sent_reset_email_screen.dart';
-import 'package:proj/main_dependency.dart';
+
 import 'package:proj/group/group_screen.dart';
 import 'package:proj/search/search_screen.dart';
+import 'package:proj/materials/animated_screen.dart';
 
 // Define http host name
 //backend develop server
@@ -22,22 +23,16 @@ const String imgPath =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final token = await initDatabaseAndGetToken();
-
-  final isTokenValid = await verifyToken(token);
-
-  runApp(ChatApp(isTokenValid: isTokenValid));
+  runApp(const ChatApp());
 }
 
 class ChatApp extends StatelessWidget {
-  final bool isTokenValid;
-
-  const ChatApp({Key? key, required this.isTokenValid}) : super(key: key);
+  const ChatApp({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final initialRoute = isTokenValid ? '/home' : '/login';
-
     return MaterialApp(
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -49,7 +44,8 @@ class ChatApp extends StatelessWidget {
         Locale('en', 'US'),
       ],
       locale: const Locale('zh'),
-      initialRoute: initialRoute,
+      home: const AnimatedPage(),
+      //initialRoute: initialRoute,
       routes: {
         '/login': (context) => const Login(),
         '/home': (context) => const NavBar(),
