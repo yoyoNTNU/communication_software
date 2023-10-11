@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/group/group_api.dart';
-import 'package:proj/group/group_widget.dart';
+import 'package:proj/group/widget/group_widget.dart';
 import 'package:proj/widget.dart';
 import 'package:image_picker/image_picker.dart';
 
