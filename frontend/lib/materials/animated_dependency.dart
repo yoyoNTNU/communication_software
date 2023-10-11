@@ -28,7 +28,11 @@ Future<bool> verifyToken(String? token) async {
   if (response.statusCode == 200) {
     return true; // 令牌有效
   } else {
-    await DatabaseHelper.instance.cleanToken();
+    await DatabaseHelper.instance.clearToken();
     return false; // 令牌无效
   }
+}
+
+Future<void> initCache() async {
+  await DatabaseHelper.instance.clearCache();
 }
