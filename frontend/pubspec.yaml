@@ -66,10 +66,10 @@ flutter:
     - assets/icons/pin.png
     - assets/icons/cancel_pin.png
     - assets/icons/mute.png
-    - assets/icons/sound.png 
-    - assets/icons/view.png 
-    - assets/icons/delete.png 
-    - assets/icons/hide.png 
+    - assets/icons/sound.png
+    - assets/icons/view.png
+    - assets/icons/delete.png
+    - assets/icons/hide.png
     - assets/icons/left.png
     - assets/icons/not_pass.png
     - assets/icons/pass.png
@@ -90,6 +90,8 @@ flutter:
     - assets/icons/+.png
     - assets/icons/Save.png
     - assets/icons/img_box.png
+    - assets/icons/cancel_red.png
+    - assets/icons/chat_plus_blue.png
 
     # Animations
     - assets/animations/loading.gif

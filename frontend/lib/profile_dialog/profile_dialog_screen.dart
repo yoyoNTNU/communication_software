@@ -97,12 +97,72 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     ),
                     const SizedBox(height: 10),
                     // Button Area
-                    if (state is SelfProfile)
-                      const Text("This is your profile"),
                     if (state is FriendProfile && state.isFriend)
-                      const Text("You are friends"),
-                    if (state is FriendProfile && !state.isFriend)
-                      const Text("You are not friends"),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppStyle.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        height: 80,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset("assets/icons/Edit_blue.png"),
+                                      Text(
+                                        '修改暱稱',
+                                        style: AppStyle.caption(
+                                          level: 2,
+                                          color: AppStyle.blue,
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                          "assets/icons/chat_plus_blue.png"),
+                                      Text(
+                                        '開啟聊天',
+                                        style: AppStyle.caption(
+                                          level: 2,
+                                          color: AppStyle.blue,
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                          "assets/icons/cancel_red.png"),
+                                      Text(
+                                        '刪除好友',
+                                        style: AppStyle.caption(
+                                          level: 2,
+                                          color: AppStyle.red,
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                   ],
                 ),
               ),
