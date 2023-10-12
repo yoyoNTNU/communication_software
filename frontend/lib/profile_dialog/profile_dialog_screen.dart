@@ -26,99 +26,105 @@ class ProfileDialog extends StatefulWidget {
 class _ProfileDialogState extends State<ProfileDialog> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProfileDialogBloc(),
-      child: BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
-        builder: (context, state) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Dialog(
-                shape: RoundedRectangleBorder(
+    return BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
+      builder: (context, state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Container(
+                width: 300,
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
+                  color: Colors.white,
                 ),
-                child: Container(
-                  width: 300,
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    children: [
-                      // Photo Area
-                      Container(
-                        height: 160,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: const DecorationImage(
-                            image: AssetImage("assets/images/Background.png"),
-                            fit: BoxFit.cover,
-                          ),
+                child: Column(
+                  children: [
+                    // Photo Area
+                    Container(
+                      height: 160,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: AppStyle.gray,
+                          width: 1,
                         ),
-                        child: Center(
-                          child: Container(
-                            height: 100,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image: const DecorationImage(
-                                image: AssetImage("assets/images/Avatar.png"),
-                                fit: BoxFit.cover,
-                              ),
+                        image: DecorationImage(
+                          image: NetworkImage(state.data['background'] ?? ""),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: AppStyle.gray,
+                              width: 1,
+                            ),
+                            image: DecorationImage(
+                              image: NetworkImage(state.data['photo'] ?? ""),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      // Text Area
-                      Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              state.toString(),
-                              style: AppStyle.header(),
-                            ),
-                            const SizedBox(height: 4),
+                    ),
+                    const SizedBox(height: 8),
+                    // Text Area
+                    Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            state.data['name'].toString(),
+                            style: AppStyle.header(),
+                          ),
+                          const SizedBox(height: 4),
+                          if (state.data['intro'] != null)
                             Text(
                               state.data['intro'].toString(),
-                              style: AppStyle.body(color: AppStyle.teal),
+                              style: AppStyle.body(),
                             ),
-                          ],
-                        ),
+                        ],
                       ),
-                      const SizedBox(height: 10),
-                      // Button Area
-                      if (state is SelfProfile)
-                        const Text("This is your profile"),
-                      if (state is FriendProfile && state.isFriend)
-                        const Text("You are friends"),
-                      if (state is FriendProfile && !state.isFriend)
-                        const Text("You are not friends"),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 10),
+                    // Button Area
+                    if (state is SelfProfile)
+                      const Text("This is your profile"),
+                    if (state is FriendProfile && state.isFriend)
+                      const Text("You are friends"),
+                    if (state is FriendProfile && !state.isFriend)
+                      const Text("You are not friends"),
+                  ],
                 ),
               ),
-              // A Button to close the dialog
-              Opacity(
-                opacity: 0.8,
-                child: FloatingActionButton(
-                  backgroundColor: AppStyle.white,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: SizedBox(
-                    height: 32,
-                    width: 32,
-                    child: Image.asset("assets/icons/X.png"),
-                  ),
+            ),
+            // A Button to close the dialog
+            Opacity(
+              opacity: 0.8,
+              child: FloatingActionButton(
+                backgroundColor: AppStyle.white,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: Image.asset("assets/icons/X.png"),
                 ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

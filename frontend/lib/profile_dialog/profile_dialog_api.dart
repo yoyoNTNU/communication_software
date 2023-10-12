@@ -6,7 +6,7 @@ import 'package:proj/data.dart';
 class GetFriendAPI {
   static String? token;
 
-  static Future<Map<String, dynamic>> getCheckFriend(int friendID) async {
+  static Future<String> getCheckFriend(int friendID) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.get(
@@ -16,9 +16,8 @@ class GetFriendAPI {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Map<String, dynamic> infoData = responseData['data'];
-      final bool isFriend = !infoData['message'].contains('not');
 
-      return {"isFriend": isFriend};
+      return infoData['relationship'];
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }
@@ -37,12 +36,13 @@ class GetFriendAPI {
       final Map<String, dynamic> info = {
         "memberID": friendID,
         "userID": infoData['user_id'],
-        "name": infoData['name'],
-        "intro": infoData['introduction'],
-        "photo": infoData['photo'] == null ? null : infoData['photo']['url'],
+        "name": infoData['name'] ?? "",
+        "intro": infoData['introduction'] ?? "",
+        "photo":
+            infoData['photo'] == null ? "" : infoData['photo']['url'] ?? "",
         "background": infoData['background'] == null
-            ? null
-            : infoData['background']['url'],
+            ? ""
+            : infoData['background']['url'] ?? "",
       };
       return info;
     } else {

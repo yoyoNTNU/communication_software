@@ -8,21 +8,21 @@ part 'profile_dialog_state.dart';
 
 class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
   ProfileDialogBloc() : super(const SelfProfile(data: {})) {
-    on<OpenProfile>((event, emit) {
+    on<OpenProfile>((event, emit) async {
       if (event.userID == -1 && event.isGroup == false) {
         // TODO: get self profile data
         emit(const SelfProfile(data: {}));
       } else if (event.userID != -1 && event.isGroup == false) {
-        // Open friend profile (or stranger profile)
-        Future.wait([
-          GetFriendAPI.getCheckFriend(event.userID),
-          GetFriendAPI.getFriendInfo(event.userID),
-        ]).then((results) {
-          final isFriend = results[0]['isFriend'];
-          final friendData = results[1];
-          emit(FriendProfile(
-              data: friendData, friendID: event.userID, isFriend: isFriend));
-        });
+        String check = await GetFriendAPI.getCheckFriend(event.userID);
+        Map<String, dynamic> info =
+            await GetFriendAPI.getFriendInfo(event.userID);
+        emit(FriendProfile(
+          data: info,
+          friendID: event.userID,
+          isFriend: check == 'Friend',
+          isInvited: check == 'Invited', // ?: Need to Confirm API
+          isRequested: check == 'Requested', // ?: Need to Confirm API
+        ));
       } else if (event.groupID != -1 && event.isGroup == true) {
         // TODO: Get group profile data
         emit(GroupProfile(id: event.userID, data: const {}));
