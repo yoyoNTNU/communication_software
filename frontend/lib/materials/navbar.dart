@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/homepage/homepage_screen.dart';
-import 'package:proj/feac_chatroom/screen/chatroom_list.dart';
+import 'package:proj/chatroom_list/chatroom_list_screen.dart';
 import 'package:proj/style.dart';
 
 class NavBar extends StatefulWidget {

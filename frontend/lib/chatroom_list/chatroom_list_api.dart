@@ -1,16 +1,16 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:proj/main.dart';
+import 'package:proj/data.dart';
 
 class ChatRoomList {
   static Future<List<Map<String, dynamic>>> fetchChatRooms() async {
-    final headers = {
-      //這裡要改成傳值
-      'Authorization':
-          'Bearer eyJhY2Nlc3MtdG9rZW4iOiJMYVFsZVJ5c1VqUEwxdmVYQWY1U3J3IiwidG9rZW4tdHlwZSI6IkJlYXJlciIsImNsaWVudCI6IkV6bkFKeGpIcDBabXJVbW5zTzk3dkEiLCJleHBpcnkiOiIxNjkzNDk3ODgwIiwidWlkIjoiZXhhbXBsZTFAZ21haWwuY29tIn0=', // 替換為你的授權標頭
-    };
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
     final response = await http.get(
-        Uri.parse('http://localhost:3000/api/chatroom'), //這裡要改成分支domain
-        headers: headers);
+      Uri(scheme: 'https', host: host, path: '/api/chatroom'),
+      headers: {'Authorization': token ?? ""},
+    );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -23,7 +23,6 @@ class ChatRoomList {
         final name = room['name'];
         final photo = room['photo'];
         final isRead = room['isRead'];
-
         return {
           "chatroomID": chatroom['id'],
           "messageID": message['id'],

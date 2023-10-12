@@ -32,7 +32,9 @@ Rails.application.routes.draw do
       delete '' => 'friends#destroy'
     end
 
-    resources :chatroom, only:[:index]
+    resources :chatroom, only:[:index] do
+      get 'unread' => 'chatroom#unread_count'
+    end
     resources :groups do
       get '/member_list' => 'groups#member_list'
       post '/invite/:id'=> 'groups#invite'
