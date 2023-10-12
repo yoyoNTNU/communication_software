@@ -1,6 +1,8 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:proj/edit_page/edit_page_screen.dart';
+import 'package:proj/profile_dialog/bloc/profile_dialog_bloc.dart';
 import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
@@ -24,7 +26,9 @@ void main() async {
 
   final isTokenValid = await verifyToken(token);
 
-  runApp(ChatApp(isTokenValid: isTokenValid));
+  runApp(
+    ChatApp(isTokenValid: isTokenValid),
+  );
 }
 
 class ChatApp extends StatelessWidget {
@@ -36,25 +40,32 @@ class ChatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final initialRoute = isTokenValid ? '/home' : '/login';
 
-    return MaterialApp(
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProfileDialogBloc(),
+        ),
       ],
-      supportedLocales: const [
-        Locale('zh', 'TW'),
-        Locale('en', 'US'),
-      ],
-      locale: const Locale('zh'),
-      initialRoute: initialRoute,
-      routes: {
-        '/login': (context) => const Login(),
-        '/home': (context) => const NavBar(),
-        '/sign_up': (context) => const SignUp(),
-        '/forget_password': (context) => const SentResetEmail(),
-        '/edit': (context) => const EditPage(),
-      },
+      child: MaterialApp(
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('zh', 'TW'),
+          Locale('en', 'US'),
+        ],
+        locale: const Locale('zh'),
+        initialRoute: initialRoute,
+        routes: {
+          '/login': (context) => const Login(),
+          '/home': (context) => const NavBar(),
+          '/sign_up': (context) => const SignUp(),
+          '/forget_password': (context) => const SentResetEmail(),
+          '/edit': (context) => const EditPage(),
+        },
+      ),
     );
   }
 }
