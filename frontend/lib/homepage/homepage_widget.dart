@@ -129,7 +129,7 @@ class _FriendsListState extends State<FriendsList> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: () =>
-                                showProfileDialog(context, friend['id']),
+                                showProfileDialog(context, id: friend['id']),
                             child: ListTile(
                               contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 0, vertical: 0),
