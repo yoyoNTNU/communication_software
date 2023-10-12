@@ -99,6 +99,8 @@ flutter:
     - assets/icons/Search.png
     - assets/icons/select.png
     - assets/icons/unselect.png
+    - assets/icons/mute_pink.png
+    - assets/icons/pin_yellow.png
 
     # Animations
     - assets/animations/loading.gif
