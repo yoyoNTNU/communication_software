@@ -49,25 +49,27 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
             const SizedBox(
               width: 16,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MainLine(
-                    chatroomType: "group",
-                    isMuted: true,
-                    isPinned: true,
-                    groupPeopleCount: 3333,
-                    name: "123321"),
-                const SizedBox(
-                  height: 4,
-                ),
-                SecondLine(
-                    sender: "您",
-                    messageType: "string",
-                    messageContent: "今天晚上吃什麼",
-                    time: "2023-10-10T13:39:46.122+08:00")
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MainLine(
+                      chatroomType: "group",
+                      isMuted: true,
+                      isPinned: true,
+                      groupPeopleCount: 3333,
+                      name: "123321"),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  SecondLine(
+                      sender: "您",
+                      messageType: "string",
+                      messageContent: "今天晚上吃什麼",
+                      time: "2023-10-10T13:39:46.122+08:00")
+                ],
+              ),
             ),
             const SizedBox(
               width: 16,
