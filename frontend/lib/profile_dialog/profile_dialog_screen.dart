@@ -90,7 +90,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                           if (state.data['intro'] != null)
                             Text(
                               state.data['intro'].toString(),
-                              style: AppStyle.body(),
+                              style: AppStyle.body(color: AppStyle.teal),
                             ),
                         ],
                       ),
