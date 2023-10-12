@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:proj/profile_dialog/bloc/profile_dialog_bloc.dart';
 import 'package:proj/style.dart';
 
 // Dialog Showing the profile of user
-void showProfileDialog(BuildContext context, int friendID) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return ProfileDialog(id: friendID);
-    },
-  );
+void showProfileDialog(BuildContext context,
+    {bool isGroup = false, int id = -1}) {
+  BlocProvider.of<ProfileDialogBloc>(context).add(OpenProfile(
+    userID: id,
+    isGroup: isGroup,
+  ));
+  showDialog(context: context, builder: (context) => ProfileDialog(userID: id));
 }
 
 // Create a Dialog that show the profile of user
 class ProfileDialog extends StatefulWidget {
-  final int id;
+  final int userID;
 
-  const ProfileDialog({Key? key, required this.id}) : super(key: key);
+  const ProfileDialog({Key? key, required this.userID}) : super(key: key);
 
   @override
   State<ProfileDialog> createState() => _ProfileDialogState();
@@ -24,48 +26,99 @@ class ProfileDialog extends StatefulWidget {
 class _ProfileDialogState extends State<ProfileDialog> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Container(
-            width: 300,
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Colors.white,
-            ),
-            child: Column(
-              children: [
-                Text(
-                  'Profile',
-                  style: AppStyle.body(),
+    return BlocProvider(
+      create: (context) => ProfileDialogBloc(),
+      child: BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
+        builder: (context, state) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Dialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                const SizedBox(height: 10),
-                Text(widget.id.toString(), style: AppStyle.body()),
-              ],
-            ),
-          ),
-        ),
-        // A Button to close the dialog
-        Opacity(
-          opacity: 0.8,
-          child: FloatingActionButton(
-            backgroundColor: AppStyle.white,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: SizedBox(
-              height: 32,
-              width: 32,
-              child: Image.asset("assets/icons/X.png"),
-            ),
-          ),
-        ),
-      ],
+                child: Container(
+                  width: 300,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      // Photo Area
+                      Container(
+                        height: 160,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: const DecorationImage(
+                            image: AssetImage("assets/images/Background.png"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Center(
+                          child: Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              image: const DecorationImage(
+                                image: AssetImage("assets/images/Avatar.png"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Text Area
+                      Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              state.toString(),
+                              style: AppStyle.header(),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              state.data['intro'].toString(),
+                              style: AppStyle.body(color: AppStyle.teal),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Button Area
+                      if (state is SelfProfile)
+                        const Text("This is your profile"),
+                      if (state is FriendProfile && state.isFriend)
+                        const Text("You are friends"),
+                      if (state is FriendProfile && !state.isFriend)
+                        const Text("You are not friends"),
+                    ],
+                  ),
+                ),
+              ),
+              // A Button to close the dialog
+              Opacity(
+                opacity: 0.8,
+                child: FloatingActionButton(
+                  backgroundColor: AppStyle.white,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: Image.asset("assets/icons/X.png"),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 }
