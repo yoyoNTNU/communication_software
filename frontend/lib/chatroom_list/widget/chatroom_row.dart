@@ -274,6 +274,9 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
                 name: widget.room.name,
                 photo: widget.room.photo,
                 isRead: widget.room.isRead,
+                type: widget.room.type,
+                count: widget.room.count,
+                sender: widget.room.sender,
               ),
             ),
             AnimatedContainer(
