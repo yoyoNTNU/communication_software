@@ -42,10 +42,11 @@ class _MainLineState extends State<MainLine> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                    width: 12,
-                    height: 18,
-                    child: Image.asset("assets/icons/user_blue.png")),
+                Image.asset(
+                  "assets/icons/user_blue.png",
+                  width: 12,
+                  height: 18,
+                ),
                 const SizedBox(
                   width: 2,
                 ),

@@ -12,7 +12,7 @@ class ChatRoomCard extends StatefulWidget {
   final String? photo;
   final bool isRead;
   final String type;
-  final int count;
+  final int? count;
   final String sender;
 
   const ChatRoomCard({
@@ -28,7 +28,7 @@ class ChatRoomCard extends StatefulWidget {
     required this.photo,
     required this.isRead,
     required this.type,
-    required this.count,
+    this.count,
     required this.sender,
   });
 
@@ -37,9 +37,34 @@ class ChatRoomCard extends StatefulWidget {
 }
 
 class _ChatRoomCardState extends State<ChatRoomCard> {
+  int unread = 0;
+  Future<void> _getUnread() async {
+    try {
+      final int unreadCount =
+          await ChatRoomListAPI.getUnreadCount(widget.chatroomID);
+      setState(() {
+        unread = unreadCount;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUnread();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
+    return GestureDetector(
+      onTap: () {
+        //TODO 要記得考慮參數傳遞
+        //在這個函式裡面導航到對應的聊天室頁面
+        //你可以使用 Navigator.push 來執行導航
+        print("tap ${widget.chatroomID} room");
+      },
       child: Container(
         color: AppStyle.white,
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
@@ -70,68 +95,33 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
                     height: 4,
                   ),
                   SecondLine(
-                      sender: "您",
-                      messageType: "string",
-                      messageContent: "今天晚上吃什麼",
-                      time: "2023-10-10T13:39:46.122+08:00")
+                      sender: widget.sender,
+                      messageType: widget.messageType,
+                      messageContent: widget.messageContent,
+                      time: widget.messageTime)
                 ],
               ),
             ),
             const SizedBox(
               width: 16,
             ),
-            Container(
-              height: 24,
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppStyle.yellow[800]!),
-                  color: AppStyle.yellow),
-              child: Text(
-                "123",
-                style: AppStyle.header(level: 3),
-              ),
-            )
+            (widget.isRead || unread == 0)
+                ? const SizedBox()
+                : Container(
+                    height: 24,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppStyle.yellow[800]!),
+                        color: AppStyle.yellow),
+                    child: Text(
+                      unread.toString(),
+                      style: AppStyle.header(level: 3),
+                    ),
+                  )
           ],
         ),
       ),
     );
   }
 }
-// ListTile(
-//       isThreeLine: true,
-//       titleAlignment: ListTileTitleAlignment.top,
-//       contentPadding: EdgeInsets.zero,
-//       tileColor: AppStyle.white,
-//       hoverColor: AppStyle.white,
-//       splashColor: AppStyle.white,
-//       leading: Align(
-//         alignment: Alignment.topLeft,
-//         child: CircleAvatar(
-//           radius: 24,
-//           backgroundColor: Colors.transparent,
-//           backgroundImage: widget.photo != null
-//               ? NetworkImage(widget.photo!) as ImageProvider
-//               : const AssetImage("assets/images/Avatar.png"),
-//         ),
-//       ),
-//       title: Text(
-//         widget.name,
-//         overflow: TextOverflow.ellipsis, // 多余文本用...表示
-//         maxLines: 1, style: AppStyle.header(level: 2),
-//       ),
-//       subtitle: Text(
-//         widget.messageContent,
-//         overflow: TextOverflow.ellipsis, // 多余文本用...表示
-//         maxLines: 1, style: AppStyle.info(color: AppStyle.gray[600]!),
-//       ),
-//       trailing: Text(formatMessageTime(widget.messageTime),
-//           overflow: TextOverflow.ellipsis, // 多余文本用...表示
-//           maxLines: 1),
-//       onTap: () {
-//         //TODO 要記得考慮參數傳遞
-//         // 在這個函式裡面導航到對應的聊天室頁面
-//         // 你可以使用 Navigator.push 來執行導航
-//         print("tap ${widget.chatroomID} room");
-//       },
-//     );

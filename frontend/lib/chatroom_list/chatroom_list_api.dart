@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:proj/main.dart';
 import 'package:proj/data.dart';
 
-class ChatRoomList {
+class ChatRoomListAPI {
   static Future<List<Map<String, dynamic>>> fetchChatRooms() async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
@@ -39,6 +39,24 @@ class ChatRoomList {
       }).toList();
 
       return fetchedChatRooms;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
+
+  static Future<int> getUnreadCount(int chatroomID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.get(
+      Uri(
+          scheme: 'https',
+          host: host,
+          path: '/api/chatroom/${chatroomID.toString()}/unread'),
+      headers: {'Authorization': token ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      return responseData['data'];
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }

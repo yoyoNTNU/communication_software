@@ -29,8 +29,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
     showLoading(context);
     try {
       final List<Map<String, dynamic>> fetchedChatRooms =
-          await ChatRoomList.fetchChatRooms();
-
+          await ChatRoomListAPI.fetchChatRooms();
       setState(() {
         chatRooms = fetchedChatRooms;
       });
