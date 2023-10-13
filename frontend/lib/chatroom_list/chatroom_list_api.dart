@@ -20,9 +20,7 @@ class ChatRoomList {
         final chatroom = room['chatroom'];
         final message = room['message'];
         final cm = room['c_m'];
-        final name = room['name'];
         final photo = room['photo'];
-        final isRead = room['isRead'];
         return {
           "chatroomID": chatroom['id'],
           "messageID": message['id'],
@@ -31,9 +29,12 @@ class ChatRoomList {
           "messageTime": message['created_at'],
           "cmIsPinned": cm['isPinned'],
           "cmIsMuted": cm['isMuted'],
-          "name": name,
+          "name": room['name'],
           "photo": photo != null ? photo['url'] : null,
-          "isRead": isRead,
+          "isRead": room['isRead'],
+          "type": room['chatroom_type'],
+          "count": room['count'],
+          "sender": room['sender'],
         };
       }).toList();
 

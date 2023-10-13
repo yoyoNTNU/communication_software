@@ -26,10 +26,8 @@ Rails.application.routes.draw do
       delete 'reject' =>'friend_requests#reject'
       delete '' =>'friend_requests#destroy'
     end
-    resources :friends ,only:[:index] do
+    resources :friends ,except:[:create] do
       get 'check' => 'friends#check'
-      patch '' => 'friends#update'
-      delete '' => 'friends#destroy'
     end
 
     resources :chatroom, only:[:index] do

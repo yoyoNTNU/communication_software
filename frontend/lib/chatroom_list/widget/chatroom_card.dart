@@ -11,6 +11,9 @@ class ChatRoomCard extends StatefulWidget {
   final String name;
   final String? photo;
   final bool isRead;
+  final String type;
+  final int count;
+  final String sender;
 
   const ChatRoomCard({
     super.key,
@@ -24,6 +27,9 @@ class ChatRoomCard extends StatefulWidget {
     required this.name,
     required this.photo,
     required this.isRead,
+    required this.type,
+    required this.count,
+    required this.sender,
   });
 
   @override
@@ -55,11 +61,11 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MainLine(
-                      chatroomType: "group",
-                      isMuted: true,
-                      isPinned: true,
-                      groupPeopleCount: 3333,
-                      name: "123321"),
+                      chatroomType: widget.type,
+                      isMuted: widget.cmIsMuted,
+                      isPinned: widget.cmIsPinned,
+                      groupPeopleCount: widget.count,
+                      name: widget.name),
                   const SizedBox(
                     height: 4,
                   ),
