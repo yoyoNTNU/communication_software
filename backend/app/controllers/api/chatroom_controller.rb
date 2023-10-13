@@ -6,24 +6,33 @@ class Api::ChatroomController < ApplicationController
     @chatroom=[]
     @chatroom_list.each do |c|
       if !c.isDisabled
-        temp=Chatroom.find(c.chatroom_id)
+        temp=Chatroom.find_by(id:c.chatroom_id)
         if temp.type_=="group"
-          g=Group.find(temp.type_id)
+          g=Group.find_by(id:temp.type_id)
           type_="group"
           count=ChatroomMember.where(chatroom:temp).length
           photo=g.photo
           name=g.name
         elsif temp.type_=="friend"
-          fs=Friendship.find(temp.type_id)
-          friend=((Member.find(fs.member_id)==current_member)? Member.find(fs.friend_id): Member.find(fs.member_id))
+          fs=Friendship.find_by(id:temp.type_id)
+          friend=((Member.find_by(id:fs.member_id)==current_member)? Member.find_by(id:fs.friend_id): Member.find_by(id:fs.member_id))
           photo=friend.photo
           type_="friend"
           count=nil
           name= Friendship.find_by(member:current_member,friend:friend).nickname
         end
         message=Message.where(chatroom:temp).last
+        sender_id=message.member_id
+        friendships=Friendship.find_by(member:current_member,friend_id:sender_id)
+        if sender_id==current_member.id
+          sender="您"
+        elsif friendships.nil?
+          sender= Member.find_by(id:sender_id).name 
+        else
+          sender=friendships.nickname
+        end
         isRead= MessageReader.find_by(message:message,member:current_member)? true:false;
-        @chatroom<<{chatroom:temp,message:message,c_m:c,photo:photo,name:name,isRead:isRead,chatroom_type:type_,count:count}
+        @chatroom<<{chatroom:temp,message:message,c_m:c,photo:photo,name:name,isRead:isRead,chatroom_type:type_,count:count,sneder:sender}
       end
     end
     @chatroom.sort_by!{ |hash| [hash[:c_m].isPinned ? 1 : 0, hash[:message].id]}.reverse!
