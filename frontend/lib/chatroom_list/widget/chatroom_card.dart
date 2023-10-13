@@ -102,9 +102,10 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
                 ],
               ),
             ),
-            const SizedBox(
-              width: 16,
-            ),
+            if (!widget.isRead && unread != 0)
+              const SizedBox(
+                width: 16,
+              ),
             (widget.isRead || unread == 0)
                 ? const SizedBox()
                 : Container(

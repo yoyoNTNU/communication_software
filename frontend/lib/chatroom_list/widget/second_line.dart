@@ -28,11 +28,15 @@ class _SecondLineState extends State<SecondLine> {
         const SizedBox(
           width: 4,
         ),
-        Text(
-          widget.messageType == "string"
-              ? widget.messageContent
-              : msgTrans(widget.messageType),
-          style: AppStyle.info(color: AppStyle.gray[600]!),
+        Expanded(
+          child: Text(
+            widget.messageType == "string"
+                ? widget.messageContent
+                : msgTrans(widget.messageType),
+            style: AppStyle.info(color: AppStyle.gray[600]!),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
         ),
         const SizedBox(
           width: 12,

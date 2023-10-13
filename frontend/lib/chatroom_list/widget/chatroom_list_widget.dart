@@ -4,6 +4,7 @@ import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:intl/intl.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:proj/widget.dart';
+import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 
 part 'chatroom_card.dart';
 part 'chatroom_row.dart';
