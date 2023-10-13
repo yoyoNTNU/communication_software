@@ -32,7 +32,7 @@ class Api::ChatroomController < ApplicationController
           sender=friendships.nickname
         end
         isRead= MessageReader.find_by(message:message,member:current_member)? true:false;
-        @chatroom<<{chatroom:temp,message:message,c_m:c,photo:photo,name:name,isRead:isRead,chatroom_type:type_,count:count,sneder:sender}
+        @chatroom<<{chatroom:temp,message:message,c_m:c,photo:photo,name:name,isRead:isRead,chatroom_type:type_,count:count,sender:sender}
       end
     end
     @chatroom.sort_by!{ |hash| [hash[:c_m].isPinned ? 1 : 0, hash[:message].id]}.reverse!
