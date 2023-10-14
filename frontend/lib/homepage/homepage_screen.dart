@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
       if (!context.mounted) return;
       showLoading(context);
       dialogShower.complete();
-      print("show");
     }
     if (info_ == null) {
       //print("API");
@@ -52,7 +51,6 @@ class _HomePageState extends State<HomePage> {
     if (dialogShower.isCompleted) {
       if (!context.mounted) return;
       Navigator.of(context).pop();
-      print("pop");
     }
     dialogCompleter.complete();
   }
