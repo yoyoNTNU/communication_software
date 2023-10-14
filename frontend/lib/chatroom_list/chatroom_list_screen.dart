@@ -18,6 +18,10 @@ class _ChatroomPageState extends State<ChatroomPage> {
   List<bool> chatRoomRowStates = [];
   List<Map<String, dynamic>> chatRooms = [];
   final ScrollController _scrollController = ScrollController();
+  bool isEdit = false;
+  bool isSort = false;
+  bool isSearch = false;
+  String? showChatroomType = "all";
 
   @override
   void initState() {
@@ -29,8 +33,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
     showLoading(context);
     try {
       final List<Map<String, dynamic>> fetchedChatRooms =
-          await ChatRoomList.fetchChatRooms();
-
+          await ChatRoomListAPI.fetchChatRooms();
       setState(() {
         chatRooms = fetchedChatRooms;
       });
@@ -46,18 +49,74 @@ class _ChatroomPageState extends State<ChatroomPage> {
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 48,
         backgroundColor: AppStyle.white,
         elevation: 0,
-        title: GestureDetector(
-          onTap: () {
-            _scrollController.animateTo(0,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut);
-          },
-          child: Text(
-            '聊天室',
-            style: AppStyle.header(),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isEdit = !isEdit;
+                isSort = false;
+                isSearch = false;
+              });
+            },
+            child: isEdit
+                ? Image.asset("assets/icons/tap_check.png")
+                : Image.asset("assets/icons/untap_check.png"),
           ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isEdit = false;
+                isSort = !isSort;
+                isSearch = false;
+              });
+            },
+            child: isSort
+                ? Image.asset("assets/icons/tap_sort.png")
+                : Image.asset("assets/icons/untap_sort.png"),
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                isEdit = false;
+                isSort = false;
+                isSearch = !isSearch;
+              });
+            },
+            child: isSearch
+                ? Image.asset("assets/icons/tap_search.png")
+                : Image.asset("assets/icons/untap_search.png"),
+          ),
+        ],
+        title: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                _scrollController.animateTo(0,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut);
+              },
+              child: Text(
+                '聊天室',
+                style: AppStyle.header(),
+              ),
+            ),
+            const SizedBox(
+              width: 16,
+            ),
+            TypeDropdownButton(
+              onChanged: (value) {
+                setState(() {
+                  showChatroomType = value;
+                  print(showChatroomType);
+                });
+              },
+              type: showChatroomType,
+            )
+          ],
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1.0),
@@ -69,48 +128,42 @@ class _ChatroomPageState extends State<ChatroomPage> {
         ),
       ),
       body: ListView.separated(
-          controller: _scrollController,
-          separatorBuilder: (context, index) {
-            if (index == 0 || index == chatRooms.length + 1) {
-              return const SizedBox(height: 8);
-            }
-            return const SizedBox(height: 12);
-          },
-          itemCount: chatRooms.length + 2,
-          itemBuilder: (context, index) {
-            for (int i = 0; i < chatRooms.length; ++i) {
-              chatRoomRowStates.add(false);
-            }
-            if (index == 0 || index == chatRooms.length + 1) {
-              return const SizedBox(height: 8);
-            }
-            final room = chatRooms[index - 1];
-            return ChatRoomRow(
-                room: ChatRoomCard(
-                  chatroomID: room["chatroomID"]!,
-                  messageID: room["messageID"]!,
-                  messageContent: room["messageContent"]!,
-                  messageType: room["messageType"]!,
-                  messageTime: room["messageTime"]!,
-                  cmIsPinned: room["cmIsPinned"]!,
-                  cmIsMuted: room["cmIsMuted"]!,
-                  name: room["name"]!,
-                  photo: room["photo"],
-                  isRead: room["isRead"]!,
-                  type: room['type'],
-                  count: room['count'],
-                  sender: room['sender'],
-                ),
-                index: index - 1,
-                isPressed: chatRoomRowStates[index - 1],
-                setIsPressed: (int rowIndex, bool value) {
-                  setState(() {
-                    chatRoomRowStates[rowIndex] = value;
-                  });
-                },
-                totalCount: chatRooms.length,
-                screenWid: MediaQuery.of(context).size.width);
-          }),
+        controller: _scrollController,
+        separatorBuilder: (context, index) {
+          if (index == 0 || index == chatRooms.length + 1) {
+            return const SizedBox(height: 8);
+          }
+          return const SizedBox(height: 12);
+        },
+        itemCount: chatRooms.length + 2,
+        itemBuilder: (context, index) {
+          for (int i = 0; i < chatRooms.length; ++i) {
+            chatRoomRowStates.add(false);
+          }
+          if (index == 0 || index == chatRooms.length + 1) {
+            return const SizedBox(height: 8);
+          }
+          final room = chatRooms[index - 1];
+          return ChatRoomRow(
+            room: ChatRoomCard(
+              chatroomID: room["chatroomID"]!,
+              messageID: room["messageID"]!,
+              messageContent: room["messageContent"]!,
+              messageType: room["messageType"]!,
+              messageTime: room["messageTime"]!,
+              cmIsPinned: room["cmIsPinned"]!,
+              cmIsMuted: room["cmIsMuted"]!,
+              name: room["name"]!,
+              photo: room["photo"],
+              isRead: room["isRead"]!,
+              type: room['type'],
+              count: room['count'],
+              sender: room['sender'],
+            ),
+            index: index - 1,
+          );
+        },
+      ),
     );
   }
 }

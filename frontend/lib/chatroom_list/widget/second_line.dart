@@ -21,18 +21,28 @@ class _SecondLineState extends State<SecondLine> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          widget.sender,
-          style: AppStyle.info(),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Text(
+            widget.sender,
+            style: AppStyle.info(),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
         ),
         const SizedBox(
           width: 4,
         ),
-        Text(
-          widget.messageType == "string"
-              ? widget.messageContent
-              : msgTrans(widget.messageType),
-          style: AppStyle.info(color: AppStyle.gray[600]!),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Text(
+            widget.messageType == "string"
+                ? widget.messageContent
+                : msgTrans(widget.messageType),
+            style: AppStyle.info(color: AppStyle.gray[600]!),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
         ),
         const SizedBox(
           width: 12,

@@ -24,6 +24,8 @@ Widget unitLine(String key, String value, [VoidCallback? onPress]) {
         child: Text(
           value,
           style: AppStyle.body(color: AppStyle.gray[500]!),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
       ),
       if (onPress != null)
