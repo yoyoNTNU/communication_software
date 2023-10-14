@@ -116,7 +116,7 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
                         border: Border.all(color: AppStyle.yellow[800]!),
                         color: AppStyle.yellow),
                     child: Text(
-                      unread.toString(),
+                      unread > 999 ? "999+" : unread.toString(),
                       style: AppStyle.header(level: 3),
                     ),
                   )
