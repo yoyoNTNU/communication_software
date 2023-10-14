@@ -30,16 +30,25 @@ class CopyableText extends StatelessWidget {
           _copyToClipboard(context);
         },
         child: Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width - 164,
+          ),
           decoration: BoxDecoration(
             color: AppStyle.blue[50],
             borderRadius: BorderRadius.circular(4),
           ),
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 8),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                "# $text_",
-                style: AppStyle.info(color: AppStyle.blue[300]!),
+              Flexible(
+                fit: FlexFit.loose,
+                child: Text(
+                  "# $text_",
+                  style: AppStyle.info(color: AppStyle.blue[300]!),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
               const SizedBox(
                 width: 4,
@@ -143,10 +152,14 @@ class _FriendsListState extends State<FriendsList> {
                               friend['nickname'],
                               style: AppStyle.header(
                                   level: 3, color: AppStyle.gray[700]!),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                             subtitle: Text(
                               friend['introduction'] ?? "",
                               style: AppStyle.info(color: AppStyle.gray[600]!),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                             leading: CircleAvatar(
                               radius: 20,
@@ -292,10 +305,15 @@ class _GroupsListState extends State<GroupsList> {
                                 horizontal: 0, vertical: 8),
                             title: Row(
                               children: [
-                                Text(
-                                  group['name'],
-                                  style: AppStyle.header(
-                                      level: 3, color: AppStyle.gray[700]!),
+                                Flexible(
+                                  fit: FlexFit.loose,
+                                  child: Text(
+                                    group['name'],
+                                    style: AppStyle.header(
+                                        level: 3, color: AppStyle.gray[700]!),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 8,

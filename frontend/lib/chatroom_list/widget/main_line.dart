@@ -23,9 +23,14 @@ class _MainLineState extends State<MainLine> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(
-          widget.name,
-          style: AppStyle.header(level: 2),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Text(
+            widget.name,
+            style: AppStyle.header(level: 2),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
         ),
         if (widget.chatroomType == "group")
           const SizedBox(

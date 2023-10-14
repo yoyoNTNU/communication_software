@@ -37,26 +37,32 @@ class _MemberCardState extends State<MemberCard> {
                     ? Image.asset("assets/icons/select.png")
                     : Image.asset("assets/icons/unselect.png"),
               ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                child: Row(children: [
-                  ClipOval(
-                      child: widget.avatar != null
-                          ? Image.network(
-                              widget.avatar!,
-                              width: 48,
-                              height: 48,
-                            )
-                          : Image.asset('assets/images/Avatar.png')),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Text(
-                    widget.name,
-                    style: AppStyle.header(level: 2),
-                  )
-                ]),
+              Expanded(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  child: Row(children: [
+                    ClipOval(
+                        child: widget.avatar != null
+                            ? Image.network(
+                                widget.avatar!,
+                                width: 48,
+                                height: 48,
+                              )
+                            : Image.asset('assets/images/Avatar.png')),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Expanded(
+                      child: Text(
+                        widget.name,
+                        style: AppStyle.header(level: 2),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    )
+                  ]),
+                ),
               )
             ],
           )),
