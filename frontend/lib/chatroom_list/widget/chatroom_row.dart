@@ -3,19 +3,11 @@ part of 'chatroom_list_widget.dart';
 class ChatRoomRow extends StatefulWidget {
   final ChatRoomCard room;
   final int index;
-  final double screenWid;
-  final bool isPressed;
-  final void Function(int, bool) setIsPressed;
-  final int totalCount;
 
   const ChatRoomRow({
     super.key,
-    required this.screenWid,
     required this.room,
     required this.index,
-    required this.isPressed,
-    required this.totalCount,
-    required this.setIsPressed,
   });
 
   @override
