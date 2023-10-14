@@ -16,11 +16,17 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Map<String, dynamic>? info_ = {};
   bool isExpanded = false;
+  Completer<void> dialogShower = Completer<void>();
+  Completer<void> dialogCompleter = Completer<void>();
 
   Future<void> _info() async {
     info_ = await DatabaseHelper.instance.getCachedSelfData();
-    if (!context.mounted) return;
-    showLoading(context);
+    if (!dialogCompleter.isCompleted) {
+      if (!context.mounted) return;
+      showLoading(context);
+      dialogShower.complete();
+      print("show");
+    }
     if (info_ == null) {
       //print("API");
       try {
@@ -43,8 +49,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onLoaded() {
-    if (!context.mounted) return;
-    Navigator.of(context).pop();
+    if (dialogShower.isCompleted) {
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+      print("pop");
+    }
+    dialogCompleter.complete();
   }
 
   @override
@@ -253,9 +263,14 @@ class _HomePageState extends State<HomePage> {
                   Positioned(
                     top: 124.5,
                     left: 154,
-                    child: Text(
-                      info_!["name"] ?? "",
-                      style: AppStyle.header(color: AppStyle.white),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width - 164,
+                      child: Text(
+                        info_!["name"] ?? "",
+                        style: AppStyle.header(color: AppStyle.white),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ),
                   ),
                   Positioned(
@@ -266,8 +281,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Positioned(
-                    top: 10,
-                    right: 12,
+                    top: 4,
+                    right: 6,
                     child: GestureDetector(
                         onTap: () async {
                           await DatabaseHelper.instance.clearCache();
