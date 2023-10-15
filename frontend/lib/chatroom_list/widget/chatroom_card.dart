@@ -42,9 +42,11 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
     try {
       final int unreadCount =
           await ChatRoomListAPI.getUnreadCount(widget.chatroomID);
-      setState(() {
-        unread = unreadCount;
-      });
+      if (mounted) {
+        setState(() {
+          unread = unreadCount;
+        });
+      }
     } catch (e) {
       print('API request error: $e');
     }
