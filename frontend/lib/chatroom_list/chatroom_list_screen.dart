@@ -142,6 +142,10 @@ class _ChatroomPageState extends State<ChatroomPage>
               onChanged: (value) async {
                 if (showChatroomType != value) {
                   setState(() {
+                    isEdit = false;
+                    isSearch = false;
+                    isSort = false;
+                    setBottomHeightAnimated(1);
                     sortBy = "time";
                     showChatroomType = value;
                     copyChatRooms = [];
@@ -207,23 +211,24 @@ class _ChatroomPageState extends State<ChatroomPage>
               if (isSort)
                 GestureDetector(
                   onTap: () async {
-                    if (sortBy != "unread") {}
-                    var temp = copyChatRooms;
-                    setState(() {
-                      isSort = false;
-                      setBottomHeightAnimated(1);
-                      sortBy = "unread";
-                      copyChatRooms = [];
-                    });
-                    await Future.delayed(const Duration(milliseconds: 100));
-                    setState(() {
-                      copyChatRooms = temp
-                          .where((element) => element["isRead"] == false)
-                          .toList();
-                      copyChatRooms.addAll(temp
-                          .where((element) => element["isRead"] == true)
-                          .toList());
-                    });
+                    if (sortBy != "unread") {
+                      var temp = copyChatRooms;
+                      setState(() {
+                        isSort = false;
+                        setBottomHeightAnimated(1);
+                        sortBy = "unread";
+                        copyChatRooms = [];
+                      });
+                      await Future.delayed(const Duration(milliseconds: 100));
+                      setState(() {
+                        copyChatRooms = temp
+                            .where((element) => element["isRead"] == false)
+                            .toList();
+                        copyChatRooms.addAll(temp
+                            .where((element) => element["isRead"] == true)
+                            .toList());
+                      });
+                    }
                   },
                   child: Container(
                     height: (_height - 1) / 2,
