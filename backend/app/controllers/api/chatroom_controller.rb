@@ -54,7 +54,6 @@ class Api::ChatroomController < ApplicationController
       count=0
       message.each do |m|
         if MessageReader.find_by(member:current_member,message:m).nil?
-          p count
           count+=1
         else 
           break
