@@ -140,20 +140,23 @@ class _ChatroomPageState extends State<ChatroomPage>
             ),
             TypeDropdownButton(
               onChanged: (value) async {
-                setState(() {
-                  showChatroomType = value;
-                  copyChatRooms = [];
-                });
-                await Future.delayed(const Duration(milliseconds: 10));
-                setState(() {
-                  if (value == "all") {
-                    copyChatRooms = chatRooms;
-                  } else {
-                    copyChatRooms = chatRooms
-                        .where((element) => element["type"] == value)
-                        .toList();
-                  }
-                });
+                if (showChatroomType != value) {
+                  setState(() {
+                    sortBy = "time";
+                    showChatroomType = value;
+                    copyChatRooms = [];
+                  });
+                  await Future.delayed(const Duration(milliseconds: 100));
+                  setState(() {
+                    if (value == "all") {
+                      copyChatRooms = chatRooms;
+                    } else {
+                      copyChatRooms = chatRooms
+                          .where((element) => element["type"] == value)
+                          .toList();
+                    }
+                  });
+                }
               },
               type: showChatroomType,
             )
@@ -165,11 +168,22 @@ class _ChatroomPageState extends State<ChatroomPage>
             children: [
               if (isSort)
                 GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      sortBy = "time";
-                      print(sortBy);
-                    });
+                  onTap: () async {
+                    if (sortBy != "time") {
+                      var temp = copyChatRooms;
+                      setState(() {
+                        isSort = false;
+                        setBottomHeightAnimated(1);
+                        sortBy = "time";
+                        copyChatRooms = [];
+                      });
+                      await Future.delayed(const Duration(milliseconds: 100));
+                      setState(() {
+                        copyChatRooms = temp;
+                        copyChatRooms.sort((a, b) =>
+                            b['messageTime'].compareTo(a['messageTime']));
+                      });
+                    }
                   },
                   child: Container(
                     height: (_height - 1) / 2,
@@ -192,11 +206,24 @@ class _ChatroomPageState extends State<ChatroomPage>
                 ),
               if (isSort)
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async {
+                    if (sortBy != "unread") {}
+                    var temp = copyChatRooms;
                     setState(() {
+                      isSort = false;
+                      setBottomHeightAnimated(1);
                       sortBy = "unread";
+                      copyChatRooms = [];
                     });
-                    print(sortBy);
+                    await Future.delayed(const Duration(milliseconds: 100));
+                    setState(() {
+                      copyChatRooms = temp
+                          .where((element) => element["isRead"] == false)
+                          .toList();
+                      copyChatRooms.addAll(temp
+                          .where((element) => element["isRead"] == true)
+                          .toList());
+                    });
                   },
                   child: Container(
                     height: (_height - 1) / 2,
