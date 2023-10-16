@@ -5,7 +5,6 @@ import 'package:proj/data.dart';
 import 'package:image_picker/image_picker.dart';
 
 class GetInfoAPI {
-  static String? token;
   static Future<List<Map<String, dynamic>>> getFriend() async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
@@ -54,7 +53,6 @@ class GetInfoAPI {
 }
 
 class GroupAPI {
-  static String? token;
   static Future<Map<String, dynamic>> createGroup(
       {String? name, XFile? avatar, XFile? background}) async {
     final dbToken = await DatabaseHelper.instance.getToken();
