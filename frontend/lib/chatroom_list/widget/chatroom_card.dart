@@ -41,10 +41,12 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
   Future<void> _getUnread() async {
     try {
       final int unreadCount =
-          await ChatRoomListAPI.getUnreadCount(widget.chatroomID);
-      setState(() {
-        unread = unreadCount;
-      });
+          await ChatRoomRowAPI.getUnreadCount(widget.chatroomID);
+      if (mounted) {
+        setState(() {
+          unread = unreadCount;
+        });
+      }
     } catch (e) {
       print('API request error: $e');
     }

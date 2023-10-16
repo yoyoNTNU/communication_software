@@ -13,20 +13,47 @@ class ChatroomPage extends StatefulWidget {
   State<ChatroomPage> createState() => _ChatroomPageState();
 }
 
-class _ChatroomPageState extends State<ChatroomPage> {
+class _ChatroomPageState extends State<ChatroomPage>
+    with TickerProviderStateMixin {
   final channel = IOWebSocketChannel.connect('wss://$host/cable');
-  List<bool> chatRoomRowStates = [];
   List<Map<String, dynamic>> chatRooms = [];
+  List<Map<String, dynamic>> copyChatRooms = [];
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
+  late AnimationController _controller;
+  late Animation<double> _animation;
   bool isEdit = false;
   bool isSort = false;
   bool isSearch = false;
   String? showChatroomType = "all";
+  String sortBy = "time";
+  double _height = 1.0;
+
+  void setBottomHeightAnimated(double end) {
+    _animation = Tween(begin: _height, end: end).animate(_controller)
+      ..addListener(() {
+        setState(() {
+          _height = _animation.value;
+        });
+      });
+    _controller.reset();
+    _controller.forward();
+  }
 
   @override
   void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
     super.initState();
     _fetchChatRooms();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> _fetchChatRooms() async {
@@ -36,6 +63,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
           await ChatRoomListAPI.fetchChatRooms();
       setState(() {
         chatRooms = fetchedChatRooms;
+        copyChatRooms = chatRooms;
       });
     } catch (e) {
       print('API request error: $e');
@@ -60,6 +88,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
                 isEdit = !isEdit;
                 isSort = false;
                 isSearch = false;
+                setBottomHeightAnimated(isEdit ? 45 : 1);
               });
             },
             child: isEdit
@@ -72,6 +101,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
                 isEdit = false;
                 isSort = !isSort;
                 isSearch = false;
+                setBottomHeightAnimated(isSort ? 89 : 1);
               });
             },
             child: isSort
@@ -84,6 +114,7 @@ class _ChatroomPageState extends State<ChatroomPage> {
                 isEdit = false;
                 isSort = false;
                 isSearch = !isSearch;
+                setBottomHeightAnimated(isSearch ? 53 : 1);
               });
             },
             child: isSearch
@@ -108,42 +139,248 @@ class _ChatroomPageState extends State<ChatroomPage> {
               width: 16,
             ),
             TypeDropdownButton(
-              onChanged: (value) {
-                setState(() {
-                  showChatroomType = value;
-                  print(showChatroomType);
-                });
+              onChanged: (value) async {
+                if (showChatroomType != value) {
+                  setState(() {
+                    isEdit = false;
+                    isSearch = false;
+                    isSort = false;
+                    setBottomHeightAnimated(1);
+                    sortBy = "time";
+                    showChatroomType = value;
+                    copyChatRooms = [];
+                  });
+                  await Future.delayed(const Duration(milliseconds: 100));
+                  setState(() {
+                    if (value == "all") {
+                      copyChatRooms = chatRooms;
+                    } else {
+                      copyChatRooms = chatRooms
+                          .where((element) => element["type"] == value)
+                          .toList();
+                    }
+                  });
+                }
               },
               type: showChatroomType,
             )
           ],
         ),
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1.0),
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: AppStyle.blue[100],
+          preferredSize: Size.fromHeight(_height),
+          child: Column(
+            children: [
+              if (isSort)
+                GestureDetector(
+                  onTap: () async {
+                    if (sortBy != "time") {
+                      var temp = copyChatRooms;
+                      setState(() {
+                        isSort = false;
+                        setBottomHeightAnimated(1);
+                        sortBy = "time";
+                        copyChatRooms = [];
+                      });
+                      await Future.delayed(const Duration(milliseconds: 100));
+                      setState(() {
+                        copyChatRooms = temp;
+                        copyChatRooms.sort((a, b) =>
+                            b['messageTime'].compareTo(a['messageTime']));
+                      });
+                    }
+                  },
+                  child: Container(
+                    height: (_height - 1) / 2,
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 11, bottom: 12),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: sortBy == "time"
+                          ? AppStyle.gray[100]!
+                          : AppStyle.white,
+                      border: const Border(
+                        top: BorderSide(color: AppStyle.teal),
+                      ),
+                    ),
+                    child: Text(
+                      "依時間排序",
+                      style: AppStyle.caption(color: AppStyle.gray[700]!),
+                    ),
+                  ),
+                ),
+              if (isSort)
+                GestureDetector(
+                  onTap: () async {
+                    if (sortBy != "unread") {
+                      var temp = copyChatRooms;
+                      setState(() {
+                        isSort = false;
+                        setBottomHeightAnimated(1);
+                        sortBy = "unread";
+                        copyChatRooms = [];
+                      });
+                      await Future.delayed(const Duration(milliseconds: 100));
+                      setState(() {
+                        copyChatRooms = temp
+                            .where((element) => element["isRead"] == false)
+                            .toList();
+                        copyChatRooms.addAll(temp
+                            .where((element) => element["isRead"] == true)
+                            .toList());
+                      });
+                    }
+                  },
+                  child: Container(
+                    height: (_height - 1) / 2,
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 11, bottom: 12),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: sortBy == "unread"
+                          ? AppStyle.gray[100]!
+                          : AppStyle.white,
+                      border: const Border(
+                        top: BorderSide(color: AppStyle.sea),
+                      ),
+                    ),
+                    child: Text(
+                      "依未讀訊息排序",
+                      style: AppStyle.caption(color: AppStyle.gray[700]!),
+                    ),
+                  ),
+                ),
+              if (isEdit)
+                Container(
+                  height: _height - 1,
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(24, 7, 24, 8),
+                  alignment: Alignment.centerLeft,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: AppStyle.teal),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "已選取 0 個",
+                          style: AppStyle.caption(color: AppStyle.gray[700]!),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          print("全選");
+                        },
+                        style: AppStyle.textBtn().copyWith(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 4),
+                          ),
+                        ),
+                        child: const Text("全選"),
+                      ),
+                      const SizedBox(
+                        width: 24,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          print("清除");
+                        },
+                        style: AppStyle.textBtn().copyWith(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 4),
+                          ),
+                          backgroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return AppStyle.gray[500]!;
+                              }
+                              return Colors.transparent;
+                            },
+                          ),
+                          foregroundColor:
+                              MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return AppStyle.white;
+                              }
+                              return AppStyle.gray[500]!;
+                            },
+                          ),
+                        ),
+                        child: const Text("清除"),
+                      ),
+                    ],
+                  ),
+                ),
+              if (isSearch)
+                Container(
+                  height: _height - 1,
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(24, 7, 24, 8),
+                  alignment: Alignment.centerLeft,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: AppStyle.teal),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AppTextField(
+                          controller: _searchController,
+                          onTapX: () {
+                            setState(() {});
+                          },
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          print("搜尋");
+                        },
+                        style: AppStyle.textBtn().copyWith(
+                          padding: MaterialStateProperty.all(
+                            const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 4),
+                          ),
+                        ),
+                        child: const Text("搜尋"),
+                      ),
+                    ],
+                  ),
+                ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: AppStyle.blue[100],
+              ),
+            ],
           ),
         ),
       ),
       body: ListView.separated(
         controller: _scrollController,
         separatorBuilder: (context, index) {
-          if (index == 0 || index == chatRooms.length + 1) {
+          if (index == 0 || index == copyChatRooms.length + 1) {
             return const SizedBox(height: 8);
           }
           return const SizedBox(height: 12);
         },
-        itemCount: chatRooms.length + 2,
+        itemCount: copyChatRooms.length + 2,
         itemBuilder: (context, index) {
-          for (int i = 0; i < chatRooms.length; ++i) {
-            chatRoomRowStates.add(false);
-          }
-          if (index == 0 || index == chatRooms.length + 1) {
+          if (index == 0 || index == copyChatRooms.length + 1) {
             return const SizedBox(height: 8);
           }
-          final room = chatRooms[index - 1];
+          final room = copyChatRooms[index - 1];
           return ChatRoomRow(
             room: ChatRoomCard(
               chatroomID: room["chatroomID"]!,

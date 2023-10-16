@@ -102,11 +102,13 @@ class _TypeDropdownButtonState extends State<TypeDropdownButton> {
           onChanged: widget.onChanged,
           dropdownStyleData: DropdownStyleData(
             padding: const EdgeInsets.all(0),
-            width: 72,
+            width: 68,
             elevation: 0,
             isOverButton: false,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8), color: AppStyle.white),
+                borderRadius: BorderRadius.circular(8),
+                color: AppStyle.white,
+                border: Border.all(color: AppStyle.teal)),
           ),
           menuItemStyleData: MenuItemStyleData(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),

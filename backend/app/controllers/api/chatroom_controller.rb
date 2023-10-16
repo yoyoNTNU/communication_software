@@ -44,7 +44,28 @@ class Api::ChatroomController < ApplicationController
   end
 
   def update
-    
+    @chatroom_member=ChatroomMember.find_by(member:current_member,chatroom_id:params[:id])
+    if @chatroom_member
+      if @chatroom_member.update(chatroom_params)
+        render json: {
+          error: false,
+          message: "succeed to update chatroom set",
+          data: @chatroom_member
+        }.to_json, status: 200
+      else
+        render json: {
+          error: true,
+          message: "failed to update chatroom set",
+          data: @chatroom_member.errors
+        }.to_json, status: 400
+      end
+    else
+      render json: {
+        error: true,
+        message: "failed to update chatroom set",
+        data: "You aren't in this chatroom."
+      }.to_json, status: 400
+    end
   end
 
   def unread_count
@@ -54,7 +75,6 @@ class Api::ChatroomController < ApplicationController
       count=0
       message.each do |m|
         if MessageReader.find_by(member:current_member,message:m).nil?
-          p count
           count+=1
         else 
           break
@@ -69,16 +89,86 @@ class Api::ChatroomController < ApplicationController
       render json: {
         error: true,
         message: "failed to get unread count",
-        data: "You aren't in this chatroom "
+        data: "You aren't in this chatroom."
       }.to_json, status: 400
     end
-
   end
 
+  def destroy_background
+    @chatroom_member=ChatroomMember.find_by(member:current_member,chatroom_id:params[:chatroom_id])
+    if @chatroom_member
+      if !@chatroom_member.background.url.nil?
+        @chatroom_member.remove_background! 
+        @chatroom_member.save
+      end
+      render json: {
+        error: false,
+        message: "succeed to update chatroom set",
+        data: @chatroom_member
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to update chatroom set",
+        data: "You aren't in this chatroom."
+      }.to_json, status: 400
+    end
+  end
 
   def read
-
+    temp=ChatroomMember.find_by(member:current_member,chatroom_id:params[:chatroom_id])
+    if temp
+      message=Message.where(chatroom_id:params[:chatroom_id]).reverse
+      message.each do |m|
+        if MessageReader.find_by(member:current_member,message:m).nil?
+          MessageReader.create(member:current_member,message:m)
+        else 
+          break
+        end
+      end
+      render json: {
+        error: false,
+        message: "succeed to read all message",
+        data:{}
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to read all message",
+        data: "You aren't in this chatroom."
+      }.to_json, status: 400
+    end
   end
 
+  def unread
+    #for develop use (this function won't let user use)
+    temp=ChatroomMember.find_by(member:current_member,chatroom_id:params[:chatroom_id])
+    if temp
+      message=Message.where(chatroom_id:params[:chatroom_id])
+      message.each do |m|
+      mr=MessageReader.find_by(member:current_member,message:m)
+        if mr
+          mr.destroy
+        end
+      end
+      render json: {
+        error: false,
+        message: "succeed to unread all message",
+        data:{}
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to unread all message",
+        data: "You aren't in this chatroom."
+      }.to_json, status: 400
+    end
+  end
   
+  private
+
+  def chatroom_params
+    params.permit(:isDisabled, :isMuted, :isPinned, :delete_at, :background)
+  end
+
 end

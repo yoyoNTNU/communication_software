@@ -43,7 +43,9 @@ class ChatRoomListAPI {
       throw Exception('API request failed with status ${response.statusCode}');
     }
   }
+}
 
+class ChatRoomRowAPI {
   static Future<int> getUnreadCount(int chatroomID) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;

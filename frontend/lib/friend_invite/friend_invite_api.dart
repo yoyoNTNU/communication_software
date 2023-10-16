@@ -4,9 +4,6 @@ import 'package:proj/main.dart';
 import 'package:proj/data.dart';
 
 class GetInfoAPI {
-  static String? token;
-  static bool isTokenInitialized = false;
-
   static Future<List<Map<String, dynamic>>> getConfirm() async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;

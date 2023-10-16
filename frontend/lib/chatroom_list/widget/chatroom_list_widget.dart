@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:intl/intl.dart';
-import 'package:web_socket_channel/io.dart';
-import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -14,3 +12,4 @@ part 'second_line.dart';
 part 'msg_trans.dart';
 part 'time_trans.dart';
 part 'type_dropdown_button.dart';
+part 'app_text_field.dart';
