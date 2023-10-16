@@ -1,5 +1,5 @@
 import 'package:proj/style.dart';
-import 'package:proj/login/login_widget.dart';
+import 'package:proj/login/widget/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proj/login/bloc/login_bloc.dart';

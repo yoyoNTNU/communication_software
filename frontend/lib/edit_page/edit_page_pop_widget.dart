@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proj/login/login_widget.dart';
+import 'package:proj/login/widget/login_widget.dart';
 import 'package:proj/style.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
