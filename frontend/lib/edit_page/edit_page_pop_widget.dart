@@ -3,7 +3,7 @@ import 'package:proj/login/login_widget.dart';
 import 'package:proj/style.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
-import 'package:proj/edit_page/edit_page_widget.dart';
+import 'package:proj/edit_page/widget/edit_page_widget.dart';
 
 class PopEditPassword extends StatefulWidget {
   const PopEditPassword({super.key});
