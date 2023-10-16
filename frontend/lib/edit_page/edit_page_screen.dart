@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
-import 'package:proj/edit_page/edit_page_widget.dart';
+import 'package:proj/edit_page/widget/edit_page_widget.dart';
 import 'package:proj/style.dart';
 import 'package:proj/widget.dart';
 

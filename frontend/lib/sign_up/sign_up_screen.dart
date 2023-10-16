@@ -1,5 +1,5 @@
 import 'package:proj/style.dart';
-import 'package:proj/sign_up/sign_up_widget.dart';
+import 'package:proj/sign_up/widget/sign_up_widget.dart';
 import 'package:proj/sign_up/sign_up_api.dart';
 import 'package:proj/sign_up/sign_up_success.dart';
 import 'package:proj/sign_up/sign_up_fail.dart';
