@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proj/main.dart';
 import 'package:proj/style.dart';
-import 'package:proj/edit_page/edit_page_pop_widget.dart';
+import 'package:proj/edit_page/pop_widget/edit_page_pop_widget.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/gestures.dart';
