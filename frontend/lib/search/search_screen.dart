@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
-import 'package:proj/search/search_widget.dart';
+import 'package:proj/search/widget/search_widget.dart';
 import 'package:proj/search/search_api.dart';
 
 class SearchPage extends StatefulWidget {
