@@ -1,6 +1,6 @@
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/sign_up/sign_up_widget.dart';
+import 'package:proj/sign_up/widget/sign_up_widget.dart';
 
 class SignUpFail extends StatefulWidget {
   final Map<String, dynamic> errorMessage;
