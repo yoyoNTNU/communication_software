@@ -1,4 +1,4 @@
-import 'package:proj/friend_invite/friend_invite_widget.dart';
+import 'package:proj/friend_invite/widget/friend_invite_widget.dart';
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
 
