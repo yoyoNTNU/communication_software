@@ -4,7 +4,6 @@ import 'package:proj/main.dart';
 import 'package:proj/data.dart';
 
 class SearchAPI {
-  static String? token;
   static Future<Map<String, dynamic>> byPhone(
     String phone,
   ) async {

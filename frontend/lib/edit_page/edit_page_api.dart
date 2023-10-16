@@ -5,8 +5,6 @@ import 'package:proj/main.dart';
 import 'package:proj/data.dart';
 
 class GetDetailAPI {
-  static String? token;
-
   static Future<Map<String, dynamic>> getInfo() async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
@@ -39,8 +37,6 @@ class GetDetailAPI {
 }
 
 class SetDetailAPI {
-  static String? token;
-
   static Future<int> modifyInfo(
       {String? name,
       String? birthday,
