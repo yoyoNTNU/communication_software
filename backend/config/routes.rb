@@ -30,15 +30,18 @@ Rails.application.routes.draw do
       get 'check' => 'friends#check'
     end
 
-    resources :chatroom, only:[:index] do
+    resources :chatroom, only:[:index,:update] do
       get 'unread' => 'chatroom#unread_count'
+      post 'read' => 'chatroom#read'
+      delete 'unread'=> 'chatroom#unread'
+      delete 'delete_background'=>'chatroom#destroy_background'
     end
     resources :groups do
-      get '/member_list' => 'groups#member_list'
-      post '/invite/:id'=> 'groups#invite'
-      delete '/kickout/:id'=> 'groups#kick_out'
-      delete '/delete_avatar'=>'groups#destroy_photo'
-      delete '/delete_background'=>'groups#destroy_background'
+      get 'member_list' => 'groups#member_list'
+      post 'invite/:id'=> 'groups#invite'
+      delete 'kickout/:id'=> 'groups#kick_out'
+      delete 'delete_avatar'=>'groups#destroy_photo'
+      delete 'delete_background'=>'groups#destroy_background'
     end
   end
 end
