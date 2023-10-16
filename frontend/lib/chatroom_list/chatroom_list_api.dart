@@ -83,4 +83,28 @@ class ChatRoomRowAPI {
           'delete_at': deleteAt.toString(),
         });
   }
+
+  static Future<void> readAllMessage(int chatroomID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    await http.post(
+      Uri(
+          scheme: 'https',
+          host: host,
+          path: '/api/chatroom/${chatroomID.toString()}/read'),
+      headers: {'Authorization': token ?? ""},
+    );
+  }
+
+  static Future<void> unReadAllMessage(int chatroomID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    await http.delete(
+      Uri(
+          scheme: 'https',
+          host: host,
+          path: '/api/chatroom/${chatroomID.toString()}/unread'),
+      headers: {'Authorization': token ?? ""},
+    );
+  }
 }

@@ -141,6 +141,22 @@ class _ChatroomPageState extends State<ChatroomPage>
         elevation: 0,
         actions: [
           GestureDetector(
+            //TODO:開發用 記得移除
+            onTap: () async {
+              await ChatRoomRowAPI.updateSetting(40, true, true, false, null);
+              await ChatRoomRowAPI.updateSetting(41, true, true, false, null);
+              await ChatRoomRowAPI.updateSetting(46, true, true, false, null);
+              await ChatRoomRowAPI.updateSetting(47, true, true, false, null);
+              await ChatRoomRowAPI.updateSetting(48, true, true, false, null);
+              await ChatRoomRowAPI.updateSetting(49, true, true, false, null);
+            },
+            child: Text(
+              "R",
+              style: AppStyle.header(),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          GestureDetector(
             onTap: () {
               setState(() {
                 isEdit = !isEdit;
@@ -431,13 +447,26 @@ class _ChatroomPageState extends State<ChatroomPage>
               sender: room['sender'],
             ),
             index: index - 1,
-            onChanged:
-                (index, isPinned, isMuted, isDisabled, needReSort) async {
+            onChanged: (index, isPinned, isMuted, isDisabled, needReSort,
+                isRead) async {
               setState(() {
                 room['cmIsPinned'] = isPinned;
                 room['cmIsMuted'] = isMuted;
                 if (isDisabled) {
-                  copyChatRooms[index].remove;
+                  var id = copyChatRooms[index]["chatroomID"];
+                  var temp = chatRooms
+                      .firstWhere((element) => element["chatroomID"] == id);
+                  chatRooms.remove(temp);
+                  if (showChatroomType == "all") {
+                    copyChatRooms = chatRooms;
+                  } else {
+                    copyChatRooms = chatRooms
+                        .where((element) => element["type"] == showChatroomType)
+                        .toList();
+                  }
+                }
+                if (isRead == true) {
+                  room['isRead'] = true;
                 }
               });
               if (needReSort) {
