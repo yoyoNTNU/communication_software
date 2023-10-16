@@ -40,6 +40,64 @@ class _ChatroomPageState extends State<ChatroomPage>
     _controller.forward();
   }
 
+  Future<void> sortByTime() async {
+    var temp = copyChatRooms;
+    setState(() {
+      isSort = false;
+      setBottomHeightAnimated(1);
+      sortBy = "time";
+      copyChatRooms = [];
+    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    setState(() {
+      copyChatRooms =
+          temp.where((element) => element["cmIsPinned"] == true).toList();
+      copyChatRooms
+          .sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      var temp2 =
+          temp.where((element) => element["cmIsPinned"] == false).toList();
+      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      copyChatRooms.addAll(temp2);
+    });
+  }
+
+  Future<void> sortByUnread() async {
+    var temp = copyChatRooms;
+    setState(() {
+      isSort = false;
+      setBottomHeightAnimated(1);
+      sortBy = "unread";
+      copyChatRooms = [];
+    });
+    await Future.delayed(const Duration(milliseconds: 100));
+    setState(() {
+      copyChatRooms = temp
+          .where((element) =>
+              (element["cmIsPinned"] == true && element["isRead"] == false))
+          .toList();
+      copyChatRooms
+          .sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      var temp2 = temp
+          .where((element) =>
+              (element["cmIsPinned"] == true && element["isRead"] == true))
+          .toList();
+      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      copyChatRooms.addAll(temp2);
+      temp2 = temp
+          .where((element) =>
+              (element["cmIsPinned"] == false && element["isRead"] == false))
+          .toList();
+      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      copyChatRooms.addAll(temp2);
+      temp2 = temp
+          .where((element) =>
+              (element["cmIsPinned"] == false && element["isRead"] == true))
+          .toList();
+      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      copyChatRooms.addAll(temp2);
+    });
+  }
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -146,11 +204,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                     isSearch = false;
                     isSort = false;
                     setBottomHeightAnimated(1);
-                    sortBy = "time";
                     showChatroomType = value;
-                    copyChatRooms = [];
                   });
-                  await Future.delayed(const Duration(milliseconds: 100));
                   setState(() {
                     if (value == "all") {
                       copyChatRooms = chatRooms;
@@ -160,6 +215,11 @@ class _ChatroomPageState extends State<ChatroomPage>
                           .toList();
                     }
                   });
+                  if (sortBy == "time") {
+                    await sortByTime();
+                  } else {
+                    await sortByUnread();
+                  }
                 }
               },
               type: showChatroomType,
@@ -174,19 +234,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 GestureDetector(
                   onTap: () async {
                     if (sortBy != "time") {
-                      var temp = copyChatRooms;
-                      setState(() {
-                        isSort = false;
-                        setBottomHeightAnimated(1);
-                        sortBy = "time";
-                        copyChatRooms = [];
-                      });
-                      await Future.delayed(const Duration(milliseconds: 100));
-                      setState(() {
-                        copyChatRooms = temp;
-                        copyChatRooms.sort((a, b) =>
-                            b['messageTime'].compareTo(a['messageTime']));
-                      });
+                      await sortByTime();
                     }
                   },
                   child: Container(
@@ -212,22 +260,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 GestureDetector(
                   onTap: () async {
                     if (sortBy != "unread") {
-                      var temp = copyChatRooms;
-                      setState(() {
-                        isSort = false;
-                        setBottomHeightAnimated(1);
-                        sortBy = "unread";
-                        copyChatRooms = [];
-                      });
-                      await Future.delayed(const Duration(milliseconds: 100));
-                      setState(() {
-                        copyChatRooms = temp
-                            .where((element) => element["isRead"] == false)
-                            .toList();
-                        copyChatRooms.addAll(temp
-                            .where((element) => element["isRead"] == true)
-                            .toList());
-                      });
+                      await sortByUnread();
                     }
                   },
                   child: Container(
@@ -398,6 +431,23 @@ class _ChatroomPageState extends State<ChatroomPage>
               sender: room['sender'],
             ),
             index: index - 1,
+            onChanged:
+                (index, isPinned, isMuted, isDisabled, needReSort) async {
+              setState(() {
+                room['cmIsPinned'] = isPinned;
+                room['cmIsMuted'] = isMuted;
+                if (isDisabled) {
+                  copyChatRooms[index].remove;
+                }
+              });
+              if (needReSort) {
+                if (sortBy == "time") {
+                  await sortByTime();
+                } else {
+                  await sortByUnread();
+                }
+              }
+            },
           );
         },
       ),

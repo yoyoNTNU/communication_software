@@ -3,9 +3,11 @@ part of 'chatroom_list_widget.dart';
 class ChatRoomRow extends StatefulWidget {
   final ChatRoomCard room;
   final int index;
+  final void Function(int, bool, bool, bool, bool) onChanged;
 
   const ChatRoomRow({
     super.key,
+    required this.onChanged,
     required this.room,
     required this.index,
   });
@@ -15,6 +17,16 @@ class ChatRoomRow extends StatefulWidget {
 }
 
 class _ChatRoomRowState extends State<ChatRoomRow> {
+  Future<void> _setChatRoom(
+      bool isPinned, bool isMuted, bool isDisabled, DateTime? deleteAt) async {
+    try {
+      await ChatRoomRowAPI.updateSetting(
+          widget.room.chatroomID, isPinned, isMuted, isDisabled, deleteAt);
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,8 +69,10 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              print("靜音");
-              setState(() {});
+              widget.onChanged(widget.index, widget.room.cmIsPinned,
+                  !widget.room.cmIsMuted, false, false);
+              await _setChatRoom(
+                  widget.room.cmIsPinned, !widget.room.cmIsMuted, false, null);
             },
           ),
           SwipeAction(
@@ -89,8 +103,10 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              print("釘選");
-              setState(() {});
+              widget.onChanged(widget.index, !widget.room.cmIsPinned,
+                  widget.room.cmIsMuted, false, true);
+              await _setChatRoom(
+                  !widget.room.cmIsPinned, widget.room.cmIsMuted, false, null);
             },
           ),
         ],

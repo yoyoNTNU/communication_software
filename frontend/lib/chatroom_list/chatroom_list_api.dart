@@ -63,4 +63,24 @@ class ChatRoomRowAPI {
       throw Exception('API request failed with status ${response.statusCode}');
     }
   }
+
+  static Future<void> updateSetting(int chatroomID, bool isPinned, bool isMuted,
+      bool isDisabled, DateTime? deleteAt) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    await http.patch(
+        Uri(
+            scheme: 'https',
+            host: host,
+            path: '/api/chatroom/${chatroomID.toString()}'),
+        headers: {
+          'Authorization': token ?? ""
+        },
+        body: {
+          'isDisabled': isDisabled.toString(),
+          'isMuted': isMuted.toString(),
+          'isPinned': isPinned.toString(),
+          'delete_at': deleteAt.toString(),
+        });
+  }
 }
