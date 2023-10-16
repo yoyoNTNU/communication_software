@@ -1,6 +1,6 @@
 import 'package:proj/style.dart';
 import 'package:flutter/material.dart';
-import 'package:proj/sent_reset_email/sent_reset_email_widget.dart';
+import 'package:proj/sent_reset_email/widget/sent_reset_email_widget.dart';
 
 class SentSuccess extends StatefulWidget {
   const SentSuccess({super.key});

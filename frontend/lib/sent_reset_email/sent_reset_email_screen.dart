@@ -1,5 +1,5 @@
 import 'package:proj/style.dart';
-import 'package:proj/sent_reset_email/sent_reset_email_widget.dart';
+import 'package:proj/sent_reset_email/widget/sent_reset_email_widget.dart';
 import 'package:proj/sent_reset_email/sent_reset_email_api.dart';
 import 'package:proj/sent_reset_email/sent_reset_email_success.dart';
 import 'package:flutter/material.dart';
