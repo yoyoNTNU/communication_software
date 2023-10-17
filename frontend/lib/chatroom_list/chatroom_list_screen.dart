@@ -28,6 +28,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   String? showChatroomType = "all";
   String sortBy = "time";
   double _height = 1.0;
+  int tapTipsCount = 0; //TODO: 開發用 記得移除
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_controller)
@@ -143,27 +144,37 @@ class _ChatroomPageState extends State<ChatroomPage>
           GestureDetector(
             //TODO:開發用 記得移除
             onTap: () async {
-              await ChatRoomRowAPI.updateSetting(40, true, true, false, null);
-              await ChatRoomRowAPI.unReadAllMessage(40);
-              await ChatRoomRowAPI.updateSetting(41, true, true, false, null);
-              await ChatRoomRowAPI.unReadAllMessage(41);
-              await ChatRoomRowAPI.updateSetting(46, true, true, false, null);
-              await ChatRoomRowAPI.unReadAllMessage(46);
-              await ChatRoomRowAPI.updateSetting(47, true, true, false, null);
-              await ChatRoomRowAPI.unReadAllMessage(47);
-              await ChatRoomRowAPI.updateSetting(48, true, true, false, null);
-              await ChatRoomRowAPI.unReadAllMessage(48);
-              await ChatRoomRowAPI.updateSetting(49, true, true, false, null);
-              await ChatRoomRowAPI.unReadAllMessage(49);
-              if (context.mounted) {
-                Navigator.popAndPushNamed(context, '/home');
+              if (tapTipsCount >= 10) {
+                showLoading(context);
+                await ChatRoomRowAPI.updateSetting(40, true, true, false, null);
+                await ChatRoomRowAPI.unReadAllMessage(40);
+                await ChatRoomRowAPI.updateSetting(41, true, true, false, null);
+                await ChatRoomRowAPI.unReadAllMessage(41);
+                await ChatRoomRowAPI.updateSetting(46, true, true, false, null);
+                await ChatRoomRowAPI.unReadAllMessage(46);
+                await ChatRoomRowAPI.updateSetting(47, true, true, false, null);
+                await ChatRoomRowAPI.unReadAllMessage(47);
+                await ChatRoomRowAPI.updateSetting(48, true, true, false, null);
+                await ChatRoomRowAPI.unReadAllMessage(48);
+                await ChatRoomRowAPI.updateSetting(49, true, true, false, null);
+                await ChatRoomRowAPI.unReadAllMessage(49);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                  Navigator.popAndPushNamed(context, '/home');
+                }
+              } else {
+                setState(() {
+                  tapTipsCount++;
+                });
               }
             },
-            child: Text(
-              "R",
-              style: AppStyle.header(),
-              textAlign: TextAlign.center,
-            ),
+            child: tapTipsCount >= 10
+                ? Image.asset("assets/icons/key.png")
+                : Container(
+                    color: AppStyle.white,
+                    height: 24,
+                    width: 24,
+                  ),
           ),
           GestureDetector(
             onTap: () {
