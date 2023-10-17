@@ -6,7 +6,7 @@ class ChatroomMember < ApplicationRecord
   after_destroy :check_groupmember_count
 
   private
-  #尚未驗證
+  #TODO:未驗證
   def remove_cloud_img
     if self.background.url.nil?
       self.remove_background! 

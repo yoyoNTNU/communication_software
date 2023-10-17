@@ -7,6 +7,7 @@ class Message < ApplicationRecord
     has_many :message_readers, dependent: :destroy
     mount_uploader :photo , MessageUploader
 
+    #TODO:需要設定8種message(string,photo,video,file,call,view,info,voice)
     def check_message_exist
         if type_=="string" && content.blank?
             errors.add(:content, "message is blank") 

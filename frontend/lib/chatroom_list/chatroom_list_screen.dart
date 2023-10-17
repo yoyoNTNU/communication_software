@@ -16,6 +16,7 @@ class ChatroomPage extends StatefulWidget {
 class _ChatroomPageState extends State<ChatroomPage>
     with TickerProviderStateMixin {
   final channel = IOWebSocketChannel.connect('wss://$host/cable');
+  //TODO:實時連接並更新列表
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];
   final ScrollController _scrollController = ScrollController();
@@ -183,6 +184,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 isSort = false;
                 isSearch = false;
                 setBottomHeightAnimated(isEdit ? 45 : 1);
+                //TODO:更改成編輯模式
               });
             },
             child: isEdit
@@ -318,7 +320,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     ),
                   ),
                 ),
-              if (isEdit)
+              if (isEdit) //TODO:編輯模式 待改
                 Container(
                   height: _height - 1,
                   width: double.infinity,
@@ -415,6 +417,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                       TextButton(
                         onPressed: () {
                           print("搜尋");
+                          //TODO:取消button 透過點擊text file跳轉到新頁面 並在該頁面執行搜尋
                         },
                         style: AppStyle.textBtn().copyWith(
                           padding: MaterialStateProperty.all(

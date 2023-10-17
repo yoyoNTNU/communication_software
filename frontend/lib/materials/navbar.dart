@@ -15,6 +15,7 @@ class _NavBarState extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO:進入時參考上次最後使用的頁面來設定currentPageIndex(需新增DB)
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         backgroundColor: AppStyle.white,
