@@ -2,14 +2,19 @@ part of 'chatroom_list_widget.dart';
 
 class ChatRoomRow extends StatefulWidget {
   final ChatRoomCard room;
-  final int index;
-  final void Function(int, bool, bool, bool, bool, bool) onChanged;
+  final Future<void> Function({
+    int chatroomID,
+    bool isPinned,
+    bool isMuted,
+    bool isDisabled,
+    bool needReSort,
+    bool isRead,
+  }) onChanged;
 
   const ChatRoomRow({
     super.key,
     required this.onChanged,
     required this.room,
-    required this.index,
   });
 
   @override
@@ -47,7 +52,7 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
         ),
       ),
       child: SwipeActionCell(
-        key: ValueKey(widget.index),
+        key: ValueKey(widget.room.chatroomID),
         leadingActions: [
           SwipeAction(
             widthSpace: 80,
@@ -77,8 +82,11 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              widget.onChanged(widget.index, widget.room.cmIsPinned,
-                  !widget.room.cmIsMuted, false, false, false);
+              widget.onChanged(
+                chatroomID: widget.room.chatroomID,
+                isPinned: widget.room.cmIsPinned,
+                isMuted: !widget.room.cmIsMuted,
+              );
               await _setChatRoom(
                   widget.room.cmIsPinned, !widget.room.cmIsMuted, false, null);
             },
@@ -111,8 +119,12 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              widget.onChanged(widget.index, !widget.room.cmIsPinned,
-                  widget.room.cmIsMuted, false, true, false);
+              widget.onChanged(
+                chatroomID: widget.room.chatroomID,
+                isPinned: !widget.room.cmIsPinned,
+                isMuted: widget.room.cmIsMuted,
+                needReSort: true,
+              );
               await _setChatRoom(
                   !widget.room.cmIsPinned, widget.room.cmIsMuted, false, null);
             },
@@ -138,8 +150,13 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
               handler(false);
               bool check = await showDelete(context);
               if (check) {
-                widget.onChanged(widget.index, widget.room.cmIsPinned,
-                    widget.room.cmIsMuted, true, true, false);
+                widget.onChanged(
+                  chatroomID: widget.room.chatroomID,
+                  isPinned: widget.room.cmIsPinned,
+                  isMuted: widget.room.cmIsMuted,
+                  isDisabled: true,
+                  needReSort: true,
+                );
                 await _setChatRoom(widget.room.cmIsPinned,
                     widget.room.cmIsMuted, true, DateTime.now());
               }
@@ -164,8 +181,13 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
               handler(false);
               bool check = await showHide(context);
               if (check) {
-                widget.onChanged(widget.index, widget.room.cmIsPinned,
-                    widget.room.cmIsMuted, true, true, false);
+                widget.onChanged(
+                  chatroomID: widget.room.chatroomID,
+                  isPinned: widget.room.cmIsPinned,
+                  isMuted: widget.room.cmIsMuted,
+                  isDisabled: true,
+                  needReSort: true,
+                );
                 await _setChatRoom(
                     widget.room.cmIsPinned, widget.room.cmIsMuted, true, null);
               }
@@ -189,8 +211,13 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
               ),
               onTap: (CompletionHandler handler) async {
                 handler(false);
-                widget.onChanged(widget.index, widget.room.cmIsPinned,
-                    widget.room.cmIsMuted, false, true, true);
+                widget.onChanged(
+                  chatroomID: widget.room.chatroomID,
+                  isPinned: widget.room.cmIsPinned,
+                  isMuted: widget.room.cmIsMuted,
+                  isRead: true,
+                  needReSort: true,
+                );
                 await _readMessage();
               },
             ),

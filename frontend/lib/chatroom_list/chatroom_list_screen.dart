@@ -144,11 +144,20 @@ class _ChatroomPageState extends State<ChatroomPage>
             //TODO:開發用 記得移除
             onTap: () async {
               await ChatRoomRowAPI.updateSetting(40, true, true, false, null);
+              await ChatRoomRowAPI.unReadAllMessage(40);
               await ChatRoomRowAPI.updateSetting(41, true, true, false, null);
+              await ChatRoomRowAPI.unReadAllMessage(41);
               await ChatRoomRowAPI.updateSetting(46, true, true, false, null);
+              await ChatRoomRowAPI.unReadAllMessage(46);
               await ChatRoomRowAPI.updateSetting(47, true, true, false, null);
+              await ChatRoomRowAPI.unReadAllMessage(47);
               await ChatRoomRowAPI.updateSetting(48, true, true, false, null);
+              await ChatRoomRowAPI.unReadAllMessage(48);
               await ChatRoomRowAPI.updateSetting(49, true, true, false, null);
+              await ChatRoomRowAPI.unReadAllMessage(49);
+              if (context.mounted) {
+                Navigator.popAndPushNamed(context, '/home');
+              }
             },
             child: Text(
               "R",
@@ -446,16 +455,20 @@ class _ChatroomPageState extends State<ChatroomPage>
               count: room['count'],
               sender: room['sender'],
             ),
-            index: index - 1,
-            onChanged: (index, isPinned, isMuted, isDisabled, needReSort,
-                isRead) async {
+            onChanged: ({
+              int? chatroomID,
+              bool isPinned = false,
+              bool isMuted = false,
+              bool isDisabled = false,
+              bool needReSort = false,
+              bool isRead = false,
+            }) async {
               setState(() {
                 room['cmIsPinned'] = isPinned;
                 room['cmIsMuted'] = isMuted;
                 if (isDisabled) {
-                  var id = copyChatRooms[index]["chatroomID"];
-                  var temp = chatRooms
-                      .firstWhere((element) => element["chatroomID"] == id);
+                  var temp = chatRooms.firstWhere(
+                      (element) => element["chatroomID"] == chatroomID);
                   chatRooms.remove(temp);
                   if (showChatroomType == "all") {
                     copyChatRooms = chatRooms;
@@ -465,7 +478,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         .toList();
                   }
                 }
-                if (isRead == true) {
+                if (isRead) {
                   room['isRead'] = true;
                 }
               });
