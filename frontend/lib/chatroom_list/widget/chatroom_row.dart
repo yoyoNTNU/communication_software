@@ -2,7 +2,7 @@ part of 'chatroom_list_widget.dart';
 
 class ChatRoomRow extends StatefulWidget {
   final ChatRoomCard room;
-  final Future<void> Function({
+  final void Function({
     int chatroomID,
     bool isPinned,
     bool isMuted,

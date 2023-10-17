@@ -40,7 +40,7 @@ class _ChatroomPageState extends State<ChatroomPage>
     _controller.forward();
   }
 
-  Future<void> sortByTime() async {
+  void sortByTime() {
     var temp = copyChatRooms;
     setState(() {
       isSort = false;
@@ -48,7 +48,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       sortBy = "time";
       copyChatRooms = [];
     });
-    await Future.delayed(const Duration(milliseconds: 100));
+    //await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
       copyChatRooms =
           temp.where((element) => element["cmIsPinned"] == true).toList();
@@ -61,7 +61,7 @@ class _ChatroomPageState extends State<ChatroomPage>
     });
   }
 
-  Future<void> sortByUnread() async {
+  void sortByUnread() {
     var temp = copyChatRooms;
     setState(() {
       isSort = false;
@@ -69,7 +69,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       sortBy = "unread";
       copyChatRooms = [];
     });
-    await Future.delayed(const Duration(milliseconds: 100));
+    //await Future.delayed(const Duration(milliseconds: 100));
     setState(() {
       copyChatRooms = temp
           .where((element) =>
@@ -222,7 +222,7 @@ class _ChatroomPageState extends State<ChatroomPage>
               width: 16,
             ),
             TypeDropdownButton(
-              onChanged: (value) async {
+              onChanged: (value) {
                 if (showChatroomType != value) {
                   setState(() {
                     isEdit = false;
@@ -241,9 +241,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                     }
                   });
                   if (sortBy == "time") {
-                    await sortByTime();
+                    sortByTime();
                   } else {
-                    await sortByUnread();
+                    sortByUnread();
                   }
                 }
               },
@@ -257,9 +257,9 @@ class _ChatroomPageState extends State<ChatroomPage>
             children: [
               if (isSort)
                 GestureDetector(
-                  onTap: () async {
+                  onTap: () {
                     if (sortBy != "time") {
-                      await sortByTime();
+                      sortByTime();
                     }
                   },
                   child: Container(
@@ -283,9 +283,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                 ),
               if (isSort)
                 GestureDetector(
-                  onTap: () async {
+                  onTap: () {
                     if (sortBy != "unread") {
-                      await sortByUnread();
+                      sortByUnread();
                     }
                   },
                   child: Container(
@@ -462,7 +462,7 @@ class _ChatroomPageState extends State<ChatroomPage>
               bool isDisabled = false,
               bool needReSort = false,
               bool isRead = false,
-            }) async {
+            }) {
               setState(() {
                 room['cmIsPinned'] = isPinned;
                 room['cmIsMuted'] = isMuted;
@@ -484,9 +484,9 @@ class _ChatroomPageState extends State<ChatroomPage>
               });
               if (needReSort) {
                 if (sortBy == "time") {
-                  await sortByTime();
+                  sortByTime();
                 } else {
-                  await sortByUnread();
+                  sortByUnread();
                 }
               }
             },
