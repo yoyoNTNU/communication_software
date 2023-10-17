@@ -20,6 +20,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   //TODO:實時連接並更新列表
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];
+  List<int> selectedIndexList = [];
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
   late AnimationController _animationController;
@@ -31,6 +32,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   String? showChatroomType = "all";
   String sortBy = "time";
   double _height = 1.0;
+  int selectedCount = 0;
   int tapTipsCount = 0; //TODO: 開發用 記得移除
 
   void setBottomHeightAnimated(double end) {
@@ -108,7 +110,14 @@ class _ChatroomPageState extends State<ChatroomPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _swipeActionController = SwipeActionController();
+    _swipeActionController = SwipeActionController(
+        selectedIndexPathsChangeCallback:
+            (changedIndexPaths, selected, currentCount) {
+      setState(() {
+        selectedCount = currentCount;
+        selectedIndexList = _swipeActionController.getSelectedIndexPaths();
+      });
+    });
     super.initState();
     _fetchChatRooms();
   }
@@ -251,6 +260,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     isSearch = false;
                     isSort = false;
                     setBottomHeightAnimated(1);
+                    _swipeActionController.stopEditingMode();
                     showChatroomType = value;
                   });
                   setState(() {
@@ -344,13 +354,18 @@ class _ChatroomPageState extends State<ChatroomPage>
                     children: [
                       Expanded(
                         child: Text(
-                          "已選取 0 個",
+                          "已選取 $selectedCount 個",
                           style: AppStyle.caption(color: AppStyle.gray[700]!),
                         ),
                       ),
                       TextButton(
                         onPressed: () {
-                          print("全選");
+                          List<int> indexPaths = [];
+                          for (var member in copyChatRooms) {
+                            indexPaths.add(member["chatroomID"]);
+                          }
+                          _swipeActionController.selectCellAt(
+                              indexPaths: indexPaths);
                         },
                         style: AppStyle.textBtn().copyWith(
                           padding: MaterialStateProperty.all(
@@ -365,7 +380,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                       ),
                       TextButton(
                         onPressed: () {
-                          print("清除");
+                          _swipeActionController.deselectAll();
                         },
                         style: AppStyle.textBtn().copyWith(
                           padding: MaterialStateProperty.all(
@@ -448,75 +463,93 @@ class _ChatroomPageState extends State<ChatroomPage>
           ),
         ),
       ),
-      body: ListView.separated(
-        controller: _scrollController,
-        separatorBuilder: (context, index) {
-          if (index == 0 || index == copyChatRooms.length + 1) {
-            return const SizedBox(height: 8);
-          }
-          return const SizedBox(height: 12);
-        },
-        itemCount: copyChatRooms.length + 2,
-        itemBuilder: (context, index) {
-          if (index == 0 || index == copyChatRooms.length + 1) {
-            return const SizedBox(height: 8);
-          }
-          final room = copyChatRooms[index - 1];
-          return ChatRoomRow(
-            controller: _swipeActionController,
-            room: ChatRoomCard(
-              chatroomID: room["chatroomID"]!,
-              messageID: room["messageID"]!,
-              messageContent: room["messageContent"]!,
-              messageType: room["messageType"]!,
-              messageTime: room["messageTime"]!,
-              cmIsPinned: room["cmIsPinned"]!,
-              cmIsMuted: room["cmIsMuted"]!,
-              name: room["name"]!,
-              photo: room["photo"],
-              isRead: room["isRead"]!,
-              type: room['type'],
-              count: room['count'],
-              sender: room['sender'],
+      body: copyChatRooms.isNotEmpty
+          ? ListView.separated(
+              controller: _scrollController,
+              separatorBuilder: (context, index) {
+                if (index == 0 || index == copyChatRooms.length + 1) {
+                  return const SizedBox(height: 8);
+                }
+                return const SizedBox(height: 12);
+              },
+              itemCount: copyChatRooms.length + 2,
+              itemBuilder: (context, index) {
+                if (index == 0 || index == copyChatRooms.length + 1) {
+                  return const SizedBox(height: 8);
+                }
+                final room = copyChatRooms[index - 1];
+                return ChatRoomRow(
+                  controller: _swipeActionController,
+                  room: ChatRoomCard(
+                    chatroomID: room["chatroomID"]!,
+                    messageID: room["messageID"]!,
+                    messageContent: room["messageContent"]!,
+                    messageType: room["messageType"]!,
+                    messageTime: room["messageTime"]!,
+                    cmIsPinned: room["cmIsPinned"]!,
+                    cmIsMuted: room["cmIsMuted"]!,
+                    name: room["name"]!,
+                    photo: room["photo"],
+                    isRead: room["isRead"]!,
+                    type: room['type'],
+                    count: room['count'],
+                    sender: room['sender'],
+                  ),
+                  onChanged: ({
+                    int? chatroomID,
+                    bool isPinned = false,
+                    bool isMuted = false,
+                    bool isDisabled = false,
+                    bool needReSort = false,
+                    bool isRead = false,
+                  }) {
+                    setState(() {
+                      room['cmIsPinned'] = isPinned;
+                      room['cmIsMuted'] = isMuted;
+                      if (isDisabled) {
+                        var temp = chatRooms.firstWhere(
+                            (element) => element["chatroomID"] == chatroomID);
+                        chatRooms.remove(temp);
+                        if (showChatroomType == "all") {
+                          copyChatRooms = chatRooms;
+                        } else {
+                          copyChatRooms = chatRooms
+                              .where((element) =>
+                                  element["type"] == showChatroomType)
+                              .toList();
+                        }
+                      }
+                      if (isRead) {
+                        room['isRead'] = true;
+                      }
+                    });
+                    if (needReSort) {
+                      if (sortBy == "time") {
+                        sortByTime();
+                      } else {
+                        sortByUnread();
+                      }
+                    }
+                  },
+                );
+              },
+            )
+          : Container(
+              alignment: Alignment.center,
+              child: Column(mainAxisSize: MainAxisSize.min, children: [
+                Image.asset("assets/images/fail_logo_dark.png"),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  "列表空空如也，趕快開始聊天吧！",
+                  style: AppStyle.info(level: 2, color: AppStyle.gray[700]!),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+              ]),
             ),
-            onChanged: ({
-              int? chatroomID,
-              bool isPinned = false,
-              bool isMuted = false,
-              bool isDisabled = false,
-              bool needReSort = false,
-              bool isRead = false,
-            }) {
-              setState(() {
-                room['cmIsPinned'] = isPinned;
-                room['cmIsMuted'] = isMuted;
-                if (isDisabled) {
-                  var temp = chatRooms.firstWhere(
-                      (element) => element["chatroomID"] == chatroomID);
-                  chatRooms.remove(temp);
-                  if (showChatroomType == "all") {
-                    copyChatRooms = chatRooms;
-                  } else {
-                    copyChatRooms = chatRooms
-                        .where((element) => element["type"] == showChatroomType)
-                        .toList();
-                  }
-                }
-                if (isRead) {
-                  room['isRead'] = true;
-                }
-              });
-              if (needReSort) {
-                if (sortBy == "time") {
-                  sortByTime();
-                } else {
-                  sortByUnread();
-                }
-              }
-            },
-          );
-        },
-      ),
     );
   }
 }
