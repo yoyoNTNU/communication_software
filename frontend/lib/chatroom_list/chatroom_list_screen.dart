@@ -16,7 +16,7 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends State<ChatroomPage>
     with TickerProviderStateMixin {
-  final channel = IOWebSocketChannel.connect('wss://$host/cable');
+  final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //TODO:實時連接並更新列表
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];
@@ -59,10 +59,10 @@ class _ChatroomPageState extends State<ChatroomPage>
       copyChatRooms =
           temp.where((element) => element["cmIsPinned"] == true).toList();
       copyChatRooms
-          .sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+          .sort((a, b) => b["messageTime"].compareTo(a["messageTime"]));
       var temp2 =
           temp.where((element) => element["cmIsPinned"] == false).toList();
-      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      temp2.sort((a, b) => b["messageTime"].compareTo(a["messageTime"]));
       copyChatRooms.addAll(temp2);
     });
   }
@@ -82,26 +82,54 @@ class _ChatroomPageState extends State<ChatroomPage>
               (element["cmIsPinned"] == true && element["isRead"] == false))
           .toList();
       copyChatRooms
-          .sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+          .sort((a, b) => b["messageTime"].compareTo(a["messageTime"]));
       var temp2 = temp
           .where((element) =>
               (element["cmIsPinned"] == true && element["isRead"] == true))
           .toList();
-      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      temp2.sort((a, b) => b["messageTime"].compareTo(a["messageTime"]));
       copyChatRooms.addAll(temp2);
       temp2 = temp
           .where((element) =>
               (element["cmIsPinned"] == false && element["isRead"] == false))
           .toList();
-      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      temp2.sort((a, b) => b["messageTime"].compareTo(a["messageTime"]));
       copyChatRooms.addAll(temp2);
       temp2 = temp
           .where((element) =>
               (element["cmIsPinned"] == false && element["isRead"] == true))
           .toList();
-      temp2.sort((a, b) => b['messageTime'].compareTo(a['messageTime']));
+      temp2.sort((a, b) => b["messageTime"].compareTo(a["messageTime"]));
       copyChatRooms.addAll(temp2);
     });
+  }
+
+  bool checkSelectedIsMuted() {
+    if (selectedIndexList.isNotEmpty) {
+      for (int index in selectedIndexList) {
+        var temp = copyChatRooms
+            .firstWhere((element) => element["chatroomID"] == index);
+        if (!temp["cmIsMuted"]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  bool checkSelectedIsPinned() {
+    if (selectedIndexList.isNotEmpty) {
+      for (int index in selectedIndexList) {
+        var temp = copyChatRooms
+            .firstWhere((element) => element["chatroomID"] == index);
+        if (!temp["cmIsPinned"]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -138,7 +166,7 @@ class _ChatroomPageState extends State<ChatroomPage>
         copyChatRooms = chatRooms;
       });
     } catch (e) {
-      print('API request error: $e');
+      print("API request error: $e");
     }
     if (!context.mounted) return;
     Navigator.of(context).pop();
@@ -245,7 +273,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     curve: Curves.easeInOut);
               },
               child: Text(
-                '聊天室',
+                "聊天室",
                 style: AppStyle.header(),
               ),
             ),
@@ -463,6 +491,141 @@ class _ChatroomPageState extends State<ChatroomPage>
           ),
         ),
       ),
+      bottomNavigationBar: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        height: isEdit ? 80 : 0,
+        decoration: BoxDecoration(
+          color: AppStyle.white,
+          border: Border(
+            bottom:
+                BorderSide(color: isEdit ? AppStyle.teal : Colors.transparent),
+            top: BorderSide(color: isEdit ? AppStyle.sea : Colors.transparent),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  // 点击按钮后的操作
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedContainer(
+                      height: isEdit ? 24 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: checkSelectedIsMuted()
+                          ? Image.asset("assets/icons/sound_teal.png")
+                          : Image.asset("assets/icons/mute.png"),
+                    ),
+                    AnimatedContainer(
+                      height: isEdit ? 16 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: checkSelectedIsMuted()
+                          ? Text(
+                              "取消靜音",
+                              style: AppStyle.caption(
+                                  level: 2, color: AppStyle.teal),
+                            )
+                          : Text(
+                              "靜音",
+                              style: AppStyle.caption(
+                                  level: 2, color: AppStyle.black),
+                            ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  // 点击按钮后的操作
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedContainer(
+                      height: isEdit ? 24 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: checkSelectedIsPinned()
+                          ? Image.asset("assets/icons/cancel_pin_gray.png")
+                          : Image.asset("assets/icons/pin_dark_yellow.png"),
+                    ),
+                    AnimatedContainer(
+                      height: isEdit ? 16 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: checkSelectedIsPinned()
+                          ? Text(
+                              "取消釘選",
+                              style: AppStyle.caption(
+                                  level: 2, color: AppStyle.gray[700]!),
+                            )
+                          : Text(
+                              "釘選",
+                              style: AppStyle.caption(
+                                  level: 2, color: AppStyle.yellow[700]!),
+                            ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  // 点击按钮后的操作
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedContainer(
+                      height: isEdit ? 24 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: Image.asset("assets/icons/hide_gray.png"),
+                    ),
+                    AnimatedContainer(
+                      height: isEdit ? 16 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: Text(
+                        "隱藏",
+                        style: AppStyle.caption(
+                            level: 2, color: AppStyle.gray[700]!),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                onPressed: () {
+                  // 点击按钮后的操作
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedContainer(
+                      height: isEdit ? 24 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: Image.asset("assets/icons/delete.png"),
+                    ),
+                    AnimatedContainer(
+                      height: isEdit ? 16 : 0,
+                      duration: Duration(milliseconds: isEdit ? 400 : 200),
+                      child: Text(
+                        "刪除",
+                        style: AppStyle.caption(level: 2, color: AppStyle.red),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: copyChatRooms.isNotEmpty
           ? ListView.separated(
               controller: _scrollController,
@@ -491,9 +654,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                     name: room["name"]!,
                     photo: room["photo"],
                     isRead: room["isRead"]!,
-                    type: room['type'],
-                    count: room['count'],
-                    sender: room['sender'],
+                    type: room["type"],
+                    count: room["count"],
+                    sender: room["sender"],
                   ),
                   onChanged: ({
                     int? chatroomID,
@@ -504,8 +667,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                     bool isRead = false,
                   }) {
                     setState(() {
-                      room['cmIsPinned'] = isPinned;
-                      room['cmIsMuted'] = isMuted;
+                      room["cmIsPinned"] = isPinned;
+                      room["cmIsMuted"] = isMuted;
                       if (isDisabled) {
                         var temp = chatRooms.firstWhere(
                             (element) => element["chatroomID"] == chatroomID);
@@ -520,7 +683,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         }
                       }
                       if (isRead) {
-                        room['isRead'] = true;
+                        room["isRead"] = true;
                       }
                     });
                     if (needReSort) {
