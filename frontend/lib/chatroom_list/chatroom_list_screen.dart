@@ -183,12 +183,15 @@ class _ChatroomPageState extends State<ChatroomPage>
           GestureDetector(
             onTap: () {
               setState(() {
+                if (isEdit) {
+                  _swipeActionController.stopEditingMode();
+                } else {
+                  _swipeActionController.startEditingMode();
+                }
                 isEdit = !isEdit;
                 isSort = false;
                 isSearch = false;
                 setBottomHeightAnimated(isEdit ? 45 : 1);
-                //TODO:更改成編輯模式
-                _swipeActionController.toggleEditingMode();
               });
             },
             child: isEdit
@@ -202,6 +205,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 isSort = !isSort;
                 isSearch = false;
                 setBottomHeightAnimated(isSort ? 89 : 1);
+                _swipeActionController.stopEditingMode();
               });
             },
             child: isSort
@@ -215,6 +219,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 isSort = false;
                 isSearch = !isSearch;
                 setBottomHeightAnimated(isSearch ? 53 : 1);
+                _swipeActionController.stopEditingMode();
               });
             },
             child: isSearch
