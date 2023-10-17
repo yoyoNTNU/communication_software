@@ -2,6 +2,7 @@ part of 'chatroom_list_widget.dart';
 
 class ChatRoomRow extends StatefulWidget {
   final ChatRoomCard room;
+  final SwipeActionController controller;
   final void Function({
     int chatroomID,
     bool isPinned,
@@ -15,6 +16,7 @@ class ChatRoomRow extends StatefulWidget {
     super.key,
     required this.onChanged,
     required this.room,
+    required this.controller,
   });
 
   @override
@@ -52,6 +54,20 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
         ),
       ),
       child: SwipeActionCell(
+        controller: widget.controller,
+        index: widget.room.chatroomID,
+        selectedIndicator: Container(
+          color: AppStyle.white,
+          alignment: Alignment.centerRight,
+          child: Image.asset("assets/icons/select.png"),
+        ),
+        unselectedIndicator: Container(
+          color: AppStyle.white,
+          alignment: Alignment.centerRight,
+          child: Image.asset("assets/icons/unselect.png"),
+        ),
+        selectedForegroundColor: Colors.transparent,
+        editModeOffset: 48,
         key: ValueKey(widget.room.chatroomID),
         leadingActions: [
           SwipeAction(

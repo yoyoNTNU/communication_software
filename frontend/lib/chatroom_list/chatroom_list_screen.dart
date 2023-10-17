@@ -5,6 +5,7 @@ import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:proj/chatroom_list/widget/chatroom_list_widget.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:proj/widget.dart';
+import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 
 class ChatroomPage extends StatefulWidget {
   const ChatroomPage({super.key});
@@ -21,8 +22,9 @@ class _ChatroomPageState extends State<ChatroomPage>
   List<Map<String, dynamic>> copyChatRooms = [];
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
-  late AnimationController _controller;
+  late AnimationController _animationController;
   late Animation<double> _animation;
+  late SwipeActionController _swipeActionController;
   bool isEdit = false;
   bool isSort = false;
   bool isSearch = false;
@@ -32,14 +34,14 @@ class _ChatroomPageState extends State<ChatroomPage>
   int tapTipsCount = 0; //TODO: 開發用 記得移除
 
   void setBottomHeightAnimated(double end) {
-    _animation = Tween(begin: _height, end: end).animate(_controller)
+    _animation = Tween(begin: _height, end: end).animate(_animationController)
       ..addListener(() {
         setState(() {
           _height = _animation.value;
         });
       });
-    _controller.reset();
-    _controller.forward();
+    _animationController.reset();
+    _animationController.forward();
   }
 
   void sortByTime() {
@@ -102,17 +104,18 @@ class _ChatroomPageState extends State<ChatroomPage>
 
   @override
   void initState() {
-    _controller = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _swipeActionController = SwipeActionController();
     super.initState();
     _fetchChatRooms();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -185,6 +188,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 isSearch = false;
                 setBottomHeightAnimated(isEdit ? 45 : 1);
                 //TODO:更改成編輯模式
+                _swipeActionController.toggleEditingMode();
               });
             },
             child: isEdit
@@ -454,6 +458,7 @@ class _ChatroomPageState extends State<ChatroomPage>
           }
           final room = copyChatRooms[index - 1];
           return ChatRoomRow(
+            controller: _swipeActionController,
             room: ChatRoomCard(
               chatroomID: room["chatroomID"]!,
               messageID: room["messageID"]!,
