@@ -132,6 +132,101 @@ class _ChatroomPageState extends State<ChatroomPage>
     return false;
   }
 
+  Future<void> _setChatRoom(int chatroomID, bool isPinned, bool isMuted,
+      bool isDisabled, DateTime? deleteAt) async {
+    try {
+      await ChatRoomRowAPI.updateSetting(
+          chatroomID, isPinned, isMuted, isDisabled, deleteAt);
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  void onChanged({
+    int? chatroomID,
+    bool isPinned = false,
+    bool isMuted = false,
+    bool isDisabled = false,
+    bool needReSort = false,
+  }) {
+    var room =
+        chatRooms.firstWhere((element) => element["chatroomID"] == chatroomID);
+    setState(() {
+      room["cmIsPinned"] = isPinned;
+      room["cmIsMuted"] = isMuted;
+      if (isDisabled) {
+        var temp = chatRooms
+            .firstWhere((element) => element["chatroomID"] == chatroomID);
+        chatRooms.remove(temp);
+        if (showChatroomType == "all") {
+          copyChatRooms = chatRooms;
+        } else {
+          copyChatRooms = chatRooms
+              .where((element) => element["type"] == showChatroomType)
+              .toList();
+        }
+      }
+    });
+    if (needReSort) {
+      if (sortBy == "time") {
+        sortByTime();
+      } else {
+        sortByUnread();
+      }
+      setBottomHeightAnimated(45);
+    }
+  }
+
+  void _setSelectedChatRoom(String types, {bool setPinOrMute = false}) {
+    for (int chatroomID in selectedIndexList) {
+      var room = chatRooms
+          .firstWhere((element) => element["chatroomID"] == chatroomID);
+      switch (types) {
+        case "Pin":
+          onChanged(
+            chatroomID: chatroomID,
+            isPinned: setPinOrMute,
+            isMuted: room["cmIsMuted"],
+            needReSort: true,
+          );
+          _setChatRoom(
+              chatroomID, setPinOrMute, room["cmIsMuted"], false, null);
+          break;
+        case "Mute":
+          onChanged(
+            chatroomID: chatroomID,
+            isPinned: room["cmIsPinned"],
+            isMuted: setPinOrMute,
+          );
+          _setChatRoom(
+              chatroomID, room["cmIsPinned"], setPinOrMute, false, null);
+          break;
+        case "Disable":
+          _swipeActionController.deselectAll();
+          onChanged(
+            chatroomID: chatroomID,
+            isPinned: room["cmIsPinned"],
+            isMuted: room["cmIsMuted"],
+            isDisabled: true,
+            needReSort: true,
+          );
+          _setChatRoom(
+              chatroomID, room["cmIsPinned"], room["cmIsMuted"], true, null);
+        case "Delete":
+          _swipeActionController.deselectAll();
+          onChanged(
+            chatroomID: chatroomID,
+            isPinned: room["cmIsPinned"],
+            isMuted: room["cmIsMuted"],
+            isDisabled: true,
+            needReSort: true,
+          );
+          _setChatRoom(chatroomID, room["cmIsPinned"], room["cmIsMuted"], true,
+              DateTime.now());
+      }
+    }
+  }
+
   @override
   void initState() {
     _animationController = AnimationController(
@@ -288,7 +383,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                     isSearch = false;
                     isSort = false;
                     setBottomHeightAnimated(1);
-                    _swipeActionController.stopEditingMode();
+                    if (_swipeActionController.isEditing.value) {
+                      _swipeActionController.deselectAll();
+                      _swipeActionController.stopEditingMode();
+                    }
                     showChatroomType = value;
                   });
                   setState(() {
@@ -506,9 +604,12 @@ class _ChatroomPageState extends State<ChatroomPage>
           children: [
             Expanded(
               child: TextButton(
-                onPressed: () {
-                  // 点击按钮后的操作
-                },
+                onPressed: selectedCount == 0
+                    ? null
+                    : () {
+                        _setSelectedChatRoom("Mute",
+                            setPinOrMute: !checkSelectedIsMuted());
+                      },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -540,9 +641,12 @@ class _ChatroomPageState extends State<ChatroomPage>
             ),
             Expanded(
               child: TextButton(
-                onPressed: () {
-                  // 点击按钮后的操作
-                },
+                onPressed: selectedCount == 0
+                    ? null
+                    : () {
+                        _setSelectedChatRoom("Pin",
+                            setPinOrMute: !checkSelectedIsPinned());
+                      },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -574,9 +678,14 @@ class _ChatroomPageState extends State<ChatroomPage>
             ),
             Expanded(
               child: TextButton(
-                onPressed: () {
-                  // 点击按钮后的操作
-                },
+                onPressed: selectedCount == 0
+                    ? null
+                    : () async {
+                        bool check = await showHide(context);
+                        if (check) {
+                          _setSelectedChatRoom("Disable");
+                        }
+                      },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -600,9 +709,14 @@ class _ChatroomPageState extends State<ChatroomPage>
             ),
             Expanded(
               child: TextButton(
-                onPressed: () {
-                  // 点击按钮后的操作
-                },
+                onPressed: selectedCount == 0
+                    ? null
+                    : () async {
+                        bool check = await showDelete(context);
+                        if (check) {
+                          _setSelectedChatRoom("Delete");
+                        }
+                      },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -699,19 +813,22 @@ class _ChatroomPageState extends State<ChatroomPage>
             )
           : Container(
               alignment: Alignment.center,
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Image.asset("assets/images/fail_logo_dark.png"),
-                const SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  "列表空空如也，趕快開始聊天吧！",
-                  style: AppStyle.info(level: 2, color: AppStyle.gray[700]!),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-              ]),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset("assets/images/fail_logo_dark.png"),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "列表空空如也，趕快開始聊天吧！",
+                    style: AppStyle.info(level: 2, color: AppStyle.gray[700]!),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                ],
+              ),
             ),
     );
   }
