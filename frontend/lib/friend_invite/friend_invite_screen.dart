@@ -20,9 +20,15 @@ class _FriendInviteState extends State<FriendInvite> {
     return Scaffold(
         backgroundColor: AppStyle.blue[50],
         appBar: AppBar(
-          leading: GestureDetector(
+          leadingWidth: 48,
+          titleSpacing: 0,
+          leading: Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
               onTap: () => Navigator.popAndPushNamed(context, '/home'),
-              child: Image.asset("assets/icons/left.png")),
+              child: Image.asset("assets/icons/left.png"),
+            ),
+          ),
           title: Text(
             '好友邀請',
             style: AppStyle.header(),
