@@ -64,9 +64,9 @@ flutter:
     - assets/icons/tap_check.png
     - assets/icons/tap_search.png
     - assets/icons/tap_sort.png
-    - assets/icons/untap_check.png
-    - assets/icons/untap_search.png
-    - assets/icons/untap_sort.png
+    - assets/icons/unTap_check.png
+    - assets/icons/unTap_search.png
+    - assets/icons/unTap_sort.png
     - assets/icons/pin.png
     - assets/icons/cancel_pin.png
     - assets/icons/mute.png

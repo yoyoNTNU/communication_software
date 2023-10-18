@@ -327,7 +327,7 @@ class _ChatroomPageState extends State<ChatroomPage>
             },
             child: isEdit
                 ? Image.asset("assets/icons/tap_check.png")
-                : Image.asset("assets/icons/untap_check.png"),
+                : Image.asset("assets/icons/unTap_check.png"),
           ),
           GestureDetector(
             onTap: () {
@@ -341,7 +341,7 @@ class _ChatroomPageState extends State<ChatroomPage>
             },
             child: isSort
                 ? Image.asset("assets/icons/tap_sort.png")
-                : Image.asset("assets/icons/untap_sort.png"),
+                : Image.asset("assets/icons/unTap_sort.png"),
           ),
           GestureDetector(
             onTap: () {
@@ -355,7 +355,7 @@ class _ChatroomPageState extends State<ChatroomPage>
             },
             child: isSearch
                 ? Image.asset("assets/icons/tap_search.png")
-                : Image.asset("assets/icons/untap_search.png"),
+                : Image.asset("assets/icons/unTap_search.png"),
           ),
         ],
         title: Row(
