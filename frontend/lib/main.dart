@@ -9,6 +9,7 @@ import 'package:proj/group/group_screen.dart';
 import 'package:proj/search/search_screen.dart';
 import 'package:proj/materials/animated_screen.dart';
 import 'package:proj/friend_invite/friend_invite_screen.dart';
+import 'package:proj/chatroom/chatroom_screen.dart';
 
 // Define http host name
 //backend develop server
@@ -59,6 +60,7 @@ class ChatApp extends StatelessWidget {
         '/group': (context) => const GroupPage(),
         '/search': (context) => const SearchPage(),
         '/invite': (context) => const FriendInvite(),
+        '/chatroom': (context) => const ChatroomPage()
       },
     );
   }
