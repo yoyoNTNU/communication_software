@@ -8,14 +8,14 @@ import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:proj/data.dart';
 
-class ChatroomPage extends StatefulWidget {
-  const ChatroomPage({super.key});
+class ChatroomListPage extends StatefulWidget {
+  const ChatroomListPage({super.key});
 
   @override
-  State<ChatroomPage> createState() => _ChatroomPageState();
+  State<ChatroomListPage> createState() => _ChatroomListPageState();
 }
 
-class _ChatroomPageState extends State<ChatroomPage>
+class _ChatroomListPageState extends State<ChatroomListPage>
     with TickerProviderStateMixin {
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //TODO:實時連接並更新列表
