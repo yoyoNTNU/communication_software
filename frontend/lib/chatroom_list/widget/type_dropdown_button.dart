@@ -110,6 +110,7 @@ class _TypeDropdownButtonState extends State<TypeDropdownButton> {
                 color: AppStyle.white,
                 border: Border.all(color: AppStyle.teal)),
           ),
+          // ignore: prefer_const_constructors
           menuItemStyleData: MenuItemStyleData(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
               customHeights: [22, 1, 22, 1, 22]),

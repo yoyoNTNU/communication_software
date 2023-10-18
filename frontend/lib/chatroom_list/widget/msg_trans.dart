@@ -13,6 +13,7 @@ String msgTrans(String messageType) {
       content = "傳送了一個檔案";
       break;
     //TODO: 電話跟視訊跟音訊類別
+
     // case "call":
     //   content = "";
     //   break;
