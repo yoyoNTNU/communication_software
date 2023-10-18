@@ -103,6 +103,12 @@ flutter:
     - assets/icons/unselect.png
     - assets/icons/mute_pink.png
     - assets/icons/pin_yellow.png
+    - assets/icons/Return_back.png
+    - assets/icons/hide_red.png
+    - assets/icons/hide_gray.png
+    - assets/icons/pin_dark_yellow.png
+    - assets/icons/sound_teal.png 
+    - assets/icons/cancel_pin_gray.png
 
     # Animations
     - assets/animations/loading.gif

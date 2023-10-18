@@ -13,3 +13,5 @@ part 'msg_trans.dart';
 part 'time_trans.dart';
 part 'type_dropdown_button.dart';
 part 'app_text_field.dart';
+part 'delete_dialog.dart';
+part 'hide_dialog.dart';

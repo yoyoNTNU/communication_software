@@ -94,6 +94,7 @@ class _SearchPageState extends State<SearchPage> {
                                     : _nationController.text +
                                         _phoneController.text
                                 : "");
+                            //TODO:顯示搜尋結果
                             print(friendID);
                           },
                         ),
@@ -107,6 +108,7 @@ class _SearchPageState extends State<SearchPage> {
                           },
                           onSubmit: (value) async {
                             await _searchByUserID(_iDController.text);
+                            //TODO:顯示搜尋結果
                             print(friendID);
                           },
                         ),

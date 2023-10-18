@@ -2,14 +2,21 @@ part of 'chatroom_list_widget.dart';
 
 class ChatRoomRow extends StatefulWidget {
   final ChatRoomCard room;
-  final int index;
-  final void Function(int, bool, bool, bool, bool) onChanged;
+  final SwipeActionController controller;
+  final void Function({
+    int chatroomID,
+    bool isPinned,
+    bool isMuted,
+    bool isDisabled,
+    bool needReSort,
+    bool isRead,
+  }) onChanged;
 
   const ChatRoomRow({
     super.key,
     required this.onChanged,
     required this.room,
-    required this.index,
+    required this.controller,
   });
 
   @override
@@ -27,6 +34,14 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
     }
   }
 
+  Future<void> _readMessage() async {
+    try {
+      await ChatRoomRowAPI.readAllMessage(widget.room.chatroomID);
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +54,21 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
         ),
       ),
       child: SwipeActionCell(
-        key: ValueKey(widget.index),
+        controller: widget.controller,
+        index: widget.room.chatroomID,
+        selectedIndicator: Container(
+          color: AppStyle.white,
+          alignment: Alignment.centerRight,
+          child: Image.asset("assets/icons/select.png"),
+        ),
+        unselectedIndicator: Container(
+          color: AppStyle.white,
+          alignment: Alignment.centerRight,
+          child: Image.asset("assets/icons/unselect.png"),
+        ),
+        selectedForegroundColor: Colors.transparent,
+        editModeOffset: 48,
+        key: ValueKey(widget.room.chatroomID),
         leadingActions: [
           SwipeAction(
             widthSpace: 80,
@@ -69,8 +98,11 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              widget.onChanged(widget.index, widget.room.cmIsPinned,
-                  !widget.room.cmIsMuted, false, false);
+              widget.onChanged(
+                chatroomID: widget.room.chatroomID,
+                isPinned: widget.room.cmIsPinned,
+                isMuted: !widget.room.cmIsMuted,
+              );
               await _setChatRoom(
                   widget.room.cmIsPinned, !widget.room.cmIsMuted, false, null);
             },
@@ -103,8 +135,12 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              widget.onChanged(widget.index, !widget.room.cmIsPinned,
-                  widget.room.cmIsMuted, false, true);
+              widget.onChanged(
+                chatroomID: widget.room.chatroomID,
+                isPinned: !widget.room.cmIsPinned,
+                isMuted: widget.room.cmIsMuted,
+                needReSort: true,
+              );
               await _setChatRoom(
                   !widget.room.cmIsPinned, widget.room.cmIsMuted, false, null);
             },
@@ -128,8 +164,18 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              print("刪除");
-              setState(() {});
+              bool check = await showDelete(context);
+              if (check) {
+                widget.onChanged(
+                  chatroomID: widget.room.chatroomID,
+                  isPinned: widget.room.cmIsPinned,
+                  isMuted: widget.room.cmIsMuted,
+                  isDisabled: true,
+                  needReSort: true,
+                );
+                await _setChatRoom(widget.room.cmIsPinned,
+                    widget.room.cmIsMuted, true, DateTime.now());
+              }
             },
           ),
           SwipeAction(
@@ -149,8 +195,18 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
             ),
             onTap: (CompletionHandler handler) async {
               handler(false);
-              print("隱藏");
-              setState(() {});
+              bool check = await showHide(context);
+              if (check) {
+                widget.onChanged(
+                  chatroomID: widget.room.chatroomID,
+                  isPinned: widget.room.cmIsPinned,
+                  isMuted: widget.room.cmIsMuted,
+                  isDisabled: true,
+                  needReSort: true,
+                );
+                await _setChatRoom(
+                    widget.room.cmIsPinned, widget.room.cmIsMuted, true, null);
+              }
             },
           ),
           if (!widget.room.isRead)
@@ -171,8 +227,14 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
               ),
               onTap: (CompletionHandler handler) async {
                 handler(false);
-                print("已讀");
-                setState(() {});
+                widget.onChanged(
+                  chatroomID: widget.room.chatroomID,
+                  isPinned: widget.room.cmIsPinned,
+                  isMuted: widget.room.cmIsMuted,
+                  isRead: true,
+                  needReSort: true,
+                );
+                await _readMessage();
               },
             ),
         ],

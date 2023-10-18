@@ -18,7 +18,7 @@ class _SignUpState extends State<SignUp> {
   final _phoneController = TextEditingController();
   final _nationController = TextEditingController();
   final _nameController = TextEditingController();
-  final _useridController = TextEditingController();
+  final _userIDController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
   bool _isLoading = false;
@@ -183,7 +183,7 @@ class _SignUpState extends State<SignUp> {
                           if (step_ == 2)
                             AppTextField(
                               key: UniqueKey(),
-                              controller: _useridController,
+                              controller: _userIDController,
                               labelText: '用戶ID設定',
                               hintText: '請輸入用戶ID',
                               isRequired: true,
@@ -253,7 +253,7 @@ class _SignUpState extends State<SignUp> {
                                                   : _nationController.text +
                                                       _phoneController.text
                                               : "",
-                                          _useridController.text,
+                                          _userIDController.text,
                                           _nameController.text,
                                           _passwordController.text,
                                           _confirmController.text);
