@@ -22,7 +22,6 @@ class _ChatroomPageState extends State<ChatroomPage>
   List<Map<String, dynamic>> copyChatRooms = [];
   List<int> selectedIndexList = [];
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _searchController = TextEditingController();
   late AnimationController _animationController;
   late Animation<double> _animation;
   late SwipeActionController _swipeActionController;
@@ -465,7 +464,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     ),
                   ),
                 ),
-              if (isEdit) //TODO:編輯模式 待改
+              if (isEdit)
                 Container(
                   height: _height - 1,
                   width: double.infinity,
@@ -548,36 +547,28 @@ class _ChatroomPageState extends State<ChatroomPage>
                       top: BorderSide(color: AppStyle.teal),
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: AppTextField(
-                          controller: _searchController,
-                          onTapX: () {
-                            setState(() {});
-                          },
-                          onChanged: (value) {
-                            setState(() {});
-                          },
-                        ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: "請輸入關鍵字",
+                      hintStyle: AppStyle.body(color: AppStyle.gray[500]!),
+                      prefixIcon: Image.asset("assets/icons/Search.png"),
+                      filled: true,
+                      fillColor: AppStyle.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppStyle.blue, width: 1.25),
                       ),
-                      const SizedBox(
-                        width: 8,
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppStyle.blue, width: 1.25),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          print("搜尋");
-                          //TODO:取消button 透過點擊text file跳轉到新頁面 並在該頁面執行搜尋
-                        },
-                        style: AppStyle.textBtn().copyWith(
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(
-                                horizontal: 4, vertical: 4),
-                          ),
-                        ),
-                        child: const Text("搜尋"),
-                      ),
-                    ],
+                    ),
+                    onTap: () {
+                      //TODO: 跳轉到搜尋訊息的新頁面(待補)
+                      Navigator.popAndPushNamed(context, "/search");
+                    },
                   ),
                 ),
               Divider(
