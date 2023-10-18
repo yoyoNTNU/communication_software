@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/homepage/homepage_screen.dart';
 import 'package:proj/chatroom_list/chatroom_list_screen.dart';
 import 'package:proj/style.dart';
+import 'package:proj/data.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -14,15 +15,32 @@ class _NavBarState extends State<NavBar> {
   int currentPageIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    (() async {
+      if (mounted) {
+        int? index = await DatabaseHelper.instance.getHomepageIndex();
+        if (index == null) {
+          index = 0;
+          await DatabaseHelper.instance.setHomepageIndex(0);
+        }
+        setState(() {
+          currentPageIndex = index!;
+        });
+      }
+    })();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    //TODO:進入時參考上次最後使用的頁面來設定currentPageIndex(需新增DB)
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         backgroundColor: AppStyle.white,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         height: 64,
         indicatorColor: Colors.transparent,
-        onDestinationSelected: (int index) {
+        onDestinationSelected: (int index) async {
+          await DatabaseHelper.instance.setHomepageIndex(index);
           setState(() {
             currentPageIndex = index;
           });

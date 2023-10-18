@@ -17,17 +17,21 @@ class _FriendsListState extends State<FriendsList> {
       //print("f:API");
       try {
         final List<Map<String, dynamic>> info = await GetInfoAPI.getFriend();
-        setState(() {
-          friendList = info;
-        });
-        await DatabaseHelper.instance.cacheFriendData(friendList);
+        if (mounted) {
+          setState(() {
+            friendList = info;
+          });
+          await DatabaseHelper.instance.cacheFriendData(friendList);
+        }
       } catch (e) {
         print('API request error: $e');
       }
     } else {
       //print("f:Cache");
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override

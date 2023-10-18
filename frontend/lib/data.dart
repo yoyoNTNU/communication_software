@@ -12,47 +12,6 @@ class Token {
   }
 }
 
-class SelfData {
-  final int memberID;
-  final String userID;
-  final String name;
-  final String photo;
-  final String background;
-  SelfData({
-    required this.memberID,
-    required this.userID,
-    required this.name,
-    required this.photo,
-    required this.background,
-  });
-}
-
-class FriendData {
-  final int id;
-  final String nickname;
-  final String photo;
-  final String introduction;
-  FriendData({
-    required this.id,
-    required this.nickname,
-    required this.photo,
-    required this.introduction,
-  });
-}
-
-class GroupData {
-  final int id;
-  final String name;
-  final String photo;
-  final int count;
-  GroupData({
-    required this.id,
-    required this.name,
-    required this.photo,
-    required this.count,
-  });
-}
-
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -101,6 +60,11 @@ class DatabaseHelper {
         name TEXT,
         photo TEXT,
         count INT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE homepage_index(
+        homepageIndex INT PRIMARY KEY
       )
     ''');
   }
@@ -207,6 +171,22 @@ class DatabaseHelper {
       return [
         {'empty': true}
       ];
+    }
+  }
+
+  Future<void> setHomepageIndex(int index) async {
+    final db = await initDatabase();
+    await db.delete('homepage_index');
+    await db.insert('homepage_index', {"homepageIndex": index});
+  }
+
+  Future<int?> getHomepageIndex() async {
+    final db = await initDatabase();
+    final List<Map<String, dynamic>> results = await db.query('homepage_index');
+    if (results.isNotEmpty) {
+      return results[0]["homepageIndex"];
+    } else {
+      return null;
     }
   }
 }
