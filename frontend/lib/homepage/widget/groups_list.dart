@@ -18,10 +18,12 @@ class _GroupsListState extends State<GroupsList> {
       //print("g:API");
       try {
         final List<Map<String, dynamic>> info = await GetInfoAPI.getGroup();
-        setState(() {
-          groupList = info;
-        });
-        await DatabaseHelper.instance.cacheGroupData(groupList);
+        if (mounted) {
+          setState(() {
+            groupList = info;
+          });
+          await DatabaseHelper.instance.cacheGroupData(groupList);
+        }
       } catch (e) {
         print('API request error: $e');
       }
@@ -29,7 +31,9 @@ class _GroupsListState extends State<GroupsList> {
       //print("g:Cache");
     }
     widget.onLoaded();
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
