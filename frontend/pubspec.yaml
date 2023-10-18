@@ -109,6 +109,7 @@ flutter:
     - assets/icons/pin_dark_yellow.png
     - assets/icons/sound_teal.png 
     - assets/icons/cancel_pin_gray.png
+    - assets/icons/Menu.png
 
     # Animations
     - assets/animations/loading.gif
