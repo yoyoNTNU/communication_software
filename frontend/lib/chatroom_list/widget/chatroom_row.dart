@@ -252,6 +252,16 @@ class _ChatRoomRowState extends State<ChatRoomRow> {
           type: widget.room.type,
           count: widget.room.count,
           sender: widget.room.sender,
+          enterRoom: () async {
+            widget.onChanged(
+              chatroomID: widget.room.chatroomID,
+              isPinned: widget.room.cmIsPinned,
+              isMuted: widget.room.cmIsMuted,
+              isRead: true,
+              needReSort: true,
+            );
+            await _readMessage();
+          },
         ),
       ),
     );

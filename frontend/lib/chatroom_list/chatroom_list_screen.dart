@@ -789,6 +789,7 @@ class _ChatroomListPageState extends State<ChatroomListPage>
                           type: room["type"],
                           count: room["count"],
                           sender: room["sender"],
+                          enterRoom: () {},
                         ),
                         onChanged: ({
                           int? chatroomID,
