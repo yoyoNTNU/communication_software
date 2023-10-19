@@ -23,8 +23,10 @@ class _ChatroomPageState extends State<ChatroomPage>
   late AnimationController _animationController;
   late Animation<double> _animation;
   final _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   bool isExpanded = false;
   double _height = 1.0;
+  int step = 0;
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -62,214 +64,240 @@ class _ChatroomPageState extends State<ChatroomPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppStyle.blue[50],
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leadingWidth: 56,
-          titleSpacing: 0,
-          leading: Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: GestureDetector(
-                onTap: () => Navigator.of(context).pop(),
-                child: Image.asset(
-                  "assets/icons/left.png",
-                ),
+      backgroundColor: AppStyle.blue[50],
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leadingWidth: 56,
+        titleSpacing: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Image.asset(
+                "assets/icons/left.png",
               ),
             ),
           ),
-          toolbarHeight: 48,
-          backgroundColor: AppStyle.white,
-          elevation: 0,
-          title: TitleLine(
-            chatroomType: "group",
-            groupPeopleCount: 10,
-            isMuted: true,
-            isPinned: true,
-            name: "聊天室$chatroomID內部",
-            isExpanded: isExpanded,
-            onTapMemberCount: () {
-              setBottomHeightAnimated(isExpanded ? 1 : 41);
-              isExpanded = !isExpanded;
+        ),
+        toolbarHeight: 48,
+        backgroundColor: AppStyle.white,
+        elevation: 0,
+        title: TitleLine(
+          chatroomType: "group",
+          groupPeopleCount: 10,
+          isMuted: true,
+          isPinned: true,
+          name: "聊天室$chatroomID內部",
+          isExpanded: isExpanded,
+          onTapMemberCount: () {
+            setBottomHeightAnimated(isExpanded ? 1 : 41);
+            isExpanded = !isExpanded;
+          },
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              print("設定");
+              //TODO:push to 聊天室設定
             },
+            child: Image.asset("assets/icons/Menu.png"),
           ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                print("設定");
-                //TODO:push to 聊天室設定
-              },
-              child: Image.asset("assets/icons/Menu.png"),
-            ),
-          ],
-          bottom: PreferredSize(
-              preferredSize: Size.fromHeight(_height),
-              child: Column(
-                children: [
-                  if (isExpanded)
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(24, 3, 24, 4),
-                      height: _height - 1,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(color: AppStyle.teal),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
-                                children: [
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                  Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ]),
-                          ),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          SizedBox(
-                            width: 24,
-                            child: _height == 41
-                                ? IconButton(
-                                    splashRadius: 12,
-                                    padding: EdgeInsets.zero,
-                                    splashColor: AppStyle.white,
-                                    focusColor: AppStyle.white,
-                                    hoverColor: AppStyle.white,
-                                    highlightColor: AppStyle.white,
-                                    alignment: Alignment.centerRight,
-                                    iconSize: 24,
-                                    onPressed: () {
-                                      print("進入成員列表");
-                                    },
-                                    icon: const Icon(
-                                      Icons.keyboard_arrow_right_rounded,
-                                      size: 24,
-                                    ),
-                                  )
-                                : null,
-                          )
-                        ],
+        ],
+        bottom: PreferredSize(
+            preferredSize: Size.fromHeight(_height),
+            child: Column(
+              children: [
+                if (isExpanded)
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(24, 3, 24, 4),
+                    height: _height - 1,
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: AppStyle.teal),
                       ),
                     ),
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                    color: AppStyle.blue[100],
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
+                              children: [
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                                const SizedBox(
+                                  width: 4,
+                                ),
+                                Image.asset(
+                                  "assets/images/avatar.png",
+                                  width: 32,
+                                  height: 32,
+                                ),
+                              ]),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                          width: 24,
+                          child: _height == 41
+                              ? IconButton(
+                                  splashRadius: 12,
+                                  padding: EdgeInsets.zero,
+                                  splashColor: AppStyle.white,
+                                  focusColor: AppStyle.white,
+                                  hoverColor: AppStyle.white,
+                                  highlightColor: AppStyle.white,
+                                  alignment: Alignment.centerRight,
+                                  iconSize: 24,
+                                  onPressed: () {
+                                    print("進入成員列表");
+                                  },
+                                  icon: const Icon(
+                                    Icons.keyboard_arrow_right_rounded,
+                                    size: 24,
+                                  ),
+                                )
+                              : null,
+                        )
+                      ],
+                    ),
                   ),
-                ],
-              )),
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                  color: AppStyle.blue[100],
+                ),
+              ],
+            )),
+      ),
+      bottomNavigationBar: Container(
+        height: 55,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 8,
         ),
-        bottomNavigationBar: Container(
-          height: 55,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 8,
+        decoration: const BoxDecoration(
+          color: AppStyle.white,
+          border: Border(
+            top: BorderSide(color: AppStyle.teal),
           ),
-          decoration: const BoxDecoration(
-            color: AppStyle.white,
-            border: Border(
-              top: BorderSide(color: AppStyle.teal),
+        ),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                print("DashBoard");
+              },
+              child: Image.asset("assets/icons/dashboard.png"),
             ),
-          ),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  print("DashBoard");
-                },
-                child: Image.asset("assets/icons/dashboard.png"),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                  child: InputTextField(
-                controller: _messageController,
-                onChanged: (value) {},
-              )),
-              const SizedBox(
-                width: 8,
-              ),
-              GestureDetector(
-                onTap: () {
-                  print("Send");
-                },
-                child: Image.asset("assets/icons/Send.png"),
-              ),
-            ],
-          ),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+                child: InputTextField(
+              controller: _messageController,
+              onChanged: (value) {},
+            )),
+            const SizedBox(
+              width: 8,
+            ),
+            GestureDetector(
+              onTap: () {
+                print("Send");
+              },
+              child: Image.asset("assets/icons/Send.png"),
+            ),
+          ],
         ),
-        body: const SizedBox());
+      ),
+      body: ListView.builder(
+        controller: _scrollController,
+        itemCount: 10,
+        itemBuilder: (BuildContext context, int index) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (step == 0) {
+              _scrollController
+                  .jumpTo(_scrollController.position.maxScrollExtent);
+              setState(() {
+                step++;
+              });
+            }
+          });
+          return MsgTile(
+            chatroomType: "group",
+            senderIsMe: index % 3 == 0,
+            senderID: 1,
+            messageType: "string",
+            isReply: false,
+            content: index % 2 == 0
+                ? "字串第一次測試"
+                : "字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試",
+            msgTime: "10:23 AM",
+          );
+        },
+      ),
+    );
   }
 }

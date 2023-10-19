@@ -1,21 +1,25 @@
 part of 'chatroom_widget.dart';
 
 class StringMsg extends StatefulWidget {
+  final String chatroomType;
   final bool senderIsMe;
   final int? senderID;
-  final String messageType;
   final bool isReply;
   final int? replyMsgID;
   final String content;
+  final String msgTime;
+  final void Function()? onLongPressed;
 
   const StringMsg({
     super.key,
+    required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
-    required this.messageType,
     required this.isReply,
     this.replyMsgID,
     required this.content,
+    required this.msgTime,
+    this.onLongPressed,
   });
 
   @override
@@ -25,6 +29,66 @@ class StringMsg extends StatefulWidget {
 class _StringMsgState extends State<StringMsg> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
+    double screenWidth = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onLongPress: widget.onLongPressed,
+      child: Container(
+        constraints: BoxConstraints(maxWidth: screenWidth * 0.70),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: widget.senderIsMe ? AppStyle.blue[400] : AppStyle.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.isReply)
+                  ReplyMsg(replyMsgID: 1, senderIsMe: widget.senderIsMe),
+                Transform.translate(
+                  offset: const Offset(0, -2),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                            width: 2,
+                            color: widget.isReply
+                                ? widget.senderIsMe
+                                    ? AppStyle.white
+                                    : AppStyle.blue[50]!
+                                : Colors.transparent),
+                      ),
+                    ),
+                    child: Text(
+                      widget.content,
+                      style: AppStyle.body(
+                          color: widget.senderIsMe
+                              ? AppStyle.white
+                              : AppStyle.gray[700]!),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Text(
+                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                style: AppStyle.info(
+                    level: 2,
+                    color: widget.senderIsMe
+                        ? AppStyle.gray[100]!
+                        : AppStyle.gray[500]!),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

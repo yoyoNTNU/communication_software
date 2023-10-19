@@ -9,6 +9,7 @@ Widget classifyMsg({
   final int? replyMsgID,
   final String content = "",
   final String msgTime = "",
+  final void Function()? onLongPressed,
 }) {
   switch (messageType) {
     case "string":
@@ -20,6 +21,7 @@ Widget classifyMsg({
         replyMsgID: replyMsgID,
         content: content,
         msgTime: msgTime,
+        onLongPressed: onLongPressed,
       );
     case "photo":
       return PhotoMsg(
