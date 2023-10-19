@@ -116,80 +116,111 @@ class _ChatroomPageState extends State<ChatroomPage>
                           top: BorderSide(color: AppStyle.teal),
                         ),
                       ),
-                      child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
-                          children: [
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Image.asset(
-                              "assets/images/avatar.png",
-                              width: 32,
-                              height: 32,
-                            ),
-                          ]),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
+                                children: [
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const SizedBox(
+                                    width: 4,
+                                  ),
+                                  Image.asset(
+                                    "assets/images/avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                ]),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          SizedBox(
+                            width: 24,
+                            child: _height == 41
+                                ? IconButton(
+                                    splashRadius: 12,
+                                    padding: EdgeInsets.zero,
+                                    splashColor: AppStyle.white,
+                                    focusColor: AppStyle.white,
+                                    hoverColor: AppStyle.white,
+                                    highlightColor: AppStyle.white,
+                                    alignment: Alignment.centerRight,
+                                    iconSize: 24,
+                                    onPressed: () {
+                                      print("進入成員列表");
+                                    },
+                                    icon: const Icon(
+                                      Icons.keyboard_arrow_right_rounded,
+                                      size: 24,
+                                    ),
+                                  )
+                                : null,
+                          )
+                        ],
+                      ),
                     ),
                   Divider(
                     height: 1,
@@ -239,6 +270,6 @@ class _ChatroomPageState extends State<ChatroomPage>
             ],
           ),
         ),
-        body: Container());
+        body: const SizedBox());
   }
 }
