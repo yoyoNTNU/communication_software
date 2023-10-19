@@ -1,21 +1,23 @@
 part of 'chatroom_widget.dart';
 
 class PhotoMsg extends StatefulWidget {
+  final String chatroomType;
   final bool senderIsMe;
   final int? senderID;
-  final String messageType;
   final bool isReply;
   final int? replyMsgID;
   final String content;
+  final String msgTime;
 
   const PhotoMsg({
     super.key,
+    required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
-    required this.messageType,
     required this.isReply,
     this.replyMsgID,
     required this.content,
+    required this.msgTime,
   });
 
   @override

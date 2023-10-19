@@ -16,3 +16,4 @@ part 'voice_msg.dart';
 part 'reply_msg.dart';
 part 'classify_msg.dart';
 part 'select_bar.dart';
+part 'read.dart';
