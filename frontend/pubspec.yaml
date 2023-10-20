@@ -37,6 +37,7 @@ dependencies:
   animated_toggle_switch: ^0.8.0
   flutter_swipe_action_cell: ^3.1.2
   dropdown_button2: ^2.3.9
+  photo_view: ^0.14.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -116,6 +117,7 @@ flutter:
     - assets/icons/Copy_blue.png
     - assets/icons/Return.png
     - assets/icons/close_ring.png
+    - assets/icons/X_white.png
 
     # Animations
     - assets/animations/loading.gif
