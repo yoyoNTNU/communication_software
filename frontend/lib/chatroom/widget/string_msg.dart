@@ -38,7 +38,8 @@ class _StringMsgState extends State<StringMsg> {
       },
       onLongPress: widget.onLongPressed,
       child: Container(
-        constraints: BoxConstraints(maxWidth: screenWidth * 0.70),
+        constraints:
+            BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: widget.senderIsMe ? AppStyle.blue[400] : AppStyle.white,
@@ -52,12 +53,12 @@ class _StringMsgState extends State<StringMsg> {
                 if (widget.isReply)
                   ReplyMsg(replyMsgID: 1, senderIsMe: widget.senderIsMe),
                 Transform.translate(
-                  offset: const Offset(0, -2),
+                  offset: const Offset(0, -1),
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border(
                         top: BorderSide(
-                            width: 2,
+                            width: 1,
                             color: widget.isReply
                                 ? widget.senderIsMe
                                     ? AppStyle.white
@@ -65,6 +66,7 @@ class _StringMsgState extends State<StringMsg> {
                                 : Colors.transparent),
                       ),
                     ),
+                    padding: EdgeInsets.only(top: widget.isReply ? 4 : 0),
                     child: Text(
                       widget.content,
                       style: AppStyle.body(
