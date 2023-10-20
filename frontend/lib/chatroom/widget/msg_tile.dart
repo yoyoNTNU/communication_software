@@ -78,7 +78,9 @@ class _MsgTileState extends State<MsgTile> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: widget.senderIsMe
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
             children: [
               if (!widget.senderIsMe)
                 Text(
@@ -109,7 +111,11 @@ class _MsgTileState extends State<MsgTile> {
                 const SizedBox(
                   height: 4,
                 ),
-              if (isSelected) SelectBar(senderIsMe: widget.senderIsMe),
+              if (isSelected)
+                SelectBar(
+                  senderIsMe: widget.senderIsMe,
+                  messageType: widget.messageType,
+                ),
             ],
           )
         ],
