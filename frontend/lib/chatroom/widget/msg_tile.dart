@@ -69,7 +69,7 @@ class _MsgTileState extends State<MsgTile> {
             Container(
               alignment: Alignment.topCenter,
               width: 36,
-              child: Image.asset("assets/images/avatar.png"),
+              child: Image.asset("assets/images/Avatar.png"),
             ),
           if (!widget.senderIsMe)
             const SizedBox(
