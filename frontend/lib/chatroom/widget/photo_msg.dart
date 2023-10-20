@@ -36,13 +36,14 @@ class _PhotoMsgState extends State<PhotoMsg> {
               return Stack(children: [
                 PhotoView(
                   imageProvider: NetworkImage(widget.content),
+                  minScale: PhotoViewComputedScale.contained * 1,
+                  maxScale: PhotoViewComputedScale.covered * 1.5,
                 ),
                 Positioned(
                   top: 24,
                   right: 24,
                   child: GestureDetector(
                     onTap: () {
-                      print("X");
                       Navigator.of(context).pop();
                     },
                     child: Image.asset("assets/icons/X_white.png"),
