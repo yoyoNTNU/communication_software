@@ -9,6 +9,10 @@ class MsgTile extends StatefulWidget {
   final int? replyMsgID;
   final String content;
   final String msgTime;
+  final bool setAllDisSelected;
+  final int index;
+  final int? tileIsSelectedIndex;
+  final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
 
   const MsgTile({
     super.key,
@@ -20,6 +24,10 @@ class MsgTile extends StatefulWidget {
     this.replyMsgID,
     required this.content,
     required this.msgTime,
+    required this.setAllDisSelected,
+    this.tileIsSelectedIndex,
+    required this.index,
+    required this.setScreenOnTapAndSelectedIndex,
   });
 
   @override
@@ -29,8 +37,18 @@ class MsgTile extends StatefulWidget {
 class _MsgTileState extends State<MsgTile> {
   //直接在這頁撈sender資訊
   bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
+    if (widget.setAllDisSelected) {
+      setState(() {
+        isSelected = widget.index == widget.tileIsSelectedIndex ? true : false;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.setScreenOnTapAndSelectedIndex(
+            false, isSelected ? widget.index : -1);
+      });
+    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       alignment:
@@ -82,8 +100,9 @@ class _MsgTileState extends State<MsgTile> {
                 msgTime: widget.msgTime,
                 onLongPressed: () {
                   setState(() {
-                    isSelected = !isSelected;
+                    isSelected = true;
                   });
+                  widget.setScreenOnTapAndSelectedIndex(true, widget.index);
                 },
               ),
               if (isSelected)

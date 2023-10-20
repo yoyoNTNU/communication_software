@@ -27,6 +27,8 @@ class _ChatroomPageState extends State<ChatroomPage>
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
+  bool isOnTap = false;
+  int? tileIsSelectedIndex;
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -272,31 +274,50 @@ class _ChatroomPageState extends State<ChatroomPage>
           ],
         ),
       ),
-      body: ListView.builder(
-        controller: _scrollController,
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (step == 0) {
-              _scrollController
-                  .jumpTo(_scrollController.position.maxScrollExtent);
-              setState(() {
-                step++;
-              });
-            }
+      body: GestureDetector(
+        onTap: () {
+          setState(() {
+            isOnTap = true;
+            tileIsSelectedIndex = null;
           });
-          return MsgTile(
-            chatroomType: "group",
-            senderIsMe: index % 3 == 0,
-            senderID: 1,
-            messageType: "string",
-            isReply: false,
-            content: index % 2 == 0
-                ? "字串第一次測試"
-                : "字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試",
-            msgTime: "10:23 AM",
-          );
         },
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: 10,
+          itemBuilder: (BuildContext context, int index) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (step == 0) {
+                _scrollController
+                    .jumpTo(_scrollController.position.maxScrollExtent);
+                setState(() {
+                  step++;
+                });
+              }
+            });
+            return MsgTile(
+              index: index,
+              chatroomType: "group",
+              senderIsMe: index % 3 == 0,
+              senderID: 1,
+              messageType: "string",
+              isReply: false,
+              content: index % 2 == 0
+                  ? "字串第一次測試"
+                  : "字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試",
+              msgTime: "10:23 AM",
+              setAllDisSelected: isOnTap,
+              tileIsSelectedIndex: tileIsSelectedIndex,
+              setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
+                setState(() {
+                  isOnTap = boolean;
+                  if (indexValue != -1) {
+                    tileIsSelectedIndex = indexValue;
+                  }
+                });
+              },
+            );
+          },
+        ),
       ),
     );
   }
