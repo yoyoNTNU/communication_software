@@ -53,7 +53,6 @@ class _ChatroomPageState extends State<ChatroomPage>
   @override
   void didChangeDependencies() {
     chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
-    print(chatroomID);
     super.didChangeDependencies();
   }
 
@@ -128,7 +127,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
                               children: [
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -136,7 +135,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -144,7 +143,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -152,7 +151,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -160,7 +159,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -168,7 +167,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -176,7 +175,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -184,7 +183,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -192,7 +191,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   width: 4,
                                 ),
                                 Image.asset(
-                                  "assets/images/avatar.png",
+                                  "assets/images/Avatar.png",
                                   width: 32,
                                   height: 32,
                                 ),
@@ -234,90 +233,107 @@ class _ChatroomPageState extends State<ChatroomPage>
               ],
             )),
       ),
-      bottomNavigationBar: Container(
-        height: 55,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
-        decoration: const BoxDecoration(
-          color: AppStyle.white,
-          border: Border(
-            top: BorderSide(color: AppStyle.teal),
+      body: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isOnTap = true;
+                  tileIsSelectedIndex = null;
+                });
+              },
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: 10,
+                itemBuilder: (BuildContext context, int index) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (step == 0) {
+                      _scrollController.jumpTo(
+                          _scrollController.position.maxScrollExtent + 100);
+                      setState(() {
+                        step++;
+                      });
+                    }
+                  });
+                  return MsgTile(
+                    index: index,
+                    chatroomType: "group",
+                    senderIsMe: index % 3 == 0,
+                    senderID: 1,
+                    messageType: "string",
+                    isReply: false,
+                    content: index % 2 == 0
+                        ? "字串第一次測試"
+                        : "字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試",
+                    msgTime: "10:23 AM",
+                    setAllDisSelected: isOnTap,
+                    tileIsSelectedIndex: tileIsSelectedIndex,
+                    setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
+                      setState(() {
+                        isOnTap = boolean;
+                        if (indexValue != -1) {
+                          tileIsSelectedIndex = indexValue;
+                        }
+                      });
+                    },
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                print("DashBoard");
-              },
-              child: Image.asset("assets/icons/dashboard.png"),
+          Container(
+            height: 55,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
             ),
-            const SizedBox(
-              width: 8,
+            decoration: const BoxDecoration(
+              color: AppStyle.white,
+              border: Border(
+                top: BorderSide(color: AppStyle.teal),
+              ),
             ),
-            Expanded(
-                child: InputTextField(
-              controller: _messageController,
-              onChanged: (value) {},
-            )),
-            const SizedBox(
-              width: 8,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    print("DashBoard");
+                  },
+                  child: Image.asset("assets/icons/dashboard.png"),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: InputTextField(
+                    controller: _messageController,
+                    onChanged: (value) {},
+                    onTap: () async {
+                      await Future.delayed(
+                        const Duration(milliseconds: 500),
+                      );
+                      _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("Send");
+                  },
+                  child: Image.asset("assets/icons/Send.png"),
+                ),
+              ],
             ),
-            GestureDetector(
-              onTap: () {
-                print("Send");
-              },
-              child: Image.asset("assets/icons/Send.png"),
-            ),
-          ],
-        ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          setState(() {
-            isOnTap = true;
-            tileIsSelectedIndex = null;
-          });
-        },
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: 10,
-          itemBuilder: (BuildContext context, int index) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (step == 0) {
-                _scrollController
-                    .jumpTo(_scrollController.position.maxScrollExtent);
-                setState(() {
-                  step++;
-                });
-              }
-            });
-            return MsgTile(
-              index: index,
-              chatroomType: "group",
-              senderIsMe: index % 3 == 0,
-              senderID: 1,
-              messageType: "string",
-              isReply: false,
-              content: index % 2 == 0
-                  ? "字串第一次測試"
-                  : "字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試字串第一次測試",
-              msgTime: "10:23 AM",
-              setAllDisSelected: isOnTap,
-              tileIsSelectedIndex: tileIsSelectedIndex,
-              setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
-                setState(() {
-                  isOnTap = boolean;
-                  if (indexValue != -1) {
-                    tileIsSelectedIndex = indexValue;
-                  }
-                });
-              },
-            );
-          },
-        ),
+          ),
+        ],
       ),
     );
   }

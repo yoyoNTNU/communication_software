@@ -75,10 +75,11 @@ class _LoginState extends State<Login> {
                                               onTap: () {
                                                 Future.delayed(
                                                     const Duration(
-                                                        milliseconds: 500), () {
+                                                        milliseconds: 800), () {
                                                   _scrollController.animateTo(
                                                       _scrollController.position
-                                                          .maxScrollExtent,
+                                                              .maxScrollExtent -
+                                                          150,
                                                       duration: const Duration(
                                                           milliseconds: 300),
                                                       curve: Curves.easeInOut);

@@ -3,11 +3,13 @@ part of 'chatroom_widget.dart';
 class InputTextField extends StatefulWidget {
   final TextEditingController controller;
   final void Function(String)? onChanged;
+  final void Function() onTap;
 
   const InputTextField({
     super.key,
     required this.controller,
     this.onChanged,
+    required this.onTap,
   });
 
   @override
@@ -31,6 +33,7 @@ class _InputTextFieldState extends State<InputTextField> {
       //TODO:按enter要可以送出訊息
       controller: widget.controller,
       onChanged: widget.onChanged,
+      onTap: widget.onTap,
       focusNode: _focusNode,
       style: AppStyle.body(
           level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
