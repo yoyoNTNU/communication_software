@@ -113,6 +113,9 @@ flutter:
     - assets/icons/dashboard.png
     - assets/icons/Send.png
     - assets/icons/user_blue.png
+    - assets/icons/Copy_blue.png
+    - assets/icons/Return.png
+    - assets/icons/close_ring.png
 
     # Animations
     - assets/animations/loading.gif
