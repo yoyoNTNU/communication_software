@@ -16,6 +16,7 @@ class ReplyMsg extends StatefulWidget {
 }
 
 class _ReplyMsgState extends State<ReplyMsg> {
+  final String msgType = "string";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,7 +71,7 @@ class _ReplyMsgState extends State<ReplyMsg> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              "回覆訊息測試", //要將6種做分類
+              msgType == "string" ? "回覆訊息測試" : replyMsgMap(msgType), //要將6種做分類
               style: AppStyle.body(
                   color: widget.senderIsMe
                       ? AppStyle.gray[100]!
@@ -84,4 +85,29 @@ class _ReplyMsgState extends State<ReplyMsg> {
       ),
     );
   }
+}
+
+String replyMsgMap(String msgType) {
+  String content;
+  switch (msgType) {
+    case "photo":
+      content = "相片";
+      break;
+    case "video":
+      content = "影片";
+      break;
+    case "file":
+      content = "檔案";
+      break;
+    case "voice":
+      content = "語音訊息";
+      break;
+    case "info":
+      content = "聯絡資訊";
+      break;
+    default:
+      content = "未知的類別";
+      break;
+  }
+  return content;
 }
