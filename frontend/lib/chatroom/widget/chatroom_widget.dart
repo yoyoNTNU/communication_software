@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
+import 'package:photo_view/photo_view.dart';
 
 part 'title_line.dart';
 part 'input_text_field.dart';

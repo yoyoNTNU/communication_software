@@ -4,20 +4,18 @@ class PhotoMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
   final int? senderID;
-  final bool isReply;
-  final int? replyMsgID;
   final String content;
   final String msgTime;
+  final void Function()? onLongPressed;
 
   const PhotoMsg({
     super.key,
     required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
-    required this.isReply,
-    this.replyMsgID,
     required this.content,
     required this.msgTime,
+    this.onLongPressed,
   });
 
   @override
@@ -27,6 +25,95 @@ class PhotoMsg extends StatefulWidget {
 class _PhotoMsgState extends State<PhotoMsg> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
+    double screenWidth = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              //要有下載按鈕
+              return Stack(children: [
+                PhotoView(
+                  imageProvider: NetworkImage(widget.content),
+                ),
+                Positioned(
+                  top: 24,
+                  right: 24,
+                  child: GestureDetector(
+                    onTap: () {
+                      print("X");
+                      Navigator.of(context).pop();
+                    },
+                    child: Image.asset("assets/icons/X_white.png"),
+                  ),
+                ),
+              ]);
+            },
+          ),
+        );
+      },
+      onLongPress: widget.onLongPressed,
+      child: Container(
+        constraints:
+            BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: widget.senderIsMe ? AppStyle.blue[400] : AppStyle.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 29,
+                  height: 18,
+                  alignment: Alignment.topCenter,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                        color: widget.senderIsMe
+                            ? AppStyle.yellow[300]!
+                            : AppStyle.yellow[600]!),
+                  ),
+                  child: Text(
+                    "相片",
+                    style: AppStyle.info(
+                        level: 2,
+                        color: widget.senderIsMe
+                            ? AppStyle.yellow[300]!
+                            : AppStyle.yellow[600]!),
+                  ),
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Image.network(
+                  widget.content,
+                  fit: BoxFit.contain,
+                ),
+                const SizedBox(
+                  height: 18,
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 0,
+              child: Text(
+                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                style: AppStyle.info(
+                    level: 2,
+                    color: widget.senderIsMe
+                        ? AppStyle.gray[100]!
+                        : AppStyle.gray[500]!),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
