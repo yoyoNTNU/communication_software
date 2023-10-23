@@ -261,7 +261,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     chatroomType: "group",
                     senderIsMe: index % 4 == 0 || index % 4 == 1,
                     senderID: 1,
-                    messageType: "call",
+                    messageType: "view",
                     isReply: index % 2 == 0,
                     content: index % 2 == 0 ? "00:00:00" : "11:09:37",
                     msgTime: "10:23 AM",
