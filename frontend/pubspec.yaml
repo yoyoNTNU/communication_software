@@ -126,6 +126,10 @@ flutter:
     - assets/icons/call_white.png
     - assets/icons/call_fail_pink.png
     - assets/icons/call_fail_light_pink.png
+    - assets/icons/cellphone.png
+    - assets/icons/cellphone_white.png
+    - assets/icons/cellphone_pink.png
+    - assets/icons/cellphone_light_pink.png
 
     # Animations
     - assets/animations/loading.gif
