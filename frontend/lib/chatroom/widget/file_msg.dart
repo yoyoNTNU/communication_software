@@ -29,7 +29,6 @@ class _FileMsgState extends State<FileMsg> {
     try {
       var response = await http.head(Uri.parse(widget.content));
       double contentLength = double.parse(response.headers['content-length']!);
-      print('文件大小：$contentLength bytes');
 
       if (contentLength / 1024 > 1) {
         contentLength /= 1024;
