@@ -3,6 +3,7 @@ import 'package:proj/style.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
+import 'package:http/http.dart' as http;
 
 part 'title_line.dart';
 part 'input_text_field.dart';

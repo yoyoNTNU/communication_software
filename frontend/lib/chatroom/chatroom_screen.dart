@@ -261,9 +261,11 @@ class _ChatroomPageState extends State<ChatroomPage>
                     chatroomType: "group",
                     senderIsMe: index % 4 == 0 || index % 4 == 1,
                     senderID: 1,
-                    messageType: "view",
+                    messageType: "file",
                     isReply: index % 2 == 0,
-                    content: index % 2 == 0 ? "00:00:00" : "11:09:37",
+                    content: index % 2 == 0
+                        ? "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.xlsx"
+                        : "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.pdf",
                     msgTime: "10:23 AM",
                     setAllDisSelected: isOnTap,
                     tileIsSelectedIndex: tileIsSelectedIndex,
