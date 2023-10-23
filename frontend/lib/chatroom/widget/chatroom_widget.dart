@@ -20,3 +20,4 @@ part 'reply_msg.dart';
 part 'classify_msg.dart';
 part 'select_bar.dart';
 part 'read.dart';
+part 'time_trans.dart';
