@@ -130,6 +130,8 @@ flutter:
     - assets/icons/cellphone_white.png
     - assets/icons/cellphone_pink.png
     - assets/icons/cellphone_light_pink.png
+    - assets/icons/File.png
+    - assets/icons/File_gray.png
 
     # Animations
     - assets/animations/loading.gif
