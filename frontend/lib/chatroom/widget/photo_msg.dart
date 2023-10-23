@@ -33,23 +33,25 @@ class _PhotoMsgState extends State<PhotoMsg> {
           MaterialPageRoute(
             builder: (context) {
               //要有下載按鈕
-              return Stack(children: [
-                PhotoView(
-                  imageProvider: NetworkImage(widget.content),
-                  minScale: PhotoViewComputedScale.contained * 1,
-                  maxScale: PhotoViewComputedScale.covered * 1.5,
-                ),
-                Positioned(
-                  top: 24,
-                  right: 24,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Image.asset("assets/icons/X_white.png"),
+              return Stack(
+                children: [
+                  PhotoView(
+                    imageProvider: NetworkImage(widget.content),
+                    minScale: PhotoViewComputedScale.contained * 1,
+                    maxScale: PhotoViewComputedScale.covered * 1.5,
                   ),
-                ),
-              ]);
+                  Positioned(
+                    top: 24,
+                    right: 24,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Image.asset("assets/icons/X_white.png"),
+                    ),
+                  ),
+                ],
+              );
             },
           ),
         );
@@ -91,9 +93,12 @@ class _PhotoMsgState extends State<PhotoMsg> {
                 const SizedBox(
                   height: 4,
                 ),
-                Image.network(
-                  widget.content,
-                  fit: BoxFit.contain,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    widget.content,
+                    fit: BoxFit.contain,
+                  ),
                 ),
                 const SizedBox(
                   height: 18,

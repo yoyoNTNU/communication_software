@@ -10,6 +10,7 @@ import 'package:proj/search/search_screen.dart';
 import 'package:proj/materials/animated_screen.dart';
 import 'package:proj/friend_invite/friend_invite_screen.dart';
 import 'package:proj/chatroom/chatroom_screen.dart';
+import 'package:media_kit/media_kit.dart';
 
 // Define http host name
 //backend develop server
@@ -23,6 +24,7 @@ const String imgPath =
 //const String imgPath ='https://storage.googleapis.com/express_message_production_uploader/uploads';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MediaKit.ensureInitialized();
 
   runApp(const ChatApp());
 }

@@ -245,7 +245,7 @@ class _ChatroomPageState extends State<ChatroomPage>
               },
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: 50,
+                itemCount: 5,
                 itemBuilder: (BuildContext context, int index) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (step == 0) {
@@ -261,11 +261,11 @@ class _ChatroomPageState extends State<ChatroomPage>
                     chatroomType: "group",
                     senderIsMe: index % 3 == 0,
                     senderID: 1,
-                    messageType: "photo",
+                    messageType: "video",
                     isReply: index % 2 == 0,
-                    content: index % 5 == 2 || index % 5 == 4
-                        ? "https://storage.googleapis.com/express_message_uploader/uploads/group/photo/29/IMG_2293.jpg"
-                        : "https://storage.googleapis.com/express_message_uploader/uploads/group/photo/30/IMG_0121.JPEG",
+                    content: index % 2 == 0
+                        ? "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.mp4"
+                        : "https://storage.googleapis.com/express_message_uploader/uploads/test/temp2.mp4",
                     msgTime: "10:23 AM",
                     setAllDisSelected: isOnTap,
                     tileIsSelectedIndex: tileIsSelectedIndex,
