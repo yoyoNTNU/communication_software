@@ -31,7 +31,7 @@ class _SelectBarState extends State<SelectBar> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Column(
                 children: [
-                  Image.asset("assets/icons/sound_teal.png"), //TODO:換圖
+                  Image.asset("assets/icons/sound_blue.png"),
                   const SizedBox(
                     height: 4,
                   ),

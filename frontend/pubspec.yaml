@@ -121,6 +121,7 @@ flutter:
     - assets/icons/Return.png
     - assets/icons/close_ring.png
     - assets/icons/X_white.png
+    - assets/icons/sound_blue.png 
 
     # Animations
     - assets/animations/loading.gif
