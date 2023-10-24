@@ -46,10 +46,9 @@ Widget classifyMsg({
         chatroomType: chatroomType,
         senderIsMe: senderIsMe,
         senderID: senderID,
-        isReply: isReply,
-        replyMsgID: replyMsgID,
         content: content,
         msgTime: msgTime,
+        onLongPressed: onLongPressed,
       );
     case "view":
       return ViewMsg(

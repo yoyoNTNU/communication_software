@@ -259,13 +259,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                   return MsgTile(
                     index: index,
                     chatroomType: "group",
-                    senderIsMe: index % 4 == 0 || index % 4 == 1,
+                    senderIsMe: index % 4 == 2 || index % 4 == 1,
                     senderID: 1,
-                    messageType: "file",
+                    messageType: "voice",
                     isReply: index % 2 == 0,
                     content: index % 2 == 0
-                        ? "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.xlsx"
-                        : "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.pdf",
+                        ? "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.mp3"
+                        : "https://storage.googleapis.com/express_message_uploader/uploads/test/temp2.mp3",
                     msgTime: "10:23 AM",
                     setAllDisSelected: isOnTap,
                     tileIsSelectedIndex: tileIsSelectedIndex,
