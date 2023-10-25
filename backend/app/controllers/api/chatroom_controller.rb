@@ -164,6 +164,15 @@ class Api::ChatroomController < ApplicationController
       }.to_json, status: 400
     end
   end
+
+  def get_all_chatroom_include_disabled
+    @chatrooms=ChatroomMember.where(member:current_member)
+    render json: {
+      error: false,
+      message: "succeed to get your all chatroom",
+      data: @chatrooms
+    }.to_json, status: 200
+  end
   
   private
 

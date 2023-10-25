@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     post 'member/feedback' =>'member#feedback'
     get 'search/phone' => 'search#by_phone'
     get 'search/user_id' => 'search#by_user_id'
+    get 'chatroom/all' => 'chatroom#get_all_chatroom_include_disabled'
     resources :friend_requests ,only:[:index,:create] do
       post 'accept' => 'friend_requests#accept'
       delete 'reject' =>'friend_requests#reject'
