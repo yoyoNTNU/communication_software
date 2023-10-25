@@ -12,11 +12,11 @@ class ContactNoise extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int noiseCount = (recordDuration / 2) > 5
+    int noiseCount = (recordDuration / 2) > 10
         ? (recordDuration / 2) >= 30
             ? 30
             : recordDuration ~/ 2
-        : 5;
+        : 10;
 
     return SizedBox(
       height: 30,
