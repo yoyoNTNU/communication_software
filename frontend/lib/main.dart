@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:proj/edit_page/edit_page_screen.dart';
 import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
@@ -26,14 +25,10 @@ const String imgPath =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MediaKit.ensureInitialized();
-  final channel = IOWebSocketChannel.connect("wss://$host/cable");
-  ChatApp.channel = channel;
   runApp(const ChatApp());
 }
 
 class ChatApp extends StatelessWidget {
-  static late final IOWebSocketChannel channel;
-
   const ChatApp({
     super.key,
   });

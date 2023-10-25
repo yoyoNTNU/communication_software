@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
+import 'package:proj/main.dart';
 import 'package:proj/chatroom/chatroom_api.dart';
 import 'package:proj/chatroom/widget/chatroom_widget.dart';
+import 'dart:convert';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
+import 'package:web_socket_channel/io.dart';
 
 class ChatroomPage extends StatefulWidget {
   const ChatroomPage({
@@ -21,6 +24,8 @@ class _ChatroomPageState extends State<ChatroomPage>
   late Animation<double> _animation;
   final _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+  List<dynamic> messageData = [];
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
@@ -45,6 +50,19 @@ class _ChatroomPageState extends State<ChatroomPage>
       duration: const Duration(milliseconds: 300),
     );
     super.initState();
+    channel.sink.add(jsonEncode({
+      'command': 'subscribe',
+      'identifier': jsonEncode({
+        'channel': 'ChatChannel',
+        'chatroom_id': 46, // 你想要订阅的聊天室ID
+      }),
+    }));
+    channel.stream.listen((message) {
+      var temp = jsonDecode(message);
+      if (!temp.containsKey('type')) {
+        print(temp["message"]["message"]["content"]);
+      }
+    });
   }
 
   @override
@@ -56,6 +74,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   @override
   void dispose() {
     _animationController.dispose();
+    channel.sink.close();
     super.dispose();
   }
 
@@ -323,7 +342,19 @@ class _ChatroomPageState extends State<ChatroomPage>
                 ),
                 GestureDetector(
                   onTap: () {
-                    print("Send");
+                    channel.sink.add(jsonEncode({
+                      'command': 'message',
+                      'identifier': jsonEncode({
+                        'channel': 'ChatChannel',
+                        'chatroom_id': 46, // 你想要发送消息的聊天室ID
+                      }),
+                      'data': jsonEncode({
+                        "chatroom_id": chatroomID,
+                        "member_id": 16,
+                        "type_": "string",
+                        "content": "這是第一則測試 拜託成功"
+                      }),
+                    }));
                   },
                   child: Image.asset("assets/icons/Send.png"),
                 ),
