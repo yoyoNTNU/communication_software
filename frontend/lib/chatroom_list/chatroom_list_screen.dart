@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proj/main.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:proj/chatroom_list/widget/chatroom_list_widget.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:proj/data.dart';
@@ -17,7 +15,6 @@ class ChatroomListPage extends StatefulWidget {
 
 class _ChatroomListPageState extends State<ChatroomListPage>
     with TickerProviderStateMixin {
-  final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //TODO:實時連接並更新列表
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];

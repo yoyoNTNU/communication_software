@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:proj/main.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom/chatroom_api.dart';
 import 'package:proj/chatroom/widget/chatroom_widget.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
 
@@ -18,7 +16,6 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends State<ChatroomPage>
     with TickerProviderStateMixin {
-  final channel = IOWebSocketChannel.connect("wss://$host/cable");
   late int? chatroomID;
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -86,7 +83,7 @@ class _ChatroomPageState extends State<ChatroomPage>
         backgroundColor: AppStyle.white,
         elevation: 0,
         title: TitleLine(
-          chatroomType: "group",
+          chatroomType: "friend",
           groupPeopleCount: 10,
           isMuted: true,
           isPinned: true,
