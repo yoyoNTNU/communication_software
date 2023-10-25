@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:proj/main.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:proj/chatroom_list/widget/chatroom_list_widget.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
+import 'package:proj/main.dart';
+import 'dart:convert';
 import 'package:proj/data.dart';
+import 'package:web_socket_channel/io.dart';
 
-class ChatroomPage extends StatefulWidget {
-  const ChatroomPage({super.key});
+class ChatroomListPage extends StatefulWidget {
+  const ChatroomListPage({super.key});
 
   @override
-  State<ChatroomPage> createState() => _ChatroomPageState();
+  State<ChatroomListPage> createState() => _ChatroomListPageState();
 }
 
-class _ChatroomPageState extends State<ChatroomPage>
+class _ChatroomListPageState extends State<ChatroomListPage>
     with TickerProviderStateMixin {
-  final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //TODO:實時連接並更新列表
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];
@@ -26,6 +26,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   late AnimationController _animationController;
   late Animation<double> _animation;
   late SwipeActionController _swipeActionController;
+  List<dynamic> channels = [];
   bool isEdit = false;
   bool isSort = false;
   bool isSearch = false;
@@ -244,6 +245,29 @@ class _ChatroomPageState extends State<ChatroomPage>
     });
     super.initState();
     _fetchChatRooms();
+
+    for (int i = 0; i < 2; i++) {
+      //var channel = IOWebSocketChannel.connect("wss://$host/cable");
+      var channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+      channel.sink.add(jsonEncode({
+        'command': 'subscribe',
+        'identifier': jsonEncode({
+          'channel': 'ChatChannel',
+          'chatroom_id': 46 + i, // 你想要订阅的聊天室ID
+        }),
+      }));
+      channels.add(channel);
+      channel.stream.listen((message) {
+        var temp = jsonDecode(message);
+        if (!temp.containsKey('type')) {
+          print("外面收到囉：${temp["message"]["message"]["content"]}");
+        }
+      });
+      print("訂閱");
+    }
+
+    print(channels[0]);
+    print(channels[1]);
   }
 
   @override
@@ -789,6 +813,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                           type: room["type"],
                           count: room["count"],
                           sender: room["sender"],
+                          enterRoom: () {},
                         ),
                         onChanged: ({
                           int? chatroomID,

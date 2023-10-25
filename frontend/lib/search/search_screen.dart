@@ -43,11 +43,14 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.popAndPushNamed(context, '/home');
-          },
-          child: Image.asset("assets/icons/left.png"),
+        leadingWidth: 48,
+        titleSpacing: 0,
+        leading: Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () => Navigator.popAndPushNamed(context, '/home'),
+            child: Image.asset("assets/icons/left.png"),
+          ),
         ),
         title: Text(
           '新增好友',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:proj/edit_page/edit_page_screen.dart';
 import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
@@ -9,6 +10,7 @@ import 'package:proj/group/group_screen.dart';
 import 'package:proj/search/search_screen.dart';
 import 'package:proj/materials/animated_screen.dart';
 import 'package:proj/friend_invite/friend_invite_screen.dart';
+import 'package:proj/chatroom/chatroom_screen.dart';
 
 // Define http host name
 //backend develop server
@@ -22,7 +24,7 @@ const String imgPath =
 //const String imgPath ='https://storage.googleapis.com/express_message_production_uploader/uploads';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MediaKit.ensureInitialized();
   runApp(const ChatApp());
 }
 
@@ -59,6 +61,7 @@ class ChatApp extends StatelessWidget {
         '/group': (context) => const GroupPage(),
         '/search': (context) => const SearchPage(),
         '/invite': (context) => const FriendInvite(),
+        '/chatroom': (context) => const ChatroomPage()
       },
     );
   }

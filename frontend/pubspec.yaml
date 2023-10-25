@@ -37,7 +37,12 @@ dependencies:
   animated_toggle_switch: ^0.8.0
   flutter_swipe_action_cell: ^3.1.2
   dropdown_button2: ^2.3.9
-
+  photo_view: ^0.14.0
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+  media_kit_libs_video: ^1.0.4
+  audioplayers: ^5.2.0
+  
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -86,7 +91,7 @@ flutter:
     - assets/icons/Edit_blue.png
     - assets/icons/User_add.png
     - assets/icons/Setting.png
-    - assets/icons/user_blue.png
+    - assets/icons/user_teal.png
     - assets/icons/User_add_white.png
     - assets/icons/Group_add.png
     - assets/icons/X.png
@@ -109,6 +114,25 @@ flutter:
     - assets/icons/pin_dark_yellow.png
     - assets/icons/sound_teal.png 
     - assets/icons/cancel_pin_gray.png
+    - assets/icons/Menu.png
+    - assets/icons/dashboard.png
+    - assets/icons/Send.png
+    - assets/icons/user_blue.png
+    - assets/icons/Copy_blue.png
+    - assets/icons/Return.png
+    - assets/icons/close_ring.png
+    - assets/icons/X_white.png
+    - assets/icons/sound_blue.png 
+    - assets/icons/call.png
+    - assets/icons/call_white.png
+    - assets/icons/call_fail_pink.png
+    - assets/icons/call_fail_light_pink.png
+    - assets/icons/cellphone.png
+    - assets/icons/cellphone_white.png
+    - assets/icons/cellphone_pink.png
+    - assets/icons/cellphone_light_pink.png
+    - assets/icons/File.png
+    - assets/icons/File_gray.png
 
     # Animations
     - assets/animations/loading.gif

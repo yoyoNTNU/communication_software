@@ -48,7 +48,7 @@ class _MainLineState extends State<MainLine> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
-                  "assets/icons/user_blue.png",
+                  "assets/icons/user_teal.png",
                   width: 12,
                   height: 18,
                 ),

@@ -12,14 +12,15 @@ String msgTrans(String messageType) {
     case "file":
       content = "傳送了一個檔案";
       break;
-    //TODO: 電話跟視訊跟音訊類別
-
-    // case "call":
-    //   content = "";
-    //   break;
-    // case "view":
-    //   content = "";
-    //   break;
+    case "voice":
+      content = "傳送了一個語音訊息";
+      break;
+    case "call":
+      content = "撥打了一通語音通話";
+      break;
+    case "view":
+      content = "撥打了一通視訊通話";
+      break;
     case "info":
       content = "傳送了一個聯絡資訊";
       break;

@@ -110,17 +110,22 @@ class _GroupPageState extends State<GroupPage> {
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            if (step == 0) {
-              Navigator.popAndPushNamed(context, '/home');
-            } else {
-              setState(() {
-                --step;
-              });
-            }
-          },
-          child: Image.asset("assets/icons/left.png"),
+        leadingWidth: 48,
+        titleSpacing: 0,
+        leading: Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () {
+              if (step == 0) {
+                Navigator.popAndPushNamed(context, '/home');
+              } else {
+                setState(() {
+                  --step;
+                });
+              }
+            },
+            child: Image.asset("assets/icons/left.png"),
+          ),
         ),
         title: Text(
           '創建群組',

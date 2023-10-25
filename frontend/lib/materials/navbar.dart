@@ -130,7 +130,7 @@ class _NavBarState extends State<NavBar> {
       ),
       body: <Widget>[
         const HomePage(),
-        const ChatroomPage(),
+        const ChatroomListPage(),
       ][currentPageIndex],
     );
   }
