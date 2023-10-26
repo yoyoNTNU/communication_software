@@ -55,6 +55,7 @@ flutter:
     # Images
     - assets/images/Background.png
     - assets/images/Avatar.png
+    - assets/images/Avatar_circle.png
     - assets/images/Logo.png
     - assets/images/success_logo.png
     - assets/images/fail_logo.png
