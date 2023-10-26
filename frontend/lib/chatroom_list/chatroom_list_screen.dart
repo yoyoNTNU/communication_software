@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:proj/chatroom_list/widget/chatroom_list_widget.dart';
+import 'package:proj/chatroom_list/chatroom_list_listener.dart';
 import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:proj/main.dart';
@@ -26,7 +27,6 @@ class _ChatroomListPageState extends State<ChatroomListPage>
   late AnimationController _animationController;
   late Animation<double> _animation;
   late SwipeActionController _swipeActionController;
-  List<dynamic> channels = [];
   bool isEdit = false;
   bool isSort = false;
   bool isSearch = false;
@@ -247,27 +247,64 @@ class _ChatroomListPageState extends State<ChatroomListPage>
     _fetchChatRooms();
 
     for (int i = 0; i < 2; i++) {
-      //var channel = IOWebSocketChannel.connect("wss://$host/cable");
-      var channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
-      channel.sink.add(jsonEncode({
-        'command': 'subscribe',
-        'identifier': jsonEncode({
-          'channel': 'ChatChannel',
-          'chatroom_id': 46 + i, // 你想要订阅的聊天室ID
-        }),
-      }));
-      channels.add(channel);
-      channel.stream.listen((message) {
-        var temp = jsonDecode(message);
-        if (!temp.containsKey('type')) {
-          print("外面收到囉：${temp["message"]["message"]["content"]}");
-        }
-      });
-      print("訂閱");
+      if (!WebSocketChannel.checkIsSubscribe(46 + i)) {
+        //var channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+        var channel = IOWebSocketChannel.connect("wss://$host/cable");
+        channel.sink.add(jsonEncode({
+          'command': 'subscribe',
+          'identifier': jsonEncode({
+            'channel': 'ChatChannel',
+            'chatroom_id': 46 + i, // 你想要订阅的聊天室ID
+          }),
+        }));
+        channel.stream.listen((message) {
+          var temp = jsonDecode(message);
+          if (!temp.containsKey('type')) {
+            print("外面收到囉：${temp["message"]["message"]["content"]}");
+            if (mounted) {
+              setState(() {
+                print("我還活著");
+                //更新UI 及 資料庫
+              });
+            } else {
+              print("我掛掉了");
+              //單純更新資料庫
+            }
+          }
+        });
+        print("訂閱");
+        WebSocketChannel.addListen(46 + i, channel);
+      } else {
+        print("已訂閱過");
+        var tempChannel = WebSocketChannel.getChannel(46 + i);
+        tempChannel!.sink.close();
+        var channel = IOWebSocketChannel.connect("wss://$host/cable");
+        channel.sink.add(jsonEncode({
+          'command': 'subscribe',
+          'identifier': jsonEncode({
+            'channel': 'ChatChannel',
+            'chatroom_id': 46 + i, // 你想要订阅的聊天室ID
+          }),
+        }));
+        channel.stream.listen((message) {
+          var temp = jsonDecode(message);
+          if (!temp.containsKey('type')) {
+            print("外面收到囉：${temp["message"]["message"]["content"]}");
+            if (mounted) {
+              setState(() {
+                print("我還活著");
+                //更新UI 及 資料庫
+              });
+            } else {
+              print("我掛掉了");
+              //單純更新資料庫
+            }
+          }
+        });
+        print("訂閱");
+        WebSocketChannel.addListen(46 + i, channel);
+      }
     }
-
-    print(channels[0]);
-    print(channels[1]);
   }
 
   @override

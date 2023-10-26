@@ -24,7 +24,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   late Animation<double> _animation;
   final _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+  final channel = IOWebSocketChannel.connect("wss://$host/cable");
   List<dynamic> messageData = [];
   bool isExpanded = false;
   double _height = 1.0;
@@ -50,24 +50,25 @@ class _ChatroomPageState extends State<ChatroomPage>
       duration: const Duration(milliseconds: 300),
     );
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
     channel.sink.add(jsonEncode({
       'command': 'subscribe',
       'identifier': jsonEncode({
         'channel': 'ChatChannel',
-        'chatroom_id': 46, // 你想要订阅的聊天室ID
+        'chatroom_id': chatroomID,
       }),
     }));
     channel.stream.listen((message) {
       var temp = jsonDecode(message);
       if (!temp.containsKey('type')) {
         print(temp["message"]["message"]["content"]);
+        setState(() {});
       }
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
     super.didChangeDependencies();
   }
 
@@ -273,7 +274,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     }
                   });
                   return MsgTile(
-                    index: index,
+                    index: index, //msgID
                     chatroomType: "group",
                     senderIsMe: index % 4 == 2 || index % 4 == 1,
                     senderID: 1,
