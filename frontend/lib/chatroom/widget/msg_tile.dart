@@ -69,7 +69,10 @@ class _MsgTileState extends State<MsgTile> {
             Container(
               alignment: Alignment.topCenter,
               width: 36,
-              child: Image.asset("assets/images/Avatar.png"),
+              child: ClipOval(
+                clipBehavior: Clip.hardEdge,
+                child: Image.asset("assets/images/Avatar.png"),
+              ),
             ),
           if (!widget.senderIsMe)
             const SizedBox(
