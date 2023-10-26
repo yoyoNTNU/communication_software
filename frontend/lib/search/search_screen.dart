@@ -19,6 +19,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> _searchByPhone(String phone) async {
     try {
       final Map<String, dynamic> searcher = await SearchAPI.byPhone(phone);
+      if (!mounted) return;
       setState(() {
         friendID = searcher['id'];
       });
@@ -30,6 +31,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> _searchByUserID(String userID) async {
     try {
       final Map<String, dynamic> searcher = await SearchAPI.byUserID(userID);
+      if (!mounted) return;
       setState(() {
         friendID = searcher['id'];
       });

@@ -75,10 +75,12 @@ class _PopEditNameState extends State<PopEditName> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                        },
+                        onTap: _isLoading
+                            ? null
+                            : () {
+                                if (!context.mounted) return;
+                                Navigator.of(context).pop();
+                              },
                         child: SizedBox(
                           width: 24,
                           height: 24,

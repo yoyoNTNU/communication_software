@@ -18,35 +18,41 @@ class _BackgroundBoxState extends State<BackgroundBox> {
   String? copyBackground;
 
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
     });
     try {
       final int responseCode = await SetDetailAPI.modifyPhoto(
           avatar: avatar, background: background);
+      if (!mounted) return;
       setState(() {
         _responseCode = responseCode;
       });
     } catch (e) {
       print('API request error: $e');
     }
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
   }
 
   Future<void> _deletePhoto() async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
     });
     try {
       final int responseCode = await SetDetailAPI.removeBackground();
+      if (!mounted) return;
       setState(() {
         _responseCode = responseCode;
       });
     } catch (e) {
       print('API request error: $e');
     }
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
@@ -118,6 +124,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                                       path.normalize(background.path);
                                   List<String> parts =
                                       path.split(normalizedPath);
+                                  if (!mounted) return;
                                   setState(() {
                                     copyBackground =
                                         "$imgPath/member/background/${widget.id}/${parts.last}";
@@ -171,6 +178,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             ? null
                             : () async {
                                 await _deletePhoto();
+                                if (!mounted) return;
                                 setState(() {
                                   copyBackground = null;
                                 });
@@ -222,6 +230,7 @@ class _BackgroundBoxState extends State<BackgroundBox> {
                             String normalizedPath =
                                 path.normalize(background.path);
                             List<String> parts = path.split(normalizedPath);
+                            if (!mounted) return;
                             setState(() {
                               copyBackground =
                                   "$imgPath/member/background/${widget.id}/${parts.last}";

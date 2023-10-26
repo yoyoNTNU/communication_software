@@ -18,35 +18,41 @@ class _AvatarBoxState extends State<AvatarBox> {
   String? copyAvatar;
 
   Future<void> _setPhoto({XFile? avatar, XFile? background}) async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
     });
     try {
       final int responseCode = await SetDetailAPI.modifyPhoto(
           avatar: avatar, background: background);
+      if (!mounted) return;
       setState(() {
         _responseCode = responseCode;
       });
     } catch (e) {
       print('API request error: $e');
     }
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
   }
 
   Future<void> _deletePhoto() async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
     });
     try {
       final int responseCode = await SetDetailAPI.removeAvatar();
+      if (!mounted) return;
       setState(() {
         _responseCode = responseCode;
       });
     } catch (e) {
       print('API request error: $e');
     }
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
@@ -117,6 +123,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                                       path.normalize(avatar.path);
                                   List<String> parts =
                                       path.split(normalizedPath);
+                                  if (!mounted) return;
                                   setState(() {
                                     copyAvatar =
                                         "$imgPath/member/photo/${widget.id}/${parts.last}";
@@ -170,6 +177,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                             ? null
                             : () async {
                                 await _deletePhoto();
+                                if (!mounted) return;
                                 setState(() {
                                   copyAvatar = null;
                                 });
@@ -220,6 +228,7 @@ class _AvatarBoxState extends State<AvatarBox> {
                           if (_responseCode == 200 && avatar != null) {
                             String normalizedPath = path.normalize(avatar.path);
                             List<String> parts = path.split(normalizedPath);
+                            if (!mounted) return;
                             setState(() {
                               copyAvatar =
                                   "$imgPath/member/photo/${widget.id}/${parts.last}";
