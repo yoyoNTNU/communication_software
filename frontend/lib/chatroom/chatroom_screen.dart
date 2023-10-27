@@ -25,8 +25,8 @@ class _ChatroomPageState extends State<ChatroomPage>
   late Animation<double> _animation;
   final _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  //final channel = IOWebSocketChannel.connect("wss://$host/cable");
-  final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+  final channel = IOWebSocketChannel.connect("wss://$host/cable");
+  //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   List<Map<String, dynamic>> messageData = [
     {
       "messageID": 1,
