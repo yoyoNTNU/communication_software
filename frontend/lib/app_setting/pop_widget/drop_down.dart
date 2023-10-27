@@ -91,10 +91,12 @@ class _DropdownState extends State<Dropdown> {
       ),
     ];
     return Container(
-      height: 40,
-      width: 370,
+      height: 50,
+      width: 375,
       decoration: BoxDecoration(
-        border: Border.all(color: AppStyle.blue[500]!),
+        border: Border.all(
+          color: AppStyle.gray,
+        ),
         borderRadius: BorderRadius.circular(5),
       ),
       child: DropdownButton2<String>(
@@ -103,7 +105,7 @@ class _DropdownState extends State<Dropdown> {
           onChanged: widget.onChanged,
           dropdownStyleData: const DropdownStyleData(
             padding: EdgeInsets.all(0),
-            width: 360,
+            width: 365,
             elevation: 0,
             isOverButton: false,
           ),
@@ -116,13 +118,13 @@ class _DropdownState extends State<Dropdown> {
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
               child: Icon(
                 Icons.keyboard_arrow_down_rounded,
-                size: 30,
+                size: 35,
                 color: AppStyle.blue[500]!,
               ),
             ),
             openMenuIcon: Icon(
               Icons.keyboard_arrow_up_rounded,
-              size: 30,
+              size: 35,
               color: AppStyle.blue[500]!,
             ),
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:proj/app_setting/app_setting_api.dart';
 import 'package:proj/style.dart';
-import 'package:proj/login/widget/login_widget.dart';
 import 'package:proj/app_setting/pop_widget/drop_down.dart';
+import 'package:proj/app_setting/success_screen.dart';
 
 class PopProbFB extends StatefulWidget {
   const PopProbFB({super.key});
@@ -31,8 +31,8 @@ class _PopProbFBState extends State<PopProbFB> {
         content: SingleChildScrollView(
           controller: _scrollController,
           child: Container(
-            width: 410,
-            height: 550,
+            width: 420,
+            height: 545,
             decoration: BoxDecoration(
               color: AppStyle.white,
               borderRadius: BorderRadius.circular(8),
@@ -91,13 +91,17 @@ class _PopProbFBState extends State<PopProbFB> {
                             '問題描述',
                             style: AppStyle.body(color: AppStyle.blue[500]!),
                           ),
-                          const Expanded(
+                          Expanded(
                             child: TextField(
                               textAlign: TextAlign.start,
                               expands: false,
                               maxLines: 10, // This makes it expandable
                               decoration: InputDecoration(
-                                border: OutlineInputBorder(),
+                                border: const OutlineInputBorder(),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: AppStyle.blue[500]!),
+                                  borderRadius: BorderRadius.circular(5),
+                              ),
                               ),
                             ),
                           ),
@@ -113,33 +117,41 @@ class _PopProbFBState extends State<PopProbFB> {
                               setState(() {
                                 fixType = value;
                               });
-                              // setState(() {
-                              //   if (value == "all") {
-                              //     copyChatRooms = chatRooms;
-                              //   } else {
-                              //     copyChatRooms = chatRooms
-                              //         .where((element) => element["type"] == value)
-                              //         .toList();
-                              //   }
-                              // });
                             }
                           },
                           type: fixType
                         ),
                         const SizedBox(height: 12.0),
-                        AppTextField(
-                          key: UniqueKey(),
-                          controller: _fixController,
-                          isPassword: false,
-                          labelText: '修改內容',
-                          hintText: '請輸入新的修改資料',
-                          onTap: () {
-                            _scrollController.animateTo(
-                                _scrollController.position.maxScrollExtent,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut);
-                          },
+                        Text(
+                          '修改內容',
+                          style: AppStyle.body(color: AppStyle.blue[500]!),
                         ),
+                        SizedBox(
+                          height: 50,
+                          child: TextField(
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: AppStyle.blue[500]!),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // AppTextField(
+                        //   key: UniqueKey(),
+                        //   controller: _fixController,
+                        //   isPassword: false,
+                        //   labelText: '修改內容',
+                        //   hintText: '請輸入新的修改資料',
+                        //   onTap: () {
+                        //     _scrollController.animateTo(
+                        //         _scrollController.position.maxScrollExtent,
+                        //         duration: const Duration(milliseconds: 300),
+                        //         curve: Curves.easeInOut);
+                        //   },
+                        // ),
                       ],
                       const SizedBox(height: 24.0),
                       Row(
@@ -147,7 +159,11 @@ class _PopProbFBState extends State<PopProbFB> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              // Handle submit action here
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) => SentSuccess(type: _selectedOption),
+                              );
                             },
                             style: AppStyle.primaryBtn(),
                             child: Row(

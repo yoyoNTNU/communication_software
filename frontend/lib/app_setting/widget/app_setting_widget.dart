@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/app_setting/pop_widget/pop_prob_fb.dart';
 
+part 'app_box.dart';
+part 'app_logo.dart';
+
 Widget title(String text) {
   return SizedBox(
     width: double.infinity,
