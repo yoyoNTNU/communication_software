@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
         builder: (context, state) {
           if (state is LoginSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.popAndPushNamed(context, '/home');
             });
           } else if (state is LoginConfirmFail) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
