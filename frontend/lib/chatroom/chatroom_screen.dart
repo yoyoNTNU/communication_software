@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:intl/intl.dart';
 
 class ChatroomPage extends StatefulWidget {
   const ChatroomPage({
@@ -24,13 +25,25 @@ class _ChatroomPageState extends State<ChatroomPage>
   late Animation<double> _animation;
   final _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
-  List<dynamic> messageData = [];
+  final channel = IOWebSocketChannel.connect("wss://$host/cable");
+  //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+  List<Map<String, dynamic>> messageData = [
+    {
+      "messageID": 1,
+      "senderID": 16,
+      "type": "string",
+      "content": "123",
+      "msgTime": "03:27 PM", //撈資料的時候先轉換好
+      "replyToID": null,
+      "isPinned": false,
+    }
+  ];
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
   bool isOnTap = false;
   int? tileIsSelectedIndex;
+  int currentMemberID = 0;
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -50,24 +63,36 @@ class _ChatroomPageState extends State<ChatroomPage>
       duration: const Duration(milliseconds: 300),
     );
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final id = dbToken?.userID;
+    if (!mounted) return;
+    setState(() {
+      currentMemberID = id!;
+    });
     channel.sink.add(jsonEncode({
       'command': 'subscribe',
       'identifier': jsonEncode({
         'channel': 'ChatChannel',
-        'chatroom_id': 46, // 你想要订阅的聊天室ID
+        'chatroom_id': chatroomID,
       }),
     }));
     channel.stream.listen((message) {
+      //收到訊息的話就建立MR
       var temp = jsonDecode(message);
       if (!temp.containsKey('type')) {
-        print(temp["message"]["message"]["content"]);
+        temp["message"]["message"]["msgTime"] = DateFormat('h:mm a')
+            .format(DateTime.parse(temp["message"]["message"]["msgTime"]))
+            .toString();
+        setState(() {
+          messageData.add(temp["message"]["message"]);
+        });
       }
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
     super.didChangeDependencies();
   }
 
@@ -102,7 +127,7 @@ class _ChatroomPageState extends State<ChatroomPage>
         backgroundColor: AppStyle.white,
         elevation: 0,
         title: TitleLine(
-          chatroomType: "friend",
+          chatroomType: "group",
           groupPeopleCount: 10,
           isMuted: true,
           isPinned: true,
@@ -142,74 +167,101 @@ class _ChatroomPageState extends State<ChatroomPage>
                               scrollDirection: Axis.horizontal,
                               //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
                               children: [
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                                 const SizedBox(
                                   width: 4,
                                 ),
-                                Image.asset(
-                                  "assets/images/Avatar.png",
-                                  width: 32,
-                                  height: 32,
+                                ClipOval(
+                                  clipBehavior: Clip.hardEdge,
+                                  child: Image.asset(
+                                    "assets/images/Avatar.png",
+                                    width: 32,
+                                    height: 32,
+                                  ),
                                 ),
                               ]),
                         ),
@@ -261,7 +313,7 @@ class _ChatroomPageState extends State<ChatroomPage>
               },
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: 10,
+                itemCount: messageData.length,
                 itemBuilder: (BuildContext context, int index) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (step == 0) {
@@ -273,16 +325,16 @@ class _ChatroomPageState extends State<ChatroomPage>
                     }
                   });
                   return MsgTile(
-                    index: index,
+                    index: messageData[index]["messageID"],
                     chatroomType: "group",
-                    senderIsMe: index % 4 == 2 || index % 4 == 1,
-                    senderID: 1,
-                    messageType: "voice",
-                    isReply: index % 2 == 0,
-                    content: index % 2 == 0
-                        ? "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.mp3"
-                        : "https://storage.googleapis.com/express_message_uploader/uploads/test/temp2.mp3",
-                    msgTime: "10:23 AM",
+                    senderIsMe:
+                        messageData[index]["senderID"] == currentMemberID,
+                    senderID: messageData[index]["senderID"],
+                    messageType: messageData[index]["type"],
+                    isReply: messageData[index]["replyToID"] != null,
+                    replyMsgID: messageData[index]["replyToID"],
+                    content: messageData[index]["content"],
+                    msgTime: messageData[index]["msgTime"],
                     setAllDisSelected: isOnTap,
                     tileIsSelectedIndex: tileIsSelectedIndex,
                     setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
@@ -324,7 +376,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                 Expanded(
                   child: InputTextField(
                     controller: _messageController,
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     onTap: () async {
                       await Future.delayed(
                         const Duration(milliseconds: 500),
@@ -341,21 +395,27 @@ class _ChatroomPageState extends State<ChatroomPage>
                   width: 8,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    channel.sink.add(jsonEncode({
-                      'command': 'message',
-                      'identifier': jsonEncode({
-                        'channel': 'ChatChannel',
-                        'chatroom_id': 46, // 你想要发送消息的聊天室ID
-                      }),
-                      'data': jsonEncode({
-                        "chatroom_id": chatroomID,
-                        "member_id": 16,
-                        "type_": "string",
-                        "content": "這是第一則測試 拜託成功"
-                      }),
-                    }));
-                  },
+                  onTap: _messageController.text == ""
+                      ? null
+                      : () {
+                          channel.sink.add(jsonEncode({
+                            'command': 'message',
+                            'identifier': jsonEncode({
+                              'channel': 'ChatChannel',
+                              'chatroom_id': chatroomID,
+                            }),
+                            'data': jsonEncode({
+                              "chatroom_id": chatroomID,
+                              "member_id": currentMemberID,
+                              "type_": "string",
+                              "content": _messageController.text,
+                              "reply_to_id": null, //要記得放回覆的msgID
+                            }),
+                          }));
+                          setState(() {
+                            _messageController.text = "";
+                          });
+                        },
                   child: Image.asset("assets/icons/Send.png"),
                 ),
               ],

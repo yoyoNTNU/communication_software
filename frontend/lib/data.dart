@@ -4,10 +4,15 @@ import 'package:path_provider/path_provider.dart';
 
 class Token {
   final String authorization;
-  Token({required this.authorization});
+  final int userID;
+  Token({
+    required this.authorization,
+    required this.userID,
+  });
   Map<String, dynamic> toMap() {
     return {
       'authorization': authorization,
+      'userID': userID,
     };
   }
 }
@@ -34,7 +39,8 @@ class DatabaseHelper {
   void _createDatabase(Database db, int version) async {
     await db.execute('''
       CREATE TABLE sign_in_token(
-        authorization TEXT PRIMARY KEY
+        authorization TEXT PRIMARY KEY,
+        userID INT
       )
     ''');
     await db.execute('''
@@ -79,7 +85,10 @@ class DatabaseHelper {
     final db = await initDatabase();
     final List<Map<String, dynamic>> results = await db.query('sign_in_token');
     if (results.isNotEmpty) {
-      return Token(authorization: results[0]['authorization']);
+      return Token(
+        authorization: results[0]['authorization'],
+        userID: results[0]['userID'],
+      );
     } else {
       return null;
     }

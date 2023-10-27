@@ -22,6 +22,7 @@ class _LoginNotConfirmState extends State<LoginNotConfirm> {
   Future<void> _sentConfirmLetter(String email) async {
     try {
       final int sentState = await ConfirmLetterAPI.sentConfirmLetter(email);
+      if (!mounted) return;
       setState(() {
         confirmLetterState = sentState;
       });
@@ -35,6 +36,7 @@ class _LoginNotConfirmState extends State<LoginNotConfirm> {
     final CountdownTimerController controller = CountdownTimerController(
       endTime: DateTime.now().millisecondsSinceEpoch + 60000,
       onEnd: () {
+        if (!mounted) return;
         setState(() {
           isResentButtonEnable = true;
         });
@@ -112,9 +114,11 @@ class _LoginNotConfirmState extends State<LoginNotConfirm> {
                                           controller: controller,
                                           widgetBuilder: (_, time) {
                                             if (time == null) {
-                                              setState(() {
-                                                isResentButtonEnable = true;
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  isResentButtonEnable = true;
+                                                });
+                                              }
                                               return Text(
                                                 '0S',
                                                 style: AppStyle.caption(

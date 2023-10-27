@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:proj/chatroom_list/widget/chatroom_list_widget.dart';
+import 'package:proj/chatroom_list/chatroom_list_listener.dart';
 import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:proj/main.dart';
@@ -22,11 +23,11 @@ class _ChatroomListPageState extends State<ChatroomListPage>
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];
   List<int> selectedIndexList = [];
+  List<int> allChatroomIndex = [];
   final ScrollController _scrollController = ScrollController();
   late AnimationController _animationController;
   late Animation<double> _animation;
   late SwipeActionController _swipeActionController;
-  List<dynamic> channels = [];
   bool isEdit = false;
   bool isSort = false;
   bool isSearch = false;
@@ -245,29 +246,51 @@ class _ChatroomListPageState extends State<ChatroomListPage>
     });
     super.initState();
     _fetchChatRooms();
+  }
 
-    for (int i = 0; i < 2; i++) {
-      //var channel = IOWebSocketChannel.connect("wss://$host/cable");
-      var channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
-      channel.sink.add(jsonEncode({
-        'command': 'subscribe',
-        'identifier': jsonEncode({
-          'channel': 'ChatChannel',
-          'chatroom_id': 46 + i, // 你想要订阅的聊天室ID
-        }),
-      }));
-      channels.add(channel);
-      channel.stream.listen((message) {
-        var temp = jsonDecode(message);
-        if (!temp.containsKey('type')) {
-          print("外面收到囉：${temp["message"]["message"]["content"]}");
-        }
-      });
-      print("訂閱");
+  @override
+  void didChangeDependencies() async {
+    await _getAllChatroomIncludeDisabled();
+    for (int id in allChatroomIndex) {
+      if (!WebSocketChannel.checkIsSubscribe(id)) {
+        createWebSocketConnect(id);
+      } else {
+        print("已訂閱過");
+        var tempChannel = WebSocketChannel.getChannel(id);
+        tempChannel!.sink.close();
+        createWebSocketConnect(id);
+      }
     }
+    super.didChangeDependencies();
+  }
 
-    print(channels[0]);
-    print(channels[1]);
+  void createWebSocketConnect(int chatroomID) {
+    //var channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+    var channel = IOWebSocketChannel.connect("wss://$host/cable");
+    channel.sink.add(jsonEncode({
+      'command': 'subscribe',
+      'identifier': jsonEncode({
+        'channel': 'ChatChannel',
+        'chatroom_id': chatroomID,
+      }),
+    }));
+    channel.stream.listen((message) {
+      var temp = jsonDecode(message);
+      if (!temp.containsKey('type')) {
+        print("外面收到囉：${temp["message"]["message"]["content"]}");
+        if (mounted) {
+          setState(() {
+            print("我還活著");
+            //更新UI 及 資料庫
+          });
+        } else {
+          print("我掛掉了");
+          //單純更新資料庫
+        }
+      }
+    });
+    print("訂閱");
+    WebSocketChannel.addListen(chatroomID, channel);
   }
 
   @override
@@ -292,6 +315,16 @@ class _ChatroomListPageState extends State<ChatroomListPage>
     }
     if (!context.mounted) return;
     Navigator.of(context).pop();
+  }
+
+  Future<void> _getAllChatroomIncludeDisabled() async {
+    try {
+      final List<int> allChatroom =
+          await ChatRoomListAPI.getAllChatroomIncludeDisabled();
+      allChatroomIndex = allChatroom;
+    } catch (e) {
+      print("API request error: $e");
+    }
   }
 
   @override

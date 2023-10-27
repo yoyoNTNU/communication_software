@@ -43,6 +43,27 @@ class ChatRoomListAPI {
       throw Exception('API request failed with status ${response.statusCode}');
     }
   }
+
+  static Future<List<int>> getAllChatroomIncludeDisabled() async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.get(
+      Uri(scheme: 'https', host: host, path: '/api/chatroom/all'),
+      headers: {'Authorization': token ?? ""},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final List<dynamic> chatroomData = responseData['data'];
+      final List<int> fetchedChatRooms = [];
+      for (Map<String, dynamic> data in chatroomData) {
+        fetchedChatRooms.add(data['chatroom_id']);
+      }
+      return fetchedChatRooms;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
 }
 
 class ChatRoomRowAPI {
