@@ -31,6 +31,7 @@ class ChatChannel < ApplicationCable::Channel
     chatroom_members=ChatroomMember.where(chatroom_id:m.chatroom_id)
     chatroom_members.each do |c|
       c.isDisabled=false
+      c.save
     end
   end
 
