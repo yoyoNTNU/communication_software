@@ -39,7 +39,7 @@ class _AppSettingState extends State<AppSetting> {
                     const SizedBox(height: 24.0),
                     versionInfo(),
                     const SizedBox(height: 24.0),
-                    loginNotification(),
+                    const loginNotification(),
                     const SizedBox(height: 24.0),
                     reportProblem(context),
                     const SizedBox(height: 24.0),

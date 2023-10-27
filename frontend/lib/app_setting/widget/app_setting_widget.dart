@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/app_setting/pop_widget/pop_prob_fb.dart';
+import 'package:animated_toggle_switch/animated_toggle_switch.dart';
 
 part 'app_box.dart';
 part 'app_logo.dart';
+part 'switcher.dart';
 
 Widget title(String text) {
   return SizedBox(
@@ -114,8 +116,18 @@ Widget versionInfo() {
       )
   );
 }
-Widget loginNotification() {
-  return Container(
+class loginNotification extends StatefulWidget {
+  const loginNotification({super.key});
+
+  @override
+  State<loginNotification> createState() => _loginNotificationState();
+}
+class _loginNotificationState extends State<loginNotification> {
+  bool _isChecked = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       decoration: BoxDecoration(
         color: AppStyle.white,
@@ -136,11 +148,23 @@ Widget loginNotification() {
             padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
             height: 44,
             child: Row(children: [
-              SizedBox(
+              Container(
                 width: 96,
-                child: Text(
-                  "開啟/關閉",
-                  style: AppStyle.header(level: 3, color: AppStyle.gray[700]!),
+                child: Row(
+                  children: [
+                    Text(
+                      "開啟/關閉",
+                      style: AppStyle.header(level: 3, color: AppStyle.gray[700]!),
+                    ),
+                    const SizedBox(width: 16),
+                    Switcher(
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ),
             ])
@@ -148,7 +172,9 @@ Widget loginNotification() {
         ]
       )
   );
+  }
 }
+
 Widget reportProblem(BuildContext context) {
   return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
