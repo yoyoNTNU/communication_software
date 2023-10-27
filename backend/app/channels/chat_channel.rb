@@ -28,6 +28,10 @@ class ChatChannel < ApplicationCable::Channel
       "replyToID": m.reply_to_id,
       "isPinned": m.isPinned,
     } })
+    chatroom_members=ChatroomMember.where(chatroom_id:m.chatroom_id)
+    chatroom_members.each do |c|
+      c.isDisabled=false
+    end
   end
 
   
