@@ -61,7 +61,7 @@ class _EditPageState extends State<EditPage> {
           actions: [
             GestureDetector(
                 onTap: () => Navigator.popAndPushNamed(context, '/edit'),
-                child: Image.asset("assets/icons/Refresh.png")),
+                child: Image.asset("assets/icons/refresh.png")),
           ],
           centerTitle: true,
           backgroundColor: Colors.white,

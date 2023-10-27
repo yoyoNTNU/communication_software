@@ -71,7 +71,7 @@ class _MsgTileState extends State<MsgTile> {
               width: 36,
               child: ClipOval(
                 clipBehavior: Clip.hardEdge,
-                child: Image.asset("assets/images/Avatar.png"),
+                child: Image.asset("assets/images/avatar.png"),
               ),
             ),
           if (!widget.senderIsMe)

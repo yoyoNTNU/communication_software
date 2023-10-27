@@ -79,7 +79,7 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
               backgroundColor: Colors.transparent,
               backgroundImage: widget.photo != null
                   ? NetworkImage(widget.photo!) as ImageProvider
-                  : const AssetImage("assets/images/Avatar.png"),
+                  : const AssetImage("assets/images/avatar.png"),
             ),
             const SizedBox(
               width: 16,

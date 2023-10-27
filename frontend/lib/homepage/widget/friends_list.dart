@@ -107,7 +107,7 @@ class _FriendsListState extends State<FriendsList> {
                                   ? NetworkImage(friend['photo'])
                                       as ImageProvider
                                   : const AssetImage(
-                                      'assets/images/Avatar.png'),
+                                      'assets/images/avatar.png'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),

@@ -104,8 +104,8 @@ class _FileMsgState extends State<FileMsg> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       widget.senderIsMe
-                          ? Image.asset("assets/icons/File.png")
-                          : Image.asset("assets/icons/File_gray.png"),
+                          ? Image.asset("assets/icons/file.png")
+                          : Image.asset("assets/icons/file_gray.png"),
                       const SizedBox(
                         width: 4,
                       ),

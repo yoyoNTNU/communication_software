@@ -623,7 +623,7 @@ class _ChatroomListPageState extends State<ChatroomListPage>
                             hintText: "請輸入關鍵字",
                             hintStyle:
                                 AppStyle.body(color: AppStyle.gray[500]!),
-                            prefixIcon: Image.asset("assets/icons/Search.png"),
+                            prefixIcon: Image.asset("assets/icons/search.png"),
                             filled: true,
                             fillColor: AppStyle.white,
                             contentPadding: const EdgeInsets.symmetric(

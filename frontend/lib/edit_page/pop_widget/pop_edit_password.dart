@@ -79,7 +79,7 @@ class _PopEditPasswordState extends State<PopEditPassword> {
                         child: SizedBox(
                           width: 24,
                           height: 24,
-                          child: Image.asset("assets/icons/X_blue.png"),
+                          child: Image.asset("assets/icons/x_blue.png"),
                         ),
                       ),
                     ],
@@ -163,7 +163,7 @@ class _PopEditPasswordState extends State<PopEditPassword> {
                           : SizedBox(
                               width: 24,
                               height: 24,
-                              child: Image.asset("assets/icons/Save.png"),
+                              child: Image.asset("assets/icons/save.png"),
                             ),
                       const SizedBox(width: 8),
                       const Text("儲存修改"),

@@ -57,7 +57,7 @@ class _SelectBarState extends State<SelectBar> {
               ),
               child: Column(
                 children: [
-                  Image.asset("assets/icons/Return.png"),
+                  Image.asset("assets/icons/return.png"),
                   const SizedBox(
                     height: 4,
                   ),
@@ -85,7 +85,7 @@ class _SelectBarState extends State<SelectBar> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   children: [
-                    Image.asset("assets/icons/Copy_blue.png"),
+                    Image.asset("assets/icons/copy_blue.png"),
                     const SizedBox(
                       height: 4,
                     ),

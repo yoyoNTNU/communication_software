@@ -36,11 +36,11 @@ class _AppTextFieldState extends State<AppTextField> {
       style: AppStyle.body(
           level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
       decoration: InputDecoration(
-        prefixIcon: Image.asset("assets/icons/Search.png"),
+        prefixIcon: Image.asset("assets/icons/search.png"),
         suffixIcon: widget.controller.text != ""
             ? IconButton(
                 splashRadius: 12,
-                icon: Image.asset("assets/icons/X_blue.png"),
+                icon: Image.asset("assets/icons/x_blue.png"),
                 onPressed: () {
                   setState(() {
                     widget.controller.text = "";

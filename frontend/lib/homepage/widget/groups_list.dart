@@ -142,7 +142,7 @@ class _GroupsListState extends State<GroupsList> {
                                   ? NetworkImage(group["photo"])
                                       as ImageProvider
                                   : const AssetImage(
-                                      'assets/images/Avatar.png'),
+                                      'assets/images/avatar.png'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),

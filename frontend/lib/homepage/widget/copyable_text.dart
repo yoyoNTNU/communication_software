@@ -52,7 +52,7 @@ class CopyableText extends StatelessWidget {
               SizedBox(
                 width: 13,
                 height: 13,
-                child: Image.asset("assets/icons/Copy.png"),
+                child: Image.asset("assets/icons/copy.png"),
               )
             ],
           ),
