@@ -72,7 +72,7 @@ class _VideoMsgState extends State<VideoMsg> {
                         player.setVolume(0.0);
                         Navigator.of(context).pop();
                       },
-                      child: Image.asset("assets/icons/X_white.png"),
+                      child: Image.asset("assets/icons/x_white.png"),
                     ),
                   ),
                 ],

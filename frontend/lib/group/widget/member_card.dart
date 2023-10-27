@@ -50,7 +50,7 @@ class _MemberCardState extends State<MemberCard> {
                                 width: 48,
                                 height: 48,
                               )
-                            : Image.asset('assets/images/Avatar.png')),
+                            : Image.asset('assets/images/avatar.png')),
                     const SizedBox(
                       width: 16,
                     ),

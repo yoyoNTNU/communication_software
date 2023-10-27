@@ -78,7 +78,7 @@ Future<XFile?> photoSource(BuildContext context) async {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("assets/icons/Camera.png"),
+                  Image.asset("assets/icons/camera.png"),
                   const SizedBox(
                     width: 4,
                   ),

@@ -13,7 +13,7 @@ class AppLogo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/images/Logo.png',
+            'assets/images/logo.png',
             width: 120,
             height: 120,
           ),

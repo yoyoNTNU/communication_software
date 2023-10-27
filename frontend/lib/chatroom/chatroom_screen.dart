@@ -144,7 +144,7 @@ class _ChatroomPageState extends State<ChatroomPage>
               print("設定");
               //TODO:push to 聊天室設定
             },
-            child: Image.asset("assets/icons/Menu.png"),
+            child: Image.asset("assets/icons/menu.png"),
           ),
         ],
         bottom: PreferredSize(
@@ -170,7 +170,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -181,7 +181,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -192,7 +192,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -203,7 +203,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -214,7 +214,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -225,7 +225,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -236,7 +236,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -247,7 +247,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -258,7 +258,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 ClipOval(
                                   clipBehavior: Clip.hardEdge,
                                   child: Image.asset(
-                                    "assets/images/Avatar.png",
+                                    "assets/images/avatar.png",
                                     width: 32,
                                     height: 32,
                                   ),
@@ -416,7 +416,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                             _messageController.text = "";
                           });
                         },
-                  child: Image.asset("assets/icons/Send.png"),
+                  child: Image.asset("assets/icons/send.png"),
                 ),
               ],
             ),

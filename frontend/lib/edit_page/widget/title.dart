@@ -54,7 +54,7 @@ Widget title(String text, [String? tips, BuildContext? context]) {
                       text: " 提出修改申請",
                       style: AppStyle.info(color: AppStyle.white)),
                 ]),
-                child: Image.asset("assets/icons/Tips.png")),
+                child: Image.asset("assets/icons/tips.png")),
           ],
         );
 }

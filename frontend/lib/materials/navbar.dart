@@ -60,7 +60,7 @@ class _NavBarState extends State<NavBar> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Image.asset("assets/icons/Table_gray.png"),
+                  Image.asset("assets/icons/table_gray.png"),
                   const SizedBox(
                     height: 4,
                   ),
@@ -79,7 +79,7 @@ class _NavBarState extends State<NavBar> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Image.asset("assets/icons/Table_blue.png"),
+                  Image.asset("assets/icons/table_blue.png"),
                   const SizedBox(
                     height: 4,
                   ),
@@ -99,7 +99,7 @@ class _NavBarState extends State<NavBar> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Image.asset("assets/icons/Chat_gray.png"),
+                  Image.asset("assets/icons/chat_gray.png"),
                   const SizedBox(
                     height: 4,
                   ),
@@ -118,7 +118,7 @@ class _NavBarState extends State<NavBar> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Image.asset("assets/icons/Chat_blue.png"),
+                  Image.asset("assets/icons/chat_blue.png"),
                   const SizedBox(
                     height: 4,
                   ),
