@@ -18,11 +18,11 @@ class _HomePageState extends State<HomePage> {
   bool isExpanded = false;
   Completer<void> dialogShower = Completer<void>();
   Completer<void> dialogCompleter = Completer<void>();
-  int? index = 1;
+  int? index;
 
   Future<void> _info() async {
     index = await DatabaseHelper.instance.getHomepageIndex();
-    if (index != 0) return;
+    if (index == 1) return;
     info_ = await DatabaseHelper.instance.getCachedSelfData();
     if (!dialogCompleter.isCompleted) {
       if (!context.mounted) return;
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return index == 0
+    return index == 0 || index == null
         ? RefreshIndicator(
             onRefresh: () async {
               await DatabaseHelper.instance.clearCache();
