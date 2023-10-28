@@ -86,7 +86,8 @@ class _ChatroomPageState extends State<ChatroomPage>
       var temp = jsonDecode(message);
       if (!temp.containsKey('type')) {
         temp["message"]["message"]["msgTime"] = DateFormat('h:mm a')
-            .format(DateTime.parse(temp["message"]["message"]["msgTime"]))
+            .format(
+                DateTime.parse(temp["message"]["message"]["msgTime"]).toLocal())
             .toString();
         setState(() {
           messageData.add(temp["message"]["message"]);
