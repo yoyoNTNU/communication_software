@@ -134,6 +134,8 @@ flutter:
     - assets/icons/cellphone_light_pink.png
     - assets/icons/file.png
     - assets/icons/file_gray.png
+    - assets/icons/sending.png
+    - assets/icons/announcement.png
 
     # Animations
     - assets/animations/loading.gif
