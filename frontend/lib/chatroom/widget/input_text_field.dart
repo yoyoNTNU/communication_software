@@ -2,14 +2,18 @@ part of 'chatroom_widget.dart';
 
 class InputTextField extends StatefulWidget {
   final TextEditingController controller;
-  final void Function(String)? onChanged;
+  final FocusNode focusNode;
   final void Function() onTap;
+  final void Function(String)? onChanged;
+  final void Function(String)? onSubmitted;
 
   const InputTextField({
     super.key,
     required this.controller,
-    this.onChanged,
+    required this.focusNode,
     required this.onTap,
+    this.onChanged,
+    this.onSubmitted,
   });
 
   @override
@@ -17,12 +21,10 @@ class InputTextField extends StatefulWidget {
 }
 
 class _InputTextFieldState extends State<InputTextField> {
-  final FocusNode _focusNode = FocusNode();
-
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(() {
+    widget.focusNode.addListener(() {
       setState(() {});
     });
   }
@@ -30,11 +32,11 @@ class _InputTextFieldState extends State<InputTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      //TODO:按enter要可以送出訊息
       controller: widget.controller,
+      onSubmitted: widget.onSubmitted,
       onChanged: widget.onChanged,
       onTap: widget.onTap,
-      focusNode: _focusNode,
+      focusNode: widget.focusNode,
       style: AppStyle.body(
           level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
       decoration: InputDecoration(

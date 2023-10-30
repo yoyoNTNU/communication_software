@@ -24,6 +24,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   late AnimationController _animationController;
   late Animation<double> _animation;
   final _messageController = TextEditingController();
+  final FocusNode _messageFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
@@ -377,6 +378,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 Expanded(
                   child: InputTextField(
                     controller: _messageController,
+                    focusNode: _messageFocusNode,
                     onChanged: (value) {
                       setState(() {});
                     },
@@ -390,6 +392,28 @@ class _ChatroomPageState extends State<ChatroomPage>
                         curve: Curves.easeOut,
                       );
                     },
+                    onSubmitted: _messageController.text == ""
+                        ? null
+                        : (value) {
+                            channel.sink.add(jsonEncode({
+                              'command': 'message',
+                              'identifier': jsonEncode({
+                                'channel': 'ChatChannel',
+                                'chatroom_id': chatroomID,
+                              }),
+                              'data': jsonEncode({
+                                "chatroom_id": chatroomID,
+                                "member_id": currentMemberID,
+                                "type_": "string",
+                                "content": _messageController.text,
+                                "reply_to_id": null, //要記得放回覆的msgID
+                              }),
+                            }));
+                            setState(() {
+                              _messageController.text = "";
+                            });
+                            _messageFocusNode.requestFocus();
+                          },
                   ),
                 ),
                 const SizedBox(
@@ -416,6 +440,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                           setState(() {
                             _messageController.text = "";
                           });
+                          _messageFocusNode.requestFocus();
                         },
                   child: Image.asset("assets/icons/send.png"),
                 ),
