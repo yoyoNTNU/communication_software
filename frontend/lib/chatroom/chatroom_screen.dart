@@ -31,7 +31,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   List<Map<String, dynamic>> messageData = [
     {
       "messageID": 1,
-      "senderID": 16,
+      "senderID": 17,
       "type": "string",
       "content": "123",
       "msgTime": "03:27 PM", //撈資料的時候先轉換好
@@ -91,7 +91,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                 DateTime.parse(temp["message"]["message"]["msgTime"]).toLocal())
             .toString();
         setState(() {
-          messageData.add(temp["message"]["message"]);
+          var tempData = messageData
+              .where((element) =>
+                  element["messageID"] == null &&
+                  element["content"] == temp["message"]["message"]["content"])
+              .first;
+          int tempDataIndex = messageData.indexOf(tempData);
+          messageData[tempDataIndex] = temp["message"]["message"];
         });
       }
     });
@@ -410,7 +416,25 @@ class _ChatroomPageState extends State<ChatroomPage>
                               }),
                             }));
                             setState(() {
+                              messageData.add({
+                                "messageID": null,
+                                "senderID": currentMemberID,
+                                "type": "string",
+                                "content": _messageController.text,
+                                "msgTime": DateFormat('h:mm a')
+                                    .format(DateTime.now())
+                                    .toString(),
+                                "replyToID": null, //要記得放回覆的msgID
+                                "isPinned": false,
+                              });
                               _messageController.text = "";
+                            });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
                             });
                             _messageFocusNode.requestFocus();
                           },
@@ -438,7 +462,25 @@ class _ChatroomPageState extends State<ChatroomPage>
                             }),
                           }));
                           setState(() {
+                            messageData.add({
+                              "messageID": null,
+                              "senderID": currentMemberID,
+                              "type": "string",
+                              "content": _messageController.text,
+                              "msgTime": DateFormat('h:mm a')
+                                  .format(DateTime.now())
+                                  .toString(),
+                              "replyToID": null, //要記得放回覆的msgID
+                              "isPinned": false,
+                            });
                             _messageController.text = "";
+                          });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
                           });
                           _messageFocusNode.requestFocus();
                         },
