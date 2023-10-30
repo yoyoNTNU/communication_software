@@ -135,7 +135,7 @@ flutter:
     - assets/icons/file.png
     - assets/icons/file_gray.png
     - assets/icons/sending.png
-    - assets/icons/announcement.png
+    - assets/icons/announce.png
 
     # Animations
     - assets/animations/loading.gif
