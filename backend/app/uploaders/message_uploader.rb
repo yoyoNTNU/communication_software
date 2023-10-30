@@ -35,6 +35,7 @@ class MessageUploader < CarrierWave::Uploader::Base
 
   # Add an allowlist of extensions which are allowed to be uploaded.
   # For images you might use something like this:
+  #TODO:需要設定8種message(string,photo,video,file,call,view,info,voice)
   def extension_allowlist
     %w(jpg jpeg gif png)
   end

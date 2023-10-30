@@ -21,20 +21,28 @@ Rails.application.routes.draw do
     post 'member/feedback' =>'member#feedback'
     get 'search/phone' => 'search#by_phone'
     get 'search/user_id' => 'search#by_user_id'
+    get 'chatroom/all' => 'chatroom#get_all_chatroom_include_disabled'
     resources :friend_requests ,only:[:index,:create] do
       post 'accept' => 'friend_requests#accept'
       delete 'reject' =>'friend_requests#reject'
       delete '' =>'friend_requests#destroy'
     end
-    resources :friends ,only:[:index] do
+    resources :friends ,except:[:create] do
       get 'check' => 'friends#check'
-      patch '' => 'friends#update'
-      delete '' => 'friends#destroy'
     end
 
-    resources :chatroom, only:[:index]
+    resources :chatroom, only:[:index,:update] do
+      get 'unread' => 'chatroom#unread_count'
+      post 'read' => 'chatroom#read'
+      delete 'unread'=> 'chatroom#unread'
+      delete 'delete_background'=>'chatroom#destroy_background'
+    end
     resources :groups do
-      get '/member_list' => 'groups#member_list'
+      get 'member_list' => 'groups#member_list'
+      post 'invite/:id'=> 'groups#invite'
+      delete 'kickout/:id'=> 'groups#kick_out'
+      delete 'delete_avatar'=>'groups#destroy_photo'
+      delete 'delete_background'=>'groups#destroy_background'
     end
   end
 end

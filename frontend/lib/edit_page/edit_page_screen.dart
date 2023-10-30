@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proj/edit_page/edit_page_api.dart';
-import 'package:proj/edit_page/edit_page_widget.dart';
+import 'package:proj/edit_page/widget/edit_page_widget.dart';
 import 'package:proj/style.dart';
 import 'package:proj/widget.dart';
 
@@ -45,13 +45,24 @@ class _EditPageState extends State<EditPage> {
     return Scaffold(
         backgroundColor: AppStyle.blue[50],
         appBar: AppBar(
-          leading: GestureDetector(
+          leadingWidth: 48,
+          titleSpacing: 0,
+          leading: Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
               onTap: () => Navigator.popAndPushNamed(context, '/home'),
-              child: Image.asset("assets/icons/left.png")),
+              child: Image.asset("assets/icons/left.png"),
+            ),
+          ),
           title: Text(
             '編輯個人資料',
             style: AppStyle.header(),
           ),
+          actions: [
+            GestureDetector(
+                onTap: () => Navigator.popAndPushNamed(context, '/edit'),
+                child: Image.asset("assets/icons/refresh.png")),
+          ],
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0.0,
@@ -69,7 +80,7 @@ class _EditPageState extends State<EditPage> {
                     infoBox(context, info_['birthday'], info_['name'],
                         info_['intro'], update),
                     const SizedBox(height: 24.0),
-                    communityBox(info_['email'], info_['phone']),
+                    communityBox(context, info_['email'], info_['phone']),
                     const SizedBox(height: 24.0),
                     AvatarBox(
                       id: info_['memberID'] ?? 1,

@@ -1,5 +1,5 @@
 import 'package:proj/style.dart';
-import 'package:proj/login/login_widget.dart';
+import 'package:proj/login/widget/login_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:proj/login/bloc/login_bloc.dart';
@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
         builder: (context, state) {
           if (state is LoginSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.popAndPushNamed(context, '/home');
             });
           } else if (state is LoginConfirmFail) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,10 +75,11 @@ class _LoginState extends State<Login> {
                                               onTap: () {
                                                 Future.delayed(
                                                     const Duration(
-                                                        milliseconds: 500), () {
+                                                        milliseconds: 800), () {
                                                   _scrollController.animateTo(
                                                       _scrollController.position
-                                                          .maxScrollExtent,
+                                                              .maxScrollExtent -
+                                                          150,
                                                       duration: const Duration(
                                                           milliseconds: 300),
                                                       curve: Curves.easeInOut);
@@ -115,6 +116,17 @@ class _LoginState extends State<Login> {
                                               onChanged: (value) {
                                                 context.read<LoginBloc>().add(
                                                       LoginTextFieldChanged(),
+                                                    );
+                                              },
+                                              onSubmit: (value) {
+                                                context.read<LoginBloc>().add(
+                                                      LoginButtonPressed(
+                                                          account:
+                                                              _accountController
+                                                                  .text,
+                                                          password:
+                                                              _passwordController
+                                                                  .text),
                                                     );
                                               },
                                             ),
@@ -172,7 +184,8 @@ class _LoginState extends State<Login> {
                                                 // Outline Button
                                                 OutlinedButton(
                                                   onPressed: () {
-                                                    Navigator.pushNamed(context,
+                                                    Navigator.popAndPushNamed(
+                                                        context,
                                                         '/forget_password');
                                                   },
                                                   style:

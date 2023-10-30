@@ -34,6 +34,14 @@ dependencies:
   flutter_countdown_timer: ^4.1.0
   calendar_date_picker2: ^0.5.3
   image_picker: ^1.0.4
+  animated_toggle_switch: ^0.8.0
+  flutter_swipe_action_cell: ^3.1.2
+  dropdown_button2: ^2.3.9
+  photo_view: ^0.14.0
+  media_kit: ^1.1.10
+  media_kit_video: ^1.2.4
+  media_kit_libs_video: ^1.0.4
+  audioplayers: ^5.2.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -45,18 +53,20 @@ flutter:
   uses-material-design: true
   assets:
     # Images
-    - assets/images/Background.png
-    - assets/images/Avatar.png
-    - assets/images/Logo.png
+    - assets/images/background.png
+    - assets/images/avatar.png
+    - assets/images/avatar_circle.png
+    - assets/images/logo.png
     - assets/images/success_logo.png
     - assets/images/fail_logo.png
+    - assets/images/fail_logo_dark.png
     # Icons
-    - assets/icons/Sign_out_circle.png
-    - assets/icons/Table_gray.png
-    - assets/icons/Chat_gray.png
-    - assets/icons/Table_blue.png
-    - assets/icons/Chat_blue.png
-    - assets/icons/Edit.png
+    - assets/icons/sign_out_circle.png
+    - assets/icons/table_gray.png
+    - assets/icons/chat_gray.png
+    - assets/icons/table_blue.png
+    - assets/icons/chat_blue.png
+    - assets/icons/edit.png
     - assets/icons/tap_check.png
     - assets/icons/tap_search.png
     - assets/icons/tap_sort.png
@@ -78,18 +88,52 @@ flutter:
     - assets/icons/mail_white.png
     - assets/icons/key.png
     - assets/icons/phone.png
-    - assets/icons/Copy.png
-    - assets/icons/Edit_blue.png
-    - assets/icons/User_add.png
-    - assets/icons/Setting.png
-    - assets/icons/user_blue.png
-    - assets/icons/User_add_white.png
-    - assets/icons/Group_add.png
-    - assets/icons/X.png
-    - assets/icons/X_blue.png
+    - assets/icons/copy.png
+    - assets/icons/edit_blue.png
+    - assets/icons/user_add.png
+    - assets/icons/setting.png
+    - assets/icons/user_teal.png
+    - assets/icons/user_add_white.png
+    - assets/icons/group_add.png
+    - assets/icons/x.png
+    - assets/icons/x_blue.png
     - assets/icons/+.png
-    - assets/icons/Save.png
+    - assets/icons/save.png
     - assets/icons/img_box.png
+    - assets/icons/refresh.png
+    - assets/icons/tips.png
+    - assets/icons/img_box_black.png
+    - assets/icons/camera.png
+    - assets/icons/search.png
+    - assets/icons/select.png
+    - assets/icons/unselect.png
+    - assets/icons/mute_pink.png
+    - assets/icons/pin_yellow.png
+    - assets/icons/return_back.png
+    - assets/icons/hide_red.png
+    - assets/icons/hide_gray.png
+    - assets/icons/pin_dark_yellow.png
+    - assets/icons/sound_teal.png
+    - assets/icons/cancel_pin_gray.png
+    - assets/icons/menu.png
+    - assets/icons/dashboard.png
+    - assets/icons/send.png
+    - assets/icons/user_blue.png
+    - assets/icons/copy_blue.png
+    - assets/icons/return.png
+    - assets/icons/close_ring.png
+    - assets/icons/x_white.png
+    - assets/icons/sound_blue.png
+    - assets/icons/call.png
+    - assets/icons/call_white.png
+    - assets/icons/call_fail_pink.png
+    - assets/icons/call_fail_light_pink.png
+    - assets/icons/cellphone.png
+    - assets/icons/cellphone_white.png
+    - assets/icons/cellphone_pink.png
+    - assets/icons/cellphone_light_pink.png
+    - assets/icons/file.png
+    - assets/icons/file_gray.png
     - assets/icons/cancel_red.png
     - assets/icons/chat_plus_blue.png
 
