@@ -32,6 +32,7 @@ class _InputTextFieldState extends State<InputTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLines: null,
       controller: widget.controller,
       onSubmitted: widget.onSubmitted,
       onChanged: widget.onChanged,
