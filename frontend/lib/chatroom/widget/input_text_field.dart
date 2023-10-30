@@ -38,6 +38,7 @@ class _InputTextFieldState extends State<InputTextField> {
       onChanged: widget.onChanged,
       onTap: widget.onTap,
       focusNode: widget.focusNode,
+      textInputAction: TextInputAction.done,
       style: AppStyle.body(
           level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
       decoration: InputDecoration(
