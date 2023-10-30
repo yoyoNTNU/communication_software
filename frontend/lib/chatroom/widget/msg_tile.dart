@@ -10,7 +10,7 @@ class MsgTile extends StatefulWidget {
   final String content;
   final String msgTime;
   final bool setAllDisSelected;
-  final int index;
+  final int? index;
   final int? tileIsSelectedIndex;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
 
@@ -26,7 +26,7 @@ class MsgTile extends StatefulWidget {
     required this.msgTime,
     required this.setAllDisSelected,
     this.tileIsSelectedIndex,
-    required this.index,
+    this.index,
     required this.setScreenOnTapAndSelectedIndex,
   });
 
@@ -63,8 +63,20 @@ class _MsgTileState extends State<MsgTile> {
               : Border.all(color: Colors.transparent)),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: widget.senderIsMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
+          if (widget.index == null)
+            const SizedBox(
+              width: 4,
+            ),
+          if (widget.index == null)
+            Image.asset(
+              "assets/icons/sending.png",
+              width: 12,
+              height: 12,
+            ),
           if (!widget.senderIsMe)
             Container(
               alignment: Alignment.topCenter,
