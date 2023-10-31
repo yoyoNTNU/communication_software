@@ -5,15 +5,15 @@ class Message < ApplicationRecord
     belongs_to :chatroom
     belongs_to :reply_to, class_name: 'Message', optional: true
     has_many :message_readers, dependent: :destroy
-    mount_uploader :photo , MessageUploader
+    mount_uploader :file , MessageUploader
 
     #TODO:需要設定8種message(string,photo,video,file,call,view,info,voice)
     def check_message_exist
         if type_=="string" && content.blank?
             errors.add(:content, "message is blank") 
         end
-        if type_=="photo" && photo.blank?
-            errors.add(:photo, "message is blank") 
+        if type_=="photo" && file.blank?
+            errors.add(:file, "message is blank") 
         end
     end
 end
