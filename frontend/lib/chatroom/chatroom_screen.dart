@@ -33,11 +33,41 @@ class _ChatroomPageState extends State<ChatroomPage>
       "messageID": 1,
       "senderID": 17,
       "type": "string",
-      "content": "123",
+      "content": "測試一下",
       "msgTime": "03:27 PM", //撈資料的時候先轉換好
       "replyToID": null,
       "isPinned": false,
-    }
+    },
+    {
+      "messageID": 2,
+      "senderID": 17,
+      "type": "photo",
+      "content":
+          "https://storage.googleapis.com/express_message_uploader/uploads/member/photo/16/1000000035.jpg",
+      "msgTime": "03:29 PM", //撈資料的時候先轉換好
+      "replyToID": null,
+      "isPinned": false,
+    },
+    {
+      "messageID": 3,
+      "senderID": 16,
+      "type": "voice",
+      "content":
+          "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.mp3",
+      "msgTime": "03:35 PM", //撈資料的時候先轉換好
+      "replyToID": null,
+      "isPinned": false,
+    },
+    {
+      "messageID": 2,
+      "senderID": 16,
+      "type": "file",
+      "content":
+          "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.pdf",
+      "msgTime": "03:40 PM", //撈資料的時候先轉換好
+      "replyToID": null,
+      "isPinned": false,
+    },
   ];
   bool isExpanded = false;
   double _height = 1.0;
@@ -135,11 +165,11 @@ class _ChatroomPageState extends State<ChatroomPage>
         backgroundColor: AppStyle.white,
         elevation: 0,
         title: TitleLine(
-          chatroomType: "group",
+          chatroomType: "friend",
           groupPeopleCount: 10,
           isMuted: true,
           isPinned: true,
-          name: "聊天室$chatroomID內部",
+          name: "範例2號",
           isExpanded: isExpanded,
           onTapMemberCount: () {
             setBottomHeightAnimated(isExpanded ? 1 : 41);

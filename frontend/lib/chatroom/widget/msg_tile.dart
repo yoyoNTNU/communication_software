@@ -99,7 +99,7 @@ class _MsgTileState extends State<MsgTile> {
             children: [
               if (!widget.senderIsMe)
                 Text(
-                  "人名",
+                  "範例2號",
                   style: AppStyle.header(level: 3),
                 ),
               if (!widget.senderIsMe)

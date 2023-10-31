@@ -16,14 +16,14 @@ class ChatChannel < ApplicationCable::Channel
       member_id:data['member_id'],
       type_:data['type_'],
       content:data['content'],
-      photo:data['photo'],
+      file:data['file'],
       reply_to_id:data['reply_to_id']
     )
     ActionCable.server.broadcast(channel_name, { message: {
       "messageID": m.id,
       "senderID": m.member_id,
       "type": m.type_,
-      "content": m.type_=="string" ? m.content : m.photo,
+      "content": m.type_=="string" ? m.content : m.file,
       "msgTime": m.created_at,
       "replyToID": m.reply_to_id,
       "isPinned": m.isPinned,
