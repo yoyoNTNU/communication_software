@@ -120,6 +120,8 @@ class _FileMsgState extends State<FileMsg> {
                                 color: widget.senderIsMe
                                     ? AppStyle.white
                                     : AppStyle.gray[700]!),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             fileSize,

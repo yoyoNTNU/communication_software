@@ -36,6 +36,9 @@ Rails.application.routes.draw do
       post 'read' => 'chatroom#read'
       delete 'unread'=> 'chatroom#unread'
       delete 'delete_background'=>'chatroom#destroy_background'
+      resources :message do
+        post 'read' => 'message#read'
+      end
     end
     resources :groups do
       get 'member_list' => 'groups#member_list'
