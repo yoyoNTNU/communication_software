@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_31_034716) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_01_012329) do
   create_table "chatroom_members", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "member_id", null: false
     t.bigint "chatroom_id", null: false
@@ -114,6 +114,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_31_034716) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "reply_to_id"
+    t.boolean "isReply", default: false
     t.index ["chatroom_id"], name: "index_messages_on_chatroom_id"
     t.index ["member_id"], name: "index_messages_on_member_id"
     t.index ["reply_to_id"], name: "index_messages_on_reply_to_id"
