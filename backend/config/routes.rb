@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       get 'check' => 'friends#check'
     end
 
-    resources :chatroom, only:[:index,:update] do
+    resources :chatroom, only:[:index,:update,:show] do
       get 'unread' => 'chatroom#unread_count'
       post 'read' => 'chatroom#read'
       delete 'unread'=> 'chatroom#unread'
