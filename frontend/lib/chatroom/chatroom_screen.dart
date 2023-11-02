@@ -28,47 +28,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
-  List<Map<String, dynamic>> messageData = [
-    {
-      "messageID": 1,
-      "senderID": 17,
-      "type": "string",
-      "content": "測試一下",
-      "msgTime": "03:27 PM", //撈資料的時候先轉換好
-      "replyToID": null,
-      "isPinned": false,
-    },
-    {
-      "messageID": 2,
-      "senderID": 17,
-      "type": "photo",
-      "content":
-          "https://storage.googleapis.com/express_message_uploader/uploads/member/photo/16/1000000035.jpg",
-      "msgTime": "03:29 PM", //撈資料的時候先轉換好
-      "replyToID": null,
-      "isPinned": false,
-    },
-    {
-      "messageID": 3,
-      "senderID": 16,
-      "type": "voice",
-      "content":
-          "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.mp3",
-      "msgTime": "03:35 PM", //撈資料的時候先轉換好
-      "replyToID": null,
-      "isPinned": false,
-    },
-    {
-      "messageID": 2,
-      "senderID": 16,
-      "type": "file",
-      "content":
-          "https://storage.googleapis.com/express_message_uploader/uploads/test/temp.pdf",
-      "msgTime": "03:40 PM", //撈資料的時候先轉換好
-      "replyToID": null,
-      "isPinned": false,
-    },
-  ];
+  List<Map<String, dynamic>> messageData = [];
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
@@ -116,10 +76,8 @@ class _ChatroomPageState extends State<ChatroomPage>
       //收到訊息的話就建立MR
       var temp = jsonDecode(message);
       if (!temp.containsKey('type')) {
-        temp["message"]["message"]["msgTime"] = DateFormat('h:mm a')
-            .format(
-                DateTime.parse(temp["message"]["message"]["msgTime"]).toLocal())
-            .toString();
+        temp["message"]["message"]["msgTime"] =
+            dateTimeStringToString(temp["message"]["message"]["msgTime"]);
         setState(() {
           var tempData = messageData
               .where((element) =>
@@ -369,7 +327,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         messageData[index]["senderID"] == currentMemberID,
                     senderID: messageData[index]["senderID"],
                     messageType: messageData[index]["type"],
-                    isReply: messageData[index]["replyToID"] != null,
+                    isReply: messageData[index]["isReply"],
                     replyMsgID: messageData[index]["replyToID"],
                     content: messageData[index]["content"],
                     msgTime: messageData[index]["msgTime"],
@@ -442,6 +400,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "member_id": currentMemberID,
                                 "type_": "string",
                                 "content": _messageController.text,
+                                "isReply": false, //依實際情況
                                 "reply_to_id": null, //要記得放回覆的msgID
                               }),
                             }));
@@ -451,9 +410,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "senderID": currentMemberID,
                                 "type": "string",
                                 "content": _messageController.text,
-                                "msgTime": DateFormat('h:mm a')
-                                    .format(DateTime.now())
-                                    .toString(),
+                                "msgTime": dateTimeToString(DateTime.now()),
+                                "isReply": false, //依實際情況
                                 "replyToID": null, //要記得放回覆的msgID
                                 "isPinned": false,
                               });
