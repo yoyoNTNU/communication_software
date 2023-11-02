@@ -43,6 +43,48 @@ class Api::ChatroomController < ApplicationController
     }.to_json, status: 200
   end
 
+  def show
+    @chatroom=Chatroom.find_by(id:params[:id])
+    if @chatroom
+      c_m=ChatroomMember.find_by(member:current_member,chatroom:@chatroom)
+      if c_m
+        if @chatroom.type_=="group"
+          g=Group.find_by(id:@chatroom.type_id)
+          type_="group"
+          name=g.name
+        elsif @chatroom.type_=="friend"
+          fs=Friendship.find_by(id:@chatroom.type_id)
+          friend=((Member.find_by(id:fs.member_id)==current_member)? Member.find_by(id:fs.friend_id): Member.find_by(id:fs.member_id))
+          type_="friend"
+          name= Friendship.find_by(member:current_member,friend:friend).nickname
+        end
+      render json: {
+        error: false,
+        message: "succeed to get chatroom",
+        data: {
+          "name": name,
+          "type_": type_,
+          "isPinned": c_m.isPinned,
+          "isMuted": c_m.isMuted,
+          "background": c_m.background,
+        }
+      }.to_json, status: 200
+      else
+        render json: {
+          error: true,
+          message: "failed to get chatroom",
+          data: "You aren't in this chatroom."
+        }.to_json, status: 400
+      end
+    else
+      render json: {
+        error: true,
+        message: "failed to get chatroom",
+        data: "This chatroom is not exist."
+      }.to_json, status: 400
+    end
+  end
+
   def update
     @chatroom_member=ChatroomMember.find_by(member:current_member,chatroom_id:params[:id])
     if @chatroom_member

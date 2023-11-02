@@ -17,6 +17,7 @@ class ChatChannel < ApplicationCable::Channel
       type_:data['type_'],
       content:data['content'],
       file:data['file'],
+      isReply: data['isReply']
       reply_to_id:data['reply_to_id']
     )
     ActionCable.server.broadcast(channel_name, { message: {
@@ -25,6 +26,7 @@ class ChatChannel < ApplicationCable::Channel
       "type": m.type_,
       "content": m.type_=="string" ? m.content : m.file,
       "msgTime": m.created_at,
+      "isReply": m.isReply,
       "replyToID": m.reply_to_id,
       "isPinned": m.isPinned,
     } })
