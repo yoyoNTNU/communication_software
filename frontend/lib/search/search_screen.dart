@@ -91,7 +91,9 @@ class _SearchPageState extends State<SearchPage> {
                           controller: _phoneController,
                           controller2: _nationController,
                           onChanged: (value) {
-                            setState(() {});
+                            setState(() {
+                              friendID = null;
+                            });
                           },
                           onSubmit: () async {
                             await _searchByPhone(_phoneController.text != ""
@@ -111,7 +113,9 @@ class _SearchPageState extends State<SearchPage> {
                         child: IDTextField(
                           controller: _iDController,
                           onChanged: (value) {
-                            setState(() {});
+                            setState(() {
+                              friendID = null;
+                            });
                           },
                           onSubmit: (value) async {
                             await _searchByUserID(_iDController.text);
@@ -128,10 +132,12 @@ class _SearchPageState extends State<SearchPage> {
             color: AppStyle.blue[100],
           ),
           if (friendID != null)
-            profile(
-              context,
-              id: friendID!,
-              isDialog: false,
+            Expanded(
+              child: profile(
+                context,
+                id: friendID!,
+                isDialog: false,
+              ),
             ),
         ],
       ),

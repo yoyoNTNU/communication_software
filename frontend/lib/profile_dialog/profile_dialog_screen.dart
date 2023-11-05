@@ -48,6 +48,9 @@ class ProfileDialog extends StatefulWidget {
 }
 
 class _ProfileDialogState extends State<ProfileDialog> {
+  bool isInput = false;
+  final TextEditingController _inviteController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
@@ -135,7 +138,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 8),
                     // Button Area
                     if (state is FriendProfile && state.isFriend)
                       Container(
@@ -149,56 +152,209 @@ class _ProfileDialogState extends State<ProfileDialog> {
                           children: [
                             Expanded(
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  print("修改暱稱");
+                                  //TODO: show dialog
+                                },
                                 child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset("assets/icons/edit_blue.png"),
-                                      Text(
-                                        '修改暱稱',
-                                        style: AppStyle.caption(
-                                          level: 2,
-                                          color: AppStyle.blue,
-                                        ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/icons/edit_blue.png"),
+                                    Text(
+                                      '修改暱稱',
+                                      style: AppStyle.caption(
+                                        level: 2,
+                                        color: AppStyle.blue,
                                       ),
-                                    ]),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Expanded(
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  print("開啟聊天");
+                                  //TODO: 導入聊天室
+                                },
                                 child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                          "assets/icons/chat_plus_blue.png"),
-                                      Text(
-                                        '開啟聊天',
-                                        style: AppStyle.caption(
-                                          level: 2,
-                                          color: AppStyle.blue,
-                                        ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                        "assets/icons/chat_plus_blue.png"),
+                                    Text(
+                                      '開啟聊天',
+                                      style: AppStyle.caption(
+                                        level: 2,
+                                        color: AppStyle.blue,
                                       ),
-                                    ]),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Expanded(
                               child: GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  print("刪除好友");
+                                  //TODO: 接API
+                                },
                                 child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                          "assets/icons/cancel_red.png"),
-                                      Text(
-                                        '刪除好友',
-                                        style: AppStyle.caption(
-                                          level: 2,
-                                          color: AppStyle.red,
-                                        ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset("assets/icons/cancel_red.png"),
+                                    Text(
+                                      '刪除好友',
+                                      style: AppStyle.caption(
+                                        level: 2,
+                                        color: AppStyle.red,
                                       ),
-                                    ]),
+                                    ),
+                                  ],
+                                ),
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (state is FriendProfile &&
+                        !state.isFriend &&
+                        !state.isInvited &&
+                        !state.isRequested &&
+                        !isInput)
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppStyle.white,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        height: 96,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isInput = true;
+                            });
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset("assets/icons/user_add.png"),
+                              Text(
+                                '加為好友',
+                                style: AppStyle.caption(
+                                  level: 2,
+                                  color: AppStyle.blue,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    if (state is FriendProfile &&
+                        !state.isFriend &&
+                        !state.isInvited &&
+                        !state.isRequested &&
+                        isInput)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppStyle.blue[50],
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        height: 156,
+                        width: double.infinity,
+                        child: Column(
+                          children: [
+                            Text(
+                              "好友邀請訊息",
+                              style: AppStyle.header(
+                                  level: 3, color: AppStyle.gray[700]!),
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            SizedBox(
+                              height: 60,
+                              child: TextField(
+                                textAlign: TextAlign.center,
+                                textInputAction: TextInputAction.search,
+                                controller: _inviteController,
+                                onChanged: (value) {},
+                                focusNode: _focusNode,
+                                style: AppStyle.body(
+                                    level: 1,
+                                    color: AppStyle.gray.shade900,
+                                    weight: FontWeight.w500),
+                                decoration: InputDecoration(
+                                  hintText: "向新朋友打聲招呼吧！",
+                                  hintStyle:
+                                      AppStyle.body(color: AppStyle.gray[300]!),
+                                  filled: true,
+                                  fillColor: AppStyle.white,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppStyle.blue[300]!, width: 1),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppStyle.blue[300]!, width: 1),
+                                  ),
+                                ),
+                                maxLines: null,
+                                maxLength: 25,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      print("送出邀請");
+                                      //TODO: 接API
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset("assets/icons/message.png"),
+                                        Text(
+                                          '送出邀請',
+                                          style: AppStyle.caption(
+                                            level: 2,
+                                            color: AppStyle.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        isInput = false;
+                                      });
+                                    },
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Image.asset("assets/icons/x_gray.png"),
+                                        Text(
+                                          '取消',
+                                          style: AppStyle.caption(
+                                            level: 2,
+                                            color: AppStyle.gray[700]!,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
