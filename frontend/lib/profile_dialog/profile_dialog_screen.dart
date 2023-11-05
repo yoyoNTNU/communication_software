@@ -13,15 +13,35 @@ void showProfile(BuildContext context, {bool isGroup = false, int id = -1}) {
   showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) => ProfileDialog(userID: id),
+    builder: (context) => ProfileDialog(
+      userID: id,
+      isDialog: true,
+    ),
   );
+}
+
+Widget profile(
+  BuildContext context, {
+  int id = -1,
+  isDialog = false,
+}) {
+  BlocProvider.of<ProfileDialogBloc>(context).add(ResetProfile());
+  BlocProvider.of<ProfileDialogBloc>(context).add(OpenProfile(
+    userID: id,
+  ));
+  return ProfileDialog(userID: id, isDialog: isDialog);
 }
 
 // Create a Dialog that show the profile of user
 class ProfileDialog extends StatefulWidget {
   final int userID;
+  final bool isDialog;
 
-  const ProfileDialog({Key? key, required this.userID}) : super(key: key);
+  const ProfileDialog({
+    Key? key,
+    required this.userID,
+    required this.isDialog,
+  }) : super(key: key);
 
   @override
   State<ProfileDialog> createState() => _ProfileDialogState();
@@ -39,6 +59,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
+              elevation: widget.isDialog ? 8 : 0,
               child: Container(
                 width: 300,
                 padding: const EdgeInsets.all(24),
@@ -187,20 +208,21 @@ class _ProfileDialogState extends State<ProfileDialog> {
               ),
             ),
             // A Button to close the dialog
-            Opacity(
-              opacity: 0.8,
-              child: FloatingActionButton(
-                backgroundColor: AppStyle.white,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: Image.asset("assets/icons/x.png"),
+            if (widget.isDialog)
+              Opacity(
+                opacity: 0.8,
+                child: FloatingActionButton(
+                  backgroundColor: AppStyle.white,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: Image.asset("assets/icons/x.png"),
+                  ),
                 ),
               ),
-            ),
           ],
         );
       },

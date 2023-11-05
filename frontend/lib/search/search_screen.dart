@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/search/widget/search_widget.dart';
 import 'package:proj/search/search_api.dart';
+import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -75,6 +76,7 @@ class _SearchPageState extends State<SearchPage> {
                 Switcher(
                   onChanged: (value) {
                     setState(() {
+                      friendID = null;
                       _isChecked = value;
                     });
                   },
@@ -117,14 +119,20 @@ class _SearchPageState extends State<SearchPage> {
                             print(friendID);
                           },
                         ),
-                      )
+                      ),
               ],
             ),
           ),
           Container(
             height: 1,
             color: AppStyle.blue[100],
-          )
+          ),
+          if (friendID != null)
+            profile(
+              context,
+              id: friendID!,
+              isDialog: false,
+            ),
         ],
       ),
     );
