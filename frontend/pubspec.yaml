@@ -136,6 +136,8 @@ flutter:
     - assets/icons/file_gray.png
     - assets/icons/cancel_red.png
     - assets/icons/chat_plus_blue.png
+    - assets/icons/sending.png
+    - assets/icons/announce.png
 
     # Animations
     - assets/animations/loading.gif

@@ -93,11 +93,14 @@ class _PhotoMsgState extends State<PhotoMsg> {
                 const SizedBox(
                   height: 4,
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    widget.content,
-                    fit: BoxFit.contain,
+                Container(
+                  constraints: const BoxConstraints(maxHeight: 200),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      widget.content,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
                 const SizedBox(

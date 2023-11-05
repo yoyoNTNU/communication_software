@@ -76,6 +76,8 @@ class _ReplyMsgState extends State<ReplyMsg> {
                   color: widget.senderIsMe
                       ? AppStyle.gray[100]!
                       : AppStyle.gray[500]!),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(

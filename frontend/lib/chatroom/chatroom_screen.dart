@@ -24,20 +24,11 @@ class _ChatroomPageState extends State<ChatroomPage>
   late AnimationController _animationController;
   late Animation<double> _animation;
   final _messageController = TextEditingController();
+  final FocusNode _messageFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
-  List<Map<String, dynamic>> messageData = [
-    {
-      "messageID": 1,
-      "senderID": 16,
-      "type": "string",
-      "content": "123",
-      "msgTime": "03:27 PM", //撈資料的時候先轉換好
-      "replyToID": null,
-      "isPinned": false,
-    }
-  ];
+  List<Map<String, dynamic>> messageData = [];
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
@@ -85,11 +76,16 @@ class _ChatroomPageState extends State<ChatroomPage>
       //收到訊息的話就建立MR
       var temp = jsonDecode(message);
       if (!temp.containsKey('type')) {
-        temp["message"]["message"]["msgTime"] = DateFormat('h:mm a')
-            .format(DateTime.parse(temp["message"]["message"]["msgTime"]))
-            .toString();
+        temp["message"]["message"]["msgTime"] =
+            dateTimeStringToString(temp["message"]["message"]["msgTime"]);
         setState(() {
-          messageData.add(temp["message"]["message"]);
+          var tempData = messageData
+              .where((element) =>
+                  element["messageID"] == null &&
+                  element["content"] == temp["message"]["message"]["content"])
+              .first;
+          int tempDataIndex = messageData.indexOf(tempData);
+          messageData[tempDataIndex] = temp["message"]["message"];
         });
       }
     });
@@ -127,11 +123,11 @@ class _ChatroomPageState extends State<ChatroomPage>
         backgroundColor: AppStyle.white,
         elevation: 0,
         title: TitleLine(
-          chatroomType: "group",
+          chatroomType: "friend",
           groupPeopleCount: 10,
           isMuted: true,
           isPinned: true,
-          name: "聊天室$chatroomID內部",
+          name: "範例2號",
           isExpanded: isExpanded,
           onTapMemberCount: () {
             setBottomHeightAnimated(isExpanded ? 1 : 41);
@@ -331,7 +327,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         messageData[index]["senderID"] == currentMemberID,
                     senderID: messageData[index]["senderID"],
                     messageType: messageData[index]["type"],
-                    isReply: messageData[index]["replyToID"] != null,
+                    isReply: messageData[index]["isReply"],
                     replyMsgID: messageData[index]["replyToID"],
                     content: messageData[index]["content"],
                     msgTime: messageData[index]["msgTime"],
@@ -376,6 +372,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                 Expanded(
                   child: InputTextField(
                     controller: _messageController,
+                    focusNode: _messageFocusNode,
                     onChanged: (value) {
                       setState(() {});
                     },
@@ -389,6 +386,46 @@ class _ChatroomPageState extends State<ChatroomPage>
                         curve: Curves.easeOut,
                       );
                     },
+                    onSubmitted: _messageController.text == ""
+                        ? null
+                        : (value) {
+                            channel.sink.add(jsonEncode({
+                              'command': 'message',
+                              'identifier': jsonEncode({
+                                'channel': 'ChatChannel',
+                                'chatroom_id': chatroomID,
+                              }),
+                              'data': jsonEncode({
+                                "chatroom_id": chatroomID,
+                                "member_id": currentMemberID,
+                                "type_": "string",
+                                "content": _messageController.text,
+                                "isReply": false, //依實際情況
+                                "reply_to_id": null, //要記得放回覆的msgID
+                              }),
+                            }));
+                            setState(() {
+                              messageData.add({
+                                "messageID": null,
+                                "senderID": currentMemberID,
+                                "type": "string",
+                                "content": _messageController.text,
+                                "msgTime": dateTimeToString(DateTime.now()),
+                                "isReply": false, //依實際情況
+                                "replyToID": null, //要記得放回覆的msgID
+                                "isPinned": false,
+                              });
+                              _messageController.text = "";
+                            });
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            });
+                            _messageFocusNode.requestFocus();
+                          },
                   ),
                 ),
                 const SizedBox(
@@ -413,8 +450,27 @@ class _ChatroomPageState extends State<ChatroomPage>
                             }),
                           }));
                           setState(() {
+                            messageData.add({
+                              "messageID": null,
+                              "senderID": currentMemberID,
+                              "type": "string",
+                              "content": _messageController.text,
+                              "msgTime": DateFormat('h:mm a')
+                                  .format(DateTime.now())
+                                  .toString(),
+                              "replyToID": null, //要記得放回覆的msgID
+                              "isPinned": false,
+                            });
                             _messageController.text = "";
                           });
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          });
+                          _messageFocusNode.requestFocus();
                         },
                   child: Image.asset("assets/icons/send.png"),
                 ),
