@@ -22,3 +22,8 @@ class OpenProfile extends ProfileDialogEvent {
   @override
   List<Object> get props => [userID];
 }
+
+class ResetProfile extends ProfileDialogEvent {
+  @override
+  List<Object> get props => [];
+}

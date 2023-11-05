@@ -6,6 +6,7 @@ import 'package:proj/style.dart';
 // Dialog Showing the profile of user
 void showProfileDialog(BuildContext context,
     {bool isGroup = false, int id = -1}) {
+  BlocProvider.of<ProfileDialogBloc>(context).add(ResetProfile());
   BlocProvider.of<ProfileDialogBloc>(context).add(OpenProfile(
     userID: id,
     isGroup: isGroup,
@@ -59,7 +60,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                           width: 1,
                         ),
                         image: DecorationImage(
-                          image: state.data['background'] != ""
+                          image: (state.data['background'] != "" &&
+                                  state.data['background'] != null)
                               ? NetworkImage(state.data['background'])
                               : const AssetImage("assets/images/background.png")
                                   as ImageProvider,
@@ -77,7 +79,8 @@ class _ProfileDialogState extends State<ProfileDialog> {
                               width: 1,
                             ),
                             image: DecorationImage(
-                              image: state.data['photo'] != ""
+                              image: (state.data['photo'] != "" &&
+                                      state.data['photo'] != null)
                                   ? NetworkImage(state.data['photo'])
                                   : const AssetImage("assets/images/avatar.png")
                                       as ImageProvider,
@@ -93,7 +96,9 @@ class _ProfileDialogState extends State<ProfileDialog> {
                       child: Column(
                         children: [
                           Text(
-                            state.data['name'].toString(),
+                            state.data['name'] != null
+                                ? state.data['name'].toString()
+                                : "",
                             style: AppStyle.header(),
                             textAlign: TextAlign.center,
                             maxLines: 2,

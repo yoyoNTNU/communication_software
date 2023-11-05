@@ -8,6 +8,9 @@ part 'profile_dialog_state.dart';
 
 class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
   ProfileDialogBloc() : super(const SelfProfile(data: {})) {
+    on<ResetProfile>((event, emit) async {
+      emit(const SelfProfile(data: {}));
+    });
     on<OpenProfile>((event, emit) async {
       if (event.userID == -1 && event.isGroup == false) {
         // TODO: get self profile data
