@@ -10,7 +10,11 @@ void showProfileDialog(BuildContext context,
     userID: id,
     isGroup: isGroup,
   ));
-  showDialog(context: context, builder: (context) => ProfileDialog(userID: id));
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) => ProfileDialog(userID: id),
+  );
 }
 
 // Create a Dialog that show the profile of user
@@ -55,7 +59,10 @@ class _ProfileDialogState extends State<ProfileDialog> {
                           width: 1,
                         ),
                         image: DecorationImage(
-                          image: NetworkImage(state.data['background'] ?? ""),
+                          image: state.data['background'] != ""
+                              ? NetworkImage(state.data['background'])
+                              : const AssetImage("assets/images/background.png")
+                                  as ImageProvider,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -70,7 +77,10 @@ class _ProfileDialogState extends State<ProfileDialog> {
                               width: 1,
                             ),
                             image: DecorationImage(
-                              image: NetworkImage(state.data['photo'] ?? ""),
+                              image: state.data['photo'] != ""
+                                  ? NetworkImage(state.data['photo'])
+                                  : const AssetImage("assets/images/avatar.png")
+                                      as ImageProvider,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -85,12 +95,17 @@ class _ProfileDialogState extends State<ProfileDialog> {
                           Text(
                             state.data['name'].toString(),
                             style: AppStyle.header(),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 4),
                           if (state.data['intro'] != null)
                             Text(
                               state.data['intro'].toString(),
                               style: AppStyle.body(color: AppStyle.teal),
+                              maxLines: 8,
+                              overflow: TextOverflow.ellipsis,
                             ),
                         ],
                       ),
@@ -113,7 +128,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Image.asset("assets/icons/Edit_blue.png"),
+                                      Image.asset("assets/icons/edit_blue.png"),
                                       Text(
                                         '修改暱稱',
                                         style: AppStyle.caption(
@@ -178,7 +193,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                 child: SizedBox(
                   height: 32,
                   width: 32,
-                  child: Image.asset("assets/icons/X.png"),
+                  child: Image.asset("assets/icons/x.png"),
                 ),
               ),
             ),

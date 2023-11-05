@@ -27,7 +27,7 @@ class GetFriendAPI {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.get(
-      Uri(scheme: 'https', host: host, path: '/api/member/$friendID/info'),
+      Uri(scheme: 'https', host: host, path: '/api/friends/$friendID'),
       headers: {'Authorization': token ?? ""},
     );
     if (response.statusCode == 200) {

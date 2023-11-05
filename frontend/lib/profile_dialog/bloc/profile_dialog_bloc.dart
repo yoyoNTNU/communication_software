@@ -20,8 +20,8 @@ class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
           data: info,
           friendID: event.userID,
           isFriend: check == 'Friend',
-          isInvited: check == 'Invited', // ?: Need to Confirm API
-          isRequested: check == 'Requested', // ?: Need to Confirm API
+          isInvited: check == 'Receiver',
+          isRequested: check == 'Sender',
         ));
       } else if (event.groupID != -1 && event.isGroup == true) {
         // TODO: Get group profile data
