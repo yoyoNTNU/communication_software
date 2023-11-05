@@ -4,8 +4,7 @@ import 'package:proj/profile_dialog/bloc/profile_dialog_bloc.dart';
 import 'package:proj/style.dart';
 
 // Dialog Showing the profile of user
-void showProfileDialog(BuildContext context,
-    {bool isGroup = false, int id = -1}) {
+void showProfile(BuildContext context, {bool isGroup = false, int id = -1}) {
   BlocProvider.of<ProfileDialogBloc>(context).add(ResetProfile());
   BlocProvider.of<ProfileDialogBloc>(context).add(OpenProfile(
     userID: id,

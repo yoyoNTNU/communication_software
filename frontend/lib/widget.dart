@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 import 'package:proj/style.dart';
 import 'dart:io';
 
@@ -30,6 +31,12 @@ void showLoading(BuildContext context) {
       builder: (context) => const LoadingDialog(),
     );
   });
+}
+
+// Dialog Showing the profile of user
+void showProfileDialog(BuildContext context,
+    {bool isGroup = false, int id = -1}) {
+  showProfile(context, isGroup: isGroup, id: id);
 }
 
 //final ImagePicker picker = ImagePicker();
