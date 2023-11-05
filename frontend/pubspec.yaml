@@ -42,7 +42,7 @@ dependencies:
   media_kit_video: ^1.2.4
   media_kit_libs_video: ^1.0.4
   audioplayers: ^5.2.0
-  
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -76,10 +76,10 @@ flutter:
     - assets/icons/pin.png
     - assets/icons/cancel_pin.png
     - assets/icons/mute.png
-    - assets/icons/sound.png 
-    - assets/icons/view.png 
-    - assets/icons/delete.png 
-    - assets/icons/hide.png 
+    - assets/icons/sound.png
+    - assets/icons/view.png
+    - assets/icons/delete.png
+    - assets/icons/hide.png
     - assets/icons/left.png
     - assets/icons/not_pass.png
     - assets/icons/pass.png
@@ -113,7 +113,7 @@ flutter:
     - assets/icons/hide_red.png
     - assets/icons/hide_gray.png
     - assets/icons/pin_dark_yellow.png
-    - assets/icons/sound_teal.png 
+    - assets/icons/sound_teal.png
     - assets/icons/cancel_pin_gray.png
     - assets/icons/menu.png
     - assets/icons/dashboard.png
@@ -123,7 +123,7 @@ flutter:
     - assets/icons/return.png
     - assets/icons/close_ring.png
     - assets/icons/x_white.png
-    - assets/icons/sound_blue.png 
+    - assets/icons/sound_blue.png
     - assets/icons/call.png
     - assets/icons/call_white.png
     - assets/icons/call_fail_pink.png
@@ -134,8 +134,12 @@ flutter:
     - assets/icons/cellphone_light_pink.png
     - assets/icons/file.png
     - assets/icons/file_gray.png
+    - assets/icons/cancel_red.png
+    - assets/icons/chat_plus_blue.png
     - assets/icons/sending.png
     - assets/icons/announce.png
+    - assets/icons/message.png
+    - assets/icons/x_gray.png
 
     # Animations
     - assets/animations/loading.gif
