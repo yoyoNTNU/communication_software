@@ -138,6 +138,8 @@ flutter:
     - assets/icons/chat_plus_blue.png
     - assets/icons/sending.png
     - assets/icons/announce.png
+    - assets/icons/message.png
+    - assets/icons/x_gray.png
 
     # Animations
     - assets/animations/loading.gif
