@@ -23,183 +23,193 @@ class _PopProbFBState extends State<PopProbFB> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        // Prevent the dialog from being dismissed with the back button
-        return false;
-      },
-      child: AlertDialog(
-        content: SingleChildScrollView(
-          controller: _scrollController,
-          child: Container(
-            width: 420,
-            height: 545,
-            decoration: BoxDecoration(
-              color: AppStyle.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        width: 24,
-                        height: 24,
-                      ),
-                      SizedBox(
-                        child: Text(
-                          '問題 / 反饋',
-                          style: AppStyle.header(),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                        },
-                        child: SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: Image.asset("assets/icons/X_blue.png"),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  height: 500,
-                  padding: const EdgeInsets.only(left: 24, right: 24, bottom: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '問題類型',
-                        style: AppStyle.body(color: AppStyle.blue[500]!),
-                      ),
-                      ..._buildRadioOptions(),
-                      const SizedBox(height: 24.0),
-                      if (_selectedOption != 4) ...[
-                          Text(
-                            '問題描述',
-                            style: AppStyle.body(color: AppStyle.blue[500]!),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              textAlign: TextAlign.start,
-                              expands: false,
-                              maxLines: 10, // This makes it expandable
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: AppStyle.blue[500]!),
-                                  borderRadius: BorderRadius.circular(5),
-                              ),
-                              ),
-                            ),
-                          ),
-                      ],
-                      if (_selectedOption == 4) ...[
-                        Text(
-                          '修改項目',
-                          style: AppStyle.body(color: AppStyle.blue[500]!),
-                        ),
-                        Dropdown(
-                          onChanged: (value) {
-                            if (fixType != value) {
-                              setState(() {
-                                fixType = value;
-                              });
-                            }
-                          },
-                          type: fixType
-                        ),
-                        const SizedBox(height: 12.0),
-                        Text(
-                          '修改內容',
-                          style: AppStyle.body(color: AppStyle.blue[500]!),
-                        ),
-                        SizedBox(
-                          height: 50,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppStyle.blue[500]!),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        // AppTextField(
-                        //   key: UniqueKey(),
-                        //   controller: _fixController,
-                        //   isPassword: false,
-                        //   labelText: '修改內容',
-                        //   hintText: '請輸入新的修改資料',
-                        //   onTap: () {
-                        //     _scrollController.animateTo(
-                        //         _scrollController.position.maxScrollExtent,
-                        //         duration: const Duration(milliseconds: 300),
-                        //         curve: Curves.easeInOut);
-                        //   },
-                        // ),
-                      ],
-                      const SizedBox(height: 24.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center, 
+        onWillPop: () async {
+          // Prevent the dialog from being dismissed with the back button
+          return false;
+        },
+        child: AlertDialog(
+            content: SingleChildScrollView(
+                controller: _scrollController,
+                child: Container(
+                    width: 420,
+                    height: 545,
+                    decoration: BoxDecoration(
+                      color: AppStyle.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) => SentSuccess(type: _selectedOption),
-                              );
-                            },
-                            style: AppStyle.primaryBtn(),
+                          Container(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, bottom: 8),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Text("送出"),
-                                const SizedBox(width: 8),
-                                _isLoading
-                                    ? const SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: AppStyle.white,
-                                        ))
-                                    : SizedBox(
-                                        width: 24,
-                                        height: 24,
-                                        child: Image.asset("assets/icons/Send.png"),
-                                      ),
+                                const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                ),
+                                SizedBox(
+                                  child: Text(
+                                    '問題 / 反饋',
+                                    style: AppStyle.header(),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (!context.mounted) return;
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child:
+                                        Image.asset("assets/icons/X_blue.png"),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ]
-            )
-          )
-        )
-      )
-    );
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Container(
+                            height: 500,
+                            padding: const EdgeInsets.only(
+                                left: 24, right: 24, bottom: 16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '問題類型',
+                                  style:
+                                      AppStyle.body(color: AppStyle.blue[500]!),
+                                ),
+                                ..._buildRadioOptions(),
+                                const SizedBox(height: 24.0),
+                                if (_selectedOption != 4) ...[
+                                  Text(
+                                    '問題描述',
+                                    style: AppStyle.body(
+                                        color: AppStyle.blue[500]!),
+                                  ),
+                                  Expanded(
+                                    child: TextField(
+                                      textAlign: TextAlign.start,
+                                      expands: false,
+                                      maxLines: 10, // This makes it expandable
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: AppStyle.blue[500]!),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                                if (_selectedOption == 4) ...[
+                                  Text(
+                                    '修改項目',
+                                    style: AppStyle.body(
+                                        color: AppStyle.blue[500]!),
+                                  ),
+                                  Dropdown(
+                                      onChanged: (value) {
+                                        if (fixType != value) {
+                                          setState(() {
+                                            fixType = value;
+                                          });
+                                        }
+                                      },
+                                      type: fixType),
+                                  const SizedBox(height: 12.0),
+                                  Text(
+                                    '修改內容',
+                                    style: AppStyle.body(
+                                        color: AppStyle.blue[500]!),
+                                  ),
+                                  SizedBox(
+                                    height: 50,
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                        border: const OutlineInputBorder(),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: AppStyle.blue[500]!),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  // AppTextField(
+                                  //   key: UniqueKey(),
+                                  //   controller: _fixController,
+                                  //   isPassword: false,
+                                  //   labelText: '修改內容',
+                                  //   hintText: '請輸入新的修改資料',
+                                  //   onTap: () {
+                                  //     _scrollController.animateTo(
+                                  //         _scrollController.position.maxScrollExtent,
+                                  //         duration: const Duration(milliseconds: 300),
+                                  //         curve: Curves.easeInOut);
+                                  //   },
+                                  // ),
+                                ],
+                                const SizedBox(height: 24.0),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (context) => SentSuccess(
+                                              type: _selectedOption),
+                                        );
+                                      },
+                                      style: AppStyle.primaryBtn(),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const Text("送出"),
+                                          const SizedBox(width: 8),
+                                          _isLoading
+                                              ? const SizedBox(
+                                                  width: 16,
+                                                  height: 16,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    color: AppStyle.white,
+                                                  ))
+                                              : SizedBox(
+                                                  width: 24,
+                                                  height: 24,
+                                                  child: Image.asset(
+                                                      "assets/icons/send_white.png"),
+                                                ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ])))));
   }
+
   List<Widget> _buildRadioOptions() {
     return [
       _radioOption('使用操作問題', 1),

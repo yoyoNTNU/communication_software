@@ -140,8 +140,9 @@ flutter:
     - assets/icons/announce.png
     - assets/icons/message.png
     - assets/icons/x_gray.png
-    - assets/icons/Send.png
-    - assets/icons/Bell.png
+    - assets/icons/send_white.png
+    - assets/icons/bell.png
+
     # Animations
     - assets/animations/loading.gif
   fonts:
