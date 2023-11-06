@@ -26,6 +26,7 @@ class _GroupPageState extends State<GroupPage> {
     showLoading(context);
     try {
       final List<Map<String, dynamic>> info = await GetInfoAPI.getFriend();
+      if (!mounted) return;
       setState(() {
         friendList = info;
         copyFriendList = friendList;
@@ -39,6 +40,7 @@ class _GroupPageState extends State<GroupPage> {
 
   Future<void> _createGroup(
       {String? name, XFile? avatar, XFile? background}) async {
+    if (!mounted) return;
     setState(() {
       _isLoading = true;
     });
@@ -47,6 +49,7 @@ class _GroupPageState extends State<GroupPage> {
           name: name, avatar: avatar, background: background);
       int responseCode = response['responseCode']!;
       dynamic groupID = response['groupID']!;
+      if (!mounted) return;
       setState(() {
         _responseCode = responseCode;
       });
@@ -55,6 +58,7 @@ class _GroupPageState extends State<GroupPage> {
           try {
             final int secResponse =
                 await GroupAPI.invite(groupID: groupID, friendID: friend['id']);
+            if (!mounted) return;
             setState(() {
               _responseCode = secResponse;
             });
@@ -66,6 +70,7 @@ class _GroupPageState extends State<GroupPage> {
     } catch (e) {
       print('API request error: $e');
     }
+    if (!mounted) return;
     setState(() {
       _isLoading = false;
     });
@@ -84,6 +89,7 @@ class _GroupPageState extends State<GroupPage> {
         ),
       );
     } else {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -110,17 +116,22 @@ class _GroupPageState extends State<GroupPage> {
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            if (step == 0) {
-              Navigator.popAndPushNamed(context, '/home');
-            } else {
-              setState(() {
-                --step;
-              });
-            }
-          },
-          child: Image.asset("assets/icons/left.png"),
+        leadingWidth: 48,
+        titleSpacing: 0,
+        leading: Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () {
+              if (step == 0) {
+                Navigator.popAndPushNamed(context, '/home');
+              } else {
+                setState(() {
+                  --step;
+                });
+              }
+            },
+            child: Image.asset("assets/icons/left.png"),
+          ),
         ),
         title: Text(
           '創建群組',

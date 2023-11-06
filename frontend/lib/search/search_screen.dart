@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/search/widget/search_widget.dart';
 import 'package:proj/search/search_api.dart';
+import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -19,6 +20,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> _searchByPhone(String phone) async {
     try {
       final Map<String, dynamic> searcher = await SearchAPI.byPhone(phone);
+      if (!mounted) return;
       setState(() {
         friendID = searcher['id'];
       });
@@ -30,6 +32,7 @@ class _SearchPageState extends State<SearchPage> {
   Future<void> _searchByUserID(String userID) async {
     try {
       final Map<String, dynamic> searcher = await SearchAPI.byUserID(userID);
+      if (!mounted) return;
       setState(() {
         friendID = searcher['id'];
       });
@@ -43,11 +46,14 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.popAndPushNamed(context, '/home');
-          },
-          child: Image.asset("assets/icons/left.png"),
+        leadingWidth: 48,
+        titleSpacing: 0,
+        leading: Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () => Navigator.popAndPushNamed(context, '/home'),
+            child: Image.asset("assets/icons/left.png"),
+          ),
         ),
         title: Text(
           '新增好友',
@@ -70,6 +76,7 @@ class _SearchPageState extends State<SearchPage> {
                 Switcher(
                   onChanged: (value) {
                     setState(() {
+                      friendID = null;
                       _isChecked = value;
                     });
                   },
@@ -84,7 +91,9 @@ class _SearchPageState extends State<SearchPage> {
                           controller: _phoneController,
                           controller2: _nationController,
                           onChanged: (value) {
-                            setState(() {});
+                            setState(() {
+                              friendID = null;
+                            });
                           },
                           onSubmit: () async {
                             await _searchByPhone(_phoneController.text != ""
@@ -104,7 +113,9 @@ class _SearchPageState extends State<SearchPage> {
                         child: IDTextField(
                           controller: _iDController,
                           onChanged: (value) {
-                            setState(() {});
+                            setState(() {
+                              friendID = null;
+                            });
                           },
                           onSubmit: (value) async {
                             await _searchByUserID(_iDController.text);
@@ -112,14 +123,22 @@ class _SearchPageState extends State<SearchPage> {
                             print(friendID);
                           },
                         ),
-                      )
+                      ),
               ],
             ),
           ),
           Container(
             height: 1,
             color: AppStyle.blue[100],
-          )
+          ),
+          if (friendID != null)
+            Expanded(
+              child: profile(
+                context,
+                id: friendID!,
+                isDialog: false,
+              ),
+            ),
         ],
       ),
     );

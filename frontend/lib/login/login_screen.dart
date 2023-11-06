@@ -26,7 +26,7 @@ class _LoginState extends State<Login> {
         builder: (context, state) {
           if (state is LoginSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.popAndPushNamed(context, '/home');
             });
           } else if (state is LoginConfirmFail) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -75,10 +75,11 @@ class _LoginState extends State<Login> {
                                               onTap: () {
                                                 Future.delayed(
                                                     const Duration(
-                                                        milliseconds: 500), () {
+                                                        milliseconds: 800), () {
                                                   _scrollController.animateTo(
                                                       _scrollController.position
-                                                          .maxScrollExtent,
+                                                              .maxScrollExtent -
+                                                          150,
                                                       duration: const Duration(
                                                           milliseconds: 300),
                                                       curve: Curves.easeInOut);

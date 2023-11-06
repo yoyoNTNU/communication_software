@@ -14,6 +14,7 @@ class _SentListState extends State<SentList> {
   Future<void> _getSentList() async {
     try {
       final List<Map<String, dynamic>> info = await GetInfoAPI.getSent();
+      if (!mounted) return;
       setState(() {
         sentList = info;
       });
@@ -90,7 +91,7 @@ class _SentListState extends State<SentList> {
                                   ? NetworkImage(friend['photo'])
                                       as ImageProvider
                                   : const AssetImage(
-                                      'assets/images/Avatar.png'),
+                                      'assets/images/avatar.png'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),

@@ -1,6 +1,9 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:proj/edit_page/edit_page_screen.dart';
+import 'package:proj/profile_dialog/bloc/profile_dialog_bloc.dart';
 import 'package:proj/sign_up/sign_up_screen.dart';
 import 'package:proj/materials/navbar.dart';
 import 'package:proj/login/login_screen.dart';
@@ -9,6 +12,7 @@ import 'package:proj/group/group_screen.dart';
 import 'package:proj/search/search_screen.dart';
 import 'package:proj/materials/animated_screen.dart';
 import 'package:proj/friend_invite/friend_invite_screen.dart';
+import 'package:proj/chatroom/chatroom_screen.dart';
 
 // Define http host name
 //backend develop server
@@ -22,7 +26,7 @@ const String imgPath =
 //const String imgPath ='https://storage.googleapis.com/express_message_production_uploader/uploads';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  MediaKit.ensureInitialized();
   runApp(const ChatApp());
 }
 
@@ -33,33 +37,41 @@ class ChatApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          toolbarHeight: 42,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProfileDialogBloc(),
         ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            toolbarHeight: 42,
+          ),
+        ),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('zh', 'TW'),
+          Locale('en', 'US'),
+        ],
+        locale: const Locale('zh'),
+        home: const AnimatedPage(),
+        routes: {
+          '/login': (context) => const Login(),
+          '/home': (context) => const NavBar(),
+          '/sign_up': (context) => const SignUp(),
+          '/forget_password': (context) => const SentResetEmail(),
+          '/edit': (context) => const EditPage(),
+          '/group': (context) => const GroupPage(),
+          '/search': (context) => const SearchPage(),
+          '/invite': (context) => const FriendInvite(),
+          '/chatroom': (context) => const ChatroomPage()
+        },
       ),
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('zh', 'TW'),
-        Locale('en', 'US'),
-      ],
-      locale: const Locale('zh'),
-      home: const AnimatedPage(),
-      routes: {
-        '/login': (context) => const Login(),
-        '/home': (context) => const NavBar(),
-        '/sign_up': (context) => const SignUp(),
-        '/forget_password': (context) => const SentResetEmail(),
-        '/edit': (context) => const EditPage(),
-        '/group': (context) => const GroupPage(),
-        '/search': (context) => const SearchPage(),
-        '/invite': (context) => const FriendInvite(),
-      },
     );
   }
 }

@@ -43,13 +43,14 @@ class _MemberCardState extends State<MemberCard> {
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   child: Row(children: [
                     ClipOval(
+                        clipBehavior: Clip.hardEdge,
                         child: widget.avatar != null
                             ? Image.network(
                                 widget.avatar!,
                                 width: 48,
                                 height: 48,
                               )
-                            : Image.asset('assets/images/Avatar.png')),
+                            : Image.asset('assets/images/avatar.png')),
                     const SizedBox(
                       width: 16,
                     ),

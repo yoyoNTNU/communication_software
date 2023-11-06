@@ -5,7 +5,7 @@ import 'package:proj/main.dart';
 class SignUpAPI {
   static Future<Map<String, dynamic>> signUp(String email, String phone,
       String userID, String name, String password, String confirm) async {
-    //TODO:處理手機輸入時的手機號空白
+    phone = phone.replaceAll(' ', '');
     final Map<String, String> body_ = {
       'email': email,
       'phone': phone,

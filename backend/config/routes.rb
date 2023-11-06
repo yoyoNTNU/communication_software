@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     get 'auth/member/password/reset'=> 'auth/passwords#reset'
     get 'auth/member/password/final'=> 'auth/passwords#final', as: 'reset_final'
   end
+  get 'ChatroomIDToTypeID' => 'helper#from_chatroomID_to_typeID'
+  get 'TypeIDToChatroomID' => 'helper#from_typeID_to_chatroomID'
   namespace :api do
     get 'member/info'=> 'member#show'
     get 'member/:id/info'=> 'member#other'
@@ -21,6 +23,7 @@ Rails.application.routes.draw do
     post 'member/feedback' =>'member#feedback'
     get 'search/phone' => 'search#by_phone'
     get 'search/user_id' => 'search#by_user_id'
+    get 'chatroom/all' => 'chatroom#get_all_chatroom_include_disabled'
     resources :friend_requests ,only:[:index,:create] do
       post 'accept' => 'friend_requests#accept'
       delete 'reject' =>'friend_requests#reject'
@@ -30,11 +33,14 @@ Rails.application.routes.draw do
       get 'check' => 'friends#check'
     end
 
-    resources :chatroom, only:[:index,:update] do
+    resources :chatroom, only:[:index,:update,:show] do
       get 'unread' => 'chatroom#unread_count'
       post 'read' => 'chatroom#read'
       delete 'unread'=> 'chatroom#unread'
       delete 'delete_background'=>'chatroom#destroy_background'
+      resources :message do
+        post 'read' => 'message#read'
+      end
     end
     resources :groups do
       get 'member_list' => 'groups#member_list'

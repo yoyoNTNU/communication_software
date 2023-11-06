@@ -22,7 +22,7 @@ class PrimeSelect extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset("assets/icons/Edit_blue.png"),
+                      Image.asset("assets/icons/edit_blue.png"),
                       Text(
                         '編輯資料',
                         style: AppStyle.caption(
@@ -41,7 +41,7 @@ class PrimeSelect extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset("assets/icons/User_add.png"),
+                      Image.asset("assets/icons/user_add.png"),
                       Text(
                         '好友邀請',
                         style: AppStyle.caption(
@@ -61,7 +61,7 @@ class PrimeSelect extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset("assets/icons/Setting.png"),
+                      Image.asset("assets/icons/setting.png"),
                       Text(
                         '設定',
                         style: AppStyle.caption(

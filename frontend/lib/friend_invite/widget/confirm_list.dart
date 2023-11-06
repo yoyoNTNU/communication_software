@@ -14,6 +14,7 @@ class _ConfirmListState extends State<ConfirmList> {
     try {
       showLoading(context);
       final List<Map<String, dynamic>> info = await GetInfoAPI.getConfirm();
+      if (!mounted) return;
       setState(() {
         confirmList = info;
       });
@@ -89,7 +90,7 @@ class _ConfirmListState extends State<ConfirmList> {
                                   ? NetworkImage(friend['photo'])
                                       as ImageProvider
                                   : const AssetImage(
-                                      'assets/images/Avatar.png'),
+                                      'assets/images/avatar.png'),
                               backgroundColor: Colors.transparent,
                             ),
                           ),

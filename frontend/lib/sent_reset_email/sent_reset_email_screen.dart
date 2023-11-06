@@ -22,6 +22,7 @@ class _SentResetEmailState extends State<SentResetEmail> {
   Future<void> _sentResetEmail(String email) async {
     try {
       final int code = await ResetEmailAPI.sentResetEmail(email);
+      if (!mounted) return;
       setState(() {
         responseCode = code;
       });
@@ -37,6 +38,7 @@ class _SentResetEmailState extends State<SentResetEmail> {
         MaterialPageRoute(builder: (context) => const SentSuccess()),
       );
     } else {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -96,6 +98,7 @@ class _SentResetEmailState extends State<SentResetEmail> {
                             },
                             onChanged: (value) {
                               if (responseCode != 200) {
+                                if (!mounted) return;
                                 setState(() {
                                   responseCode = 200;
                                 });

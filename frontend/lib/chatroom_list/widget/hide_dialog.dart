@@ -77,7 +77,7 @@ class HideDialog extends StatelessWidget {
                       SizedBox(
                         width: 24,
                         height: 24,
-                        child: Image.asset("assets/icons/Return_back.png"),
+                        child: Image.asset("assets/icons/return_back.png"),
                       ),
                       const SizedBox(
                         width: 8,

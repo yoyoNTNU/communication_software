@@ -7,7 +7,7 @@ class SearchAPI {
   static Future<Map<String, dynamic>> byPhone(
     String phone,
   ) async {
-    //TODO:處理手機輸入時的手機號空白
+    phone = phone.replaceAll(' ', '');
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.get(

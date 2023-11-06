@@ -31,6 +31,7 @@ class _SignUpState extends State<SignUp> {
     try {
       final Map<String, dynamic> signUp =
           await SignUpAPI.signUp(email, phone, userID, name, password, confirm);
+      if (!mounted) return;
       setState(() {
         message = signUp;
       });

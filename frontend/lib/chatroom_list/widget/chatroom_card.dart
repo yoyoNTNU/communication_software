@@ -14,6 +14,7 @@ class ChatRoomCard extends StatefulWidget {
   final String type;
   final int? count;
   final String sender;
+  final void Function() enterRoom;
 
   const ChatRoomCard({
     super.key,
@@ -30,6 +31,7 @@ class ChatRoomCard extends StatefulWidget {
     required this.type,
     this.count,
     required this.sender,
+    required this.enterRoom,
   });
 
   @override
@@ -62,10 +64,10 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //TODO 要記得考慮參數傳遞
-        //在這個函式裡面導航到對應的聊天室頁面
-        //你可以使用 Navigator.push 來執行導航
+        //TODO:之後視情況要改成popAndPush
+        widget.enterRoom();
         print("tap ${widget.chatroomID} room");
+        Navigator.pushNamed(context, "/chatroom", arguments: widget.chatroomID);
       },
       child: Container(
         color: AppStyle.white,
@@ -77,7 +79,7 @@ class _ChatRoomCardState extends State<ChatRoomCard> {
               backgroundColor: Colors.transparent,
               backgroundImage: widget.photo != null
                   ? NetworkImage(widget.photo!) as ImageProvider
-                  : const AssetImage("assets/images/Avatar.png"),
+                  : const AssetImage("assets/images/avatar.png"),
             ),
             const SizedBox(
               width: 16,

@@ -45,9 +45,14 @@ class _EditPageState extends State<EditPage> {
     return Scaffold(
         backgroundColor: AppStyle.blue[50],
         appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () => Navigator.popAndPushNamed(context, '/home'),
-            child: Image.asset("assets/icons/left.png"),
+          leadingWidth: 48,
+          titleSpacing: 0,
+          leading: Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: () => Navigator.popAndPushNamed(context, '/home'),
+              child: Image.asset("assets/icons/left.png"),
+            ),
           ),
           title: Text(
             '編輯個人資料',
@@ -56,7 +61,7 @@ class _EditPageState extends State<EditPage> {
           actions: [
             GestureDetector(
                 onTap: () => Navigator.popAndPushNamed(context, '/edit'),
-                child: Image.asset("assets/icons/Refresh.png")),
+                child: Image.asset("assets/icons/refresh.png")),
           ],
           centerTitle: true,
           backgroundColor: Colors.white,

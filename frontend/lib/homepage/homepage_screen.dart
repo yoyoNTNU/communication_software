@@ -18,11 +18,11 @@ class _HomePageState extends State<HomePage> {
   bool isExpanded = false;
   Completer<void> dialogShower = Completer<void>();
   Completer<void> dialogCompleter = Completer<void>();
-  int? index = 1;
+  int? index;
 
   Future<void> _info() async {
     index = await DatabaseHelper.instance.getHomepageIndex();
-    if (index != 0) return;
+    if (index == 1) return;
     info_ = await DatabaseHelper.instance.getCachedSelfData();
     if (!dialogCompleter.isCompleted) {
       if (!context.mounted) return;
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return index == 0
+    return index == 0 || index == null
         ? RefreshIndicator(
             onRefresh: () async {
               await DatabaseHelper.instance.clearCache();
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                             height: 32,
                             width: 32,
                             child:
-                                Image.asset("assets/icons/User_add_white.png"),
+                                Image.asset("assets/icons/user_add_white.png"),
                           ),
                         ),
                       ],
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(
                             height: 32,
                             width: 32,
-                            child: Image.asset("assets/icons/Group_add.png"),
+                            child: Image.asset("assets/icons/group_add.png"),
                           ),
                         ),
                       ],
@@ -180,7 +180,7 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox(
                             height: 32,
                             width: 32,
-                            child: Image.asset("assets/icons/X.png"),
+                            child: Image.asset("assets/icons/x.png"),
                           ),
                         ),
                       ],
@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                                   ? NetworkImage(info_!["background"])
                                       as ImageProvider
                                   : const AssetImage(
-                                      'assets/images/Background.png'),
+                                      'assets/images/background.png'),
                               fit: BoxFit.contain,
                             ),
                           ),
@@ -268,7 +268,7 @@ class _HomePageState extends State<HomePage> {
                                   ? NetworkImage(info_!["photo"])
                                       as ImageProvider
                                   : const AssetImage(
-                                      'assets/images/Avatar.png'),
+                                      'assets/images/avatar.png'),
                               backgroundColor: Colors.transparent),
                         ),
                         Positioned(
@@ -300,7 +300,7 @@ class _HomePageState extends State<HomePage> {
                                 if (!context.mounted) return;
                                 Navigator.popAndPushNamed(context, '/home');
                               },
-                              child: Image.asset("assets/icons/Refresh.png")),
+                              child: Image.asset("assets/icons/refresh.png")),
                         )
                       ],
                     ),

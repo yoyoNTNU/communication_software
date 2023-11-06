@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:proj/main.dart';
 import 'package:proj/style.dart';
 import 'package:proj/chatroom_list/chatroom_list_api.dart';
 import 'package:proj/chatroom_list/widget/chatroom_list_widget.dart';
-import 'package:web_socket_channel/io.dart';
+import 'package:proj/chatroom_list/chatroom_list_listener.dart';
 import 'package:proj/widget.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
+import 'package:proj/main.dart';
+import 'dart:convert';
 import 'package:proj/data.dart';
+import 'package:web_socket_channel/io.dart';
 
-class ChatroomPage extends StatefulWidget {
-  const ChatroomPage({super.key});
+class ChatroomListPage extends StatefulWidget {
+  const ChatroomListPage({super.key});
 
   @override
-  State<ChatroomPage> createState() => _ChatroomPageState();
+  State<ChatroomListPage> createState() => _ChatroomListPageState();
 }
 
-class _ChatroomPageState extends State<ChatroomPage>
+class _ChatroomListPageState extends State<ChatroomListPage>
     with TickerProviderStateMixin {
-  final channel = IOWebSocketChannel.connect("wss://$host/cable");
   //TODO:實時連接並更新列表
   List<Map<String, dynamic>> chatRooms = [];
   List<Map<String, dynamic>> copyChatRooms = [];
   List<int> selectedIndexList = [];
+  List<int> allChatroomIndex = [];
   final ScrollController _scrollController = ScrollController();
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -247,6 +249,51 @@ class _ChatroomPageState extends State<ChatroomPage>
   }
 
   @override
+  void didChangeDependencies() async {
+    await _getAllChatroomIncludeDisabled();
+    for (int id in allChatroomIndex) {
+      if (!WebSocketChannel.checkIsSubscribe(id)) {
+        createWebSocketConnect(id);
+      } else {
+        print("已訂閱過");
+        var tempChannel = WebSocketChannel.getChannel(id);
+        tempChannel!.sink.close();
+        createWebSocketConnect(id);
+      }
+    }
+    super.didChangeDependencies();
+  }
+
+  void createWebSocketConnect(int chatroomID) {
+    //var channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
+    var channel = IOWebSocketChannel.connect("wss://$host/cable");
+    channel.sink.add(jsonEncode({
+      'command': 'subscribe',
+      'identifier': jsonEncode({
+        'channel': 'ChatChannel',
+        'chatroom_id': chatroomID,
+      }),
+    }));
+    channel.stream.listen((message) {
+      var temp = jsonDecode(message);
+      if (!temp.containsKey('type')) {
+        print("外面收到囉：${temp["message"]["message"]["content"]}");
+        if (mounted) {
+          setState(() {
+            print("我還活著");
+            //更新UI 及 資料庫
+          });
+        } else {
+          print("我掛掉了");
+          //單純更新資料庫
+        }
+      }
+    });
+    print("訂閱");
+    WebSocketChannel.addListen(chatroomID, channel);
+  }
+
+  @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
@@ -268,6 +315,16 @@ class _ChatroomPageState extends State<ChatroomPage>
     }
     if (!context.mounted) return;
     Navigator.of(context).pop();
+  }
+
+  Future<void> _getAllChatroomIncludeDisabled() async {
+    try {
+      final List<int> allChatroom =
+          await ChatRoomListAPI.getAllChatroomIncludeDisabled();
+      allChatroomIndex = allChatroom;
+    } catch (e) {
+      print("API request error: $e");
+    }
   }
 
   @override
@@ -566,7 +623,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                             hintText: "請輸入關鍵字",
                             hintStyle:
                                 AppStyle.body(color: AppStyle.gray[500]!),
-                            prefixIcon: Image.asset("assets/icons/Search.png"),
+                            prefixIcon: Image.asset("assets/icons/search.png"),
                             filled: true,
                             fillColor: AppStyle.white,
                             contentPadding: const EdgeInsets.symmetric(
@@ -789,6 +846,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                           type: room["type"],
                           count: room["count"],
                           sender: room["sender"],
+                          enterRoom: () {},
                         ),
                         onChanged: ({
                           int? chatroomID,

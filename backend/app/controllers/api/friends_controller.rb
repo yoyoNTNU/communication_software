@@ -22,10 +22,10 @@ class Api::FriendsController < ApplicationController
       }.to_json, status: 200
     else
       render json: {
-        error: true,
-        message: "failed to get friend info",
-        data: "you are not friends."
-      }.to_json, status: 400
+        error: false,
+        message: "succeed to get friend info",
+        data: @friend
+      }.to_json, status: 200
     end
   end
 
@@ -58,21 +58,23 @@ class Api::FriendsController < ApplicationController
           }
         }.to_json, status: 200
       else
-        if FriendRequest.find_by(friend:@friend,member:current_member)
+        if temp=FriendRequest.find_by(friend:@friend,member:current_member)
           render json: {
             error: false,
             message: "succeed to get relationship",
             data: {
               relationship: "Sender",
+              message: temp.content,
               info:"#{current_member.name} has send request to #{@friend.name}."
             }
           }.to_json, status: 200
-        elsif  FriendRequest.find_by(friend:current_member,member:@friend)
+        elsif  temp=FriendRequest.find_by(friend:current_member,member:@friend)
           render json: {
             error: false,
             message: "succeed to get relationship",
             data: {
               relationship: "Receiver",
+              message: temp.content,
               info:"#{current_member.name} has received request from #{@friend.name}."
             }
           }.to_json, status: 200
@@ -147,7 +149,7 @@ class Api::FriendsController < ApplicationController
         error: true,
         message: "failed to set friendship",
         data: "This is yourself."
-      }.to_json, status: 200
+      }.to_json, status: 400
       return
     else 
       @friendship=Friendship.find_by(member:current_member,friend:@friend)

@@ -30,7 +30,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         if (response.statusCode == 200) {
           final bearerToken = headers['authorization'];
-          final Token token = Token(authorization: bearerToken);
+          final userID = data['data']['id'];
+          final Token token = Token(authorization: bearerToken, userID: userID);
           await DatabaseHelper.instance.setToken(token);
           await DatabaseHelper.instance.clearCache();
 
