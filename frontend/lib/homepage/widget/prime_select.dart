@@ -56,7 +56,7 @@ class PrimeSelect extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   //TODO: push to setting page
-                  Navigator.popAndPushNamed(context, '/login');
+                  Navigator.popAndPushNamed(context, '/setting');
                 },
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
