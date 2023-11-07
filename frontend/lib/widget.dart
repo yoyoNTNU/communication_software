@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 import 'package:proj/style.dart';
 import 'package:flutter/services.dart';
+import 'package:photo_view/photo_view.dart';
 import 'dart:io';
 
 class LoadingDialog extends StatelessWidget {
@@ -59,6 +60,93 @@ void copyToClipboard(BuildContext context, String text) {
     duration: const Duration(milliseconds: 1500),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+void fullViewImage(
+  BuildContext context,
+  String content, {
+  String title = "",
+  bool isNeedDownload = false,
+  bool isNeedEdit = false,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) {
+        //要有下載按鈕
+        return Stack(
+          children: [
+            PhotoView(
+              imageProvider: NetworkImage(content),
+              minScale: PhotoViewComputedScale.contained * 1,
+              maxScale: PhotoViewComputedScale.covered * 1.5,
+            ),
+            Container(
+              height: 60,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Row(
+                children: [
+                  isNeedDownload
+                      ? GestureDetector(
+                          onTap: () {
+                            print("下載圖片");
+                            //TODO: 下載圖片
+                          },
+                          child: Image.asset("assets/icons/download.png"),
+                        )
+                      : const SizedBox(
+                          width: 24,
+                          height: 24,
+                        ),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppStyle.header(color: AppStyle.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Image.asset("assets/icons/x_white.png"),
+                  ),
+                ],
+              ),
+            ),
+            if (isNeedEdit)
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(bottom: 42),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      print("顯示相片來源選單");
+                    },
+                    style: AppStyle.secondaryBtn(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: Image.asset("assets/icons/edit_teal.png"),
+                        ),
+                        const SizedBox(width: 8),
+                        const Text("編輯"),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+          ],
+        );
+      },
+    ),
+  );
 }
 
 //final ImagePicker picker = ImagePicker();
