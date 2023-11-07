@@ -26,8 +26,7 @@ class _SelfAreaState extends State<SelfArea> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  print("編輯資料");
-                  //TODO: directed to edit page
+                  Navigator.popAndPushNamed(context, '/edit');
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -47,8 +46,7 @@ class _SelfAreaState extends State<SelfArea> {
             Expanded(
               child: GestureDetector(
                 onTap: () {
-                  print("複製ID");
-                  //TODO: 複製ID
+                  copyToClipboard(context, state.data['userID']);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
