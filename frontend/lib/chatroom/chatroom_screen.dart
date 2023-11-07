@@ -446,6 +446,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "member_id": currentMemberID,
                               "type_": "string",
                               "content": _messageController.text,
+                              "isReply": false, //依實際情況
                               "reply_to_id": null, //要記得放回覆的msgID
                             }),
                           }));
@@ -455,9 +456,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "senderID": currentMemberID,
                               "type": "string",
                               "content": _messageController.text,
-                              "msgTime": DateFormat('h:mm a')
-                                  .format(DateTime.now())
-                                  .toString(),
+                              "msgTime": dateTimeToString(DateTime.now()),
+                              "isReply": false, //依實際情況
                               "replyToID": null, //要記得放回覆的msgID
                               "isPinned": false,
                             });
