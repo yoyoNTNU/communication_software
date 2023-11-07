@@ -284,6 +284,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            showProfileDialog(context);
+                          },
+                          child: Container(
+                              width: double.infinity,
+                              height: 210,
+                              color: Colors.transparent),
+                        ),
                         Positioned(
                           top: 154.5,
                           left: 154,

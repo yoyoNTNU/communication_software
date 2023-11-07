@@ -15,7 +15,8 @@ class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
     on<OpenProfile>((event, emit) async {
       final dbToken = await DatabaseHelper.instance.getToken();
       final id = dbToken?.userID;
-      if (event.userID == id && event.isGroup == false) {
+      if ((event.userID == id || event.userID == -1) &&
+          event.isGroup == false) {
         Map<String, dynamic> info = await GetFriendAPI.getSelfInfo();
         emit(SelfProfile(data: info));
       } else if (event.userID != id && event.isGroup == false) {
