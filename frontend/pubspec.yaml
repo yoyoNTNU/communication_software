@@ -146,6 +146,8 @@ flutter:
     - assets/icons/reject.png
     - assets/icons/agree.png
     - assets/icons/leave.png
+    - assets/icons/download.png
+    - assets/icons/edit_teal.png
 
     # Animations
     - assets/animations/loading.gif
