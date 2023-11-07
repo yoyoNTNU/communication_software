@@ -142,6 +142,9 @@ flutter:
     - assets/icons/x_gray.png
     - assets/icons/send_white.png
     - assets/icons/bell.png
+    - assets/icons/wait.png
+    - assets/icons/reject.png
+    - assets/icons/agree.png
 
     # Animations
     - assets/animations/loading.gif
