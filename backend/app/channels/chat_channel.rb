@@ -17,7 +17,7 @@ class ChatChannel < ApplicationCable::Channel
       type_:data['type_'],
       content:data['content'],
       file:data['file'],
-      isReply: data['isReply']
+      isReply: data['isReply'],
       reply_to_id:data['reply_to_id']
     )
     ActionCable.server.broadcast(channel_name, { message: {
