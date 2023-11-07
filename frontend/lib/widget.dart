@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 import 'package:proj/style.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 
 class LoadingDialog extends StatelessWidget {
@@ -46,6 +47,18 @@ void showProfileDialog(
     id: id,
     groupMemberCount: groupMemberCount,
   );
+}
+
+void copyToClipboard(BuildContext context, String text) {
+  Clipboard.setData(ClipboardData(text: text));
+  SnackBar snackBar = SnackBar(
+    content: Text(
+      '已複製到剪貼板',
+      style: AppStyle.body(color: AppStyle.white),
+    ),
+    duration: const Duration(milliseconds: 1500),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 //final ImagePicker picker = ImagePicker();
