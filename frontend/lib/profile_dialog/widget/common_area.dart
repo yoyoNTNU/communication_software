@@ -20,41 +20,59 @@ class _CommonAreaState extends State<CommonArea> {
           Column(
             children: [
               // Photo Area
-              Container(
-                height: 160,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: AppStyle.gray,
-                    width: 1,
+              GestureDetector(
+                onTap: () {
+                  (state.data['background'] != "" &&
+                          state.data['background'] != null)
+                      ? fullViewImage(context, state.data['background'],
+                          isNeedEdit: state is SelfProfile, title: "封面相片")
+                      : null;
+                },
+                child: Container(
+                  height: 160,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: AppStyle.gray,
+                      width: 1,
+                    ),
+                    image: DecorationImage(
+                      image: (state.data['background'] != "" &&
+                              state.data['background'] != null)
+                          ? NetworkImage(state.data['background'])
+                          : const AssetImage("assets/images/background.png")
+                              as ImageProvider,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                  image: DecorationImage(
-                    image: (state.data['background'] != "" &&
-                            state.data['background'] != null)
-                        ? NetworkImage(state.data['background'])
-                        : const AssetImage("assets/images/background.png")
-                            as ImageProvider,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                child: Center(
-                  child: Container(
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: AppStyle.gray,
-                        width: 1,
-                      ),
-                      image: DecorationImage(
-                        image: (state.data['photo'] != "" &&
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        (state.data['photo'] != "" &&
                                 state.data['photo'] != null)
-                            ? NetworkImage(state.data['photo'])
-                            : const AssetImage("assets/images/avatar.png")
-                                as ImageProvider,
-                        fit: BoxFit.cover,
+                            ? fullViewImage(context, state.data['photo'],
+                                isNeedEdit: state is SelfProfile, title: "頭貼相片")
+                            : null;
+                      },
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(
+                            color: AppStyle.gray,
+                            width: 1,
+                          ),
+                          image: DecorationImage(
+                            image: (state.data['photo'] != "" &&
+                                    state.data['photo'] != null)
+                                ? NetworkImage(state.data['photo'])
+                                : const AssetImage("assets/images/avatar.png")
+                                    as ImageProvider,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),
