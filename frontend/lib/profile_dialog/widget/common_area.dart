@@ -74,7 +74,8 @@ class _CommonAreaState extends State<CommonArea> {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    if (state.data['intro'] != null || state is GroupProfile)
+                      const SizedBox(height: 4),
                     if (state.data['intro'] != null)
                       Text(
                         state.data['intro'].toString(),
@@ -82,6 +83,34 @@ class _CommonAreaState extends State<CommonArea> {
                         maxLines: 8,
                         overflow: TextOverflow.ellipsis,
                       ),
+                    if (state is GroupProfile)
+                      Container(
+                        height: 18,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: AppStyle.teal),
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.transparent),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              "assets/icons/user_teal.png",
+                              width: 12,
+                              height: 18,
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            Text(
+                              state.memberCount.toString(),
+                              style:
+                                  AppStyle.info(level: 2, color: AppStyle.teal),
+                            )
+                          ],
+                        ),
+                      )
                   ],
                 ),
               ),

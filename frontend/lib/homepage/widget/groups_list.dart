@@ -87,63 +87,73 @@ class _GroupsListState extends State<GroupsList> {
                       var group = groupList[index];
                       return Column(
                         children: <Widget>[
-                          ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 8),
-                            title: Row(
-                              children: [
-                                Flexible(
-                                  fit: FlexFit.loose,
-                                  child: Text(
-                                    group['name'],
-                                    style: AppStyle.header(
-                                        level: 3, color: AppStyle.gray[700]!),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
+                          GestureDetector(
+                            onTap: () {
+                              showProfileDialog(
+                                context,
+                                id: group['id'],
+                                isGroup: true,
+                                groupMemberCount: group['count'],
+                              );
+                            },
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 8),
+                              title: Row(
+                                children: [
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Text(
+                                      group['name'],
+                                      style: AppStyle.header(
+                                          level: 3, color: AppStyle.gray[700]!),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Container(
-                                  height: 18,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: AppStyle.teal),
-                                      borderRadius: BorderRadius.circular(4),
-                                      color: Colors.transparent),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        "assets/icons/user_teal.png",
-                                        width: 12,
-                                        height: 18,
-                                      ),
-                                      const SizedBox(
-                                        width: 2,
-                                      ),
-                                      Text(
-                                        "${group['count']}",
-                                        style: AppStyle.info(
-                                            level: 2, color: AppStyle.teal),
-                                      )
-                                    ],
+                                  const SizedBox(
+                                    width: 8,
                                   ),
-                                )
-                              ],
-                            ),
-                            leading: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: group["photo"] != null
-                                  ? NetworkImage(group["photo"])
-                                      as ImageProvider
-                                  : const AssetImage(
-                                      'assets/images/avatar.png'),
-                              backgroundColor: Colors.transparent,
+                                  Container(
+                                    height: 18,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 4),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1, color: AppStyle.teal),
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.transparent),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Image.asset(
+                                          "assets/icons/user_teal.png",
+                                          width: 12,
+                                          height: 18,
+                                        ),
+                                        const SizedBox(
+                                          width: 2,
+                                        ),
+                                        Text(
+                                          "${group['count']}",
+                                          style: AppStyle.info(
+                                              level: 2, color: AppStyle.teal),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                              leading: CircleAvatar(
+                                radius: 20,
+                                backgroundImage: group["photo"] != null
+                                    ? NetworkImage(group["photo"])
+                                        as ImageProvider
+                                    : const AssetImage(
+                                        'assets/images/avatar.png'),
+                                backgroundColor: Colors.transparent,
+                              ),
                             ),
                           ),
                           Divider(

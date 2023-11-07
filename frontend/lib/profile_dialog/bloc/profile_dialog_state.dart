@@ -37,11 +37,12 @@ final class FriendProfile extends ProfileDialogState {
 }
 
 final class GroupProfile extends ProfileDialogState {
-  final int id;
-
-  const GroupProfile({required Map<String, dynamic> data, required this.id})
-      : super(data: data);
+  final int memberCount;
+  const GroupProfile({
+    required Map<String, dynamic> data,
+    this.memberCount = 0,
+  }) : super(data: data);
 
   @override
-  List<Object> get props => [id, data];
+  List<Object> get props => [data];
 }

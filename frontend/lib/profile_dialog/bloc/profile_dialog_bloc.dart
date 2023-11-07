@@ -15,24 +15,22 @@ class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
     on<OpenProfile>((event, emit) async {
       final dbToken = await DatabaseHelper.instance.getToken();
       final id = dbToken?.userID;
-      if ((event.userID == id || event.userID == -1) &&
-          event.isGroup == false) {
+      if ((event.id == id || event.id == -1) && event.isGroup == false) {
         Map<String, dynamic> info = await GetFriendAPI.getSelfInfo();
         emit(SelfProfile(data: info));
-      } else if (event.userID != id && event.isGroup == false) {
-        String check = await GetFriendAPI.getCheckFriend(event.userID);
-        Map<String, dynamic> info =
-            await GetFriendAPI.getFriendInfo(event.userID);
+      } else if (event.id != id && event.isGroup == false) {
+        String check = await GetFriendAPI.getCheckFriend(event.id);
+        Map<String, dynamic> info = await GetFriendAPI.getFriendInfo(event.id);
         emit(FriendProfile(
           data: info,
-          friendID: event.userID,
+          friendID: event.id,
           isFriend: check == 'Friend',
           isReceiver: check == 'Receiver',
           isSender: check == 'Sender',
         ));
-      } else if (event.groupID != -1 && event.isGroup == true) {
-        // TODO: Get group profile data
-        emit(GroupProfile(id: event.userID, data: const {}));
+      } else if (event.id != -1 && event.isGroup == true) {
+        Map<String, dynamic> info = await GetGroupAPI.getGroupInfo(event.id);
+        emit(GroupProfile(data: info, memberCount: event.groupMemberCount));
       }
     });
   }

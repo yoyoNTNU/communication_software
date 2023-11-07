@@ -34,9 +34,18 @@ void showLoading(BuildContext context) {
 }
 
 // Dialog Showing the profile of user
-void showProfileDialog(BuildContext context,
-    {bool isGroup = false, int id = -1}) {
-  showProfile(context, isGroup: isGroup, id: id);
+void showProfileDialog(
+  BuildContext context, {
+  bool isGroup = false,
+  int id = -1,
+  int groupMemberCount = 0,
+}) {
+  showProfile(
+    context,
+    isGroup: isGroup,
+    id: id,
+    groupMemberCount: groupMemberCount,
+  );
 }
 
 //final ImagePicker picker = ImagePicker();

@@ -5,18 +5,26 @@ import 'package:proj/profile_dialog/widget/profile_dialog_widget.dart';
 import 'package:proj/style.dart';
 
 // Dialog Showing the profile of user
-void showProfile(BuildContext context, {bool isGroup = false, int id = -1}) {
+void showProfile(
+  BuildContext context, {
+  bool isGroup = false,
+  int id = -1,
+  int groupMemberCount = 0,
+}) {
   BlocProvider.of<ProfileDialogBloc>(context).add(ResetProfile());
   BlocProvider.of<ProfileDialogBloc>(context).add(OpenProfile(
-    userID: id,
+    id: id,
     isGroup: isGroup,
+    groupMemberCount: groupMemberCount,
   ));
+
   showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) => ProfileDialog(
       userID: id,
       isDialog: true,
+      groupMemberCount: groupMemberCount,
     ),
   );
 }
@@ -25,23 +33,30 @@ Widget profile(
   BuildContext context, {
   int id = -1,
   isDialog = false,
+  int groupMemberCount = 0,
 }) {
   BlocProvider.of<ProfileDialogBloc>(context).add(ResetProfile());
   BlocProvider.of<ProfileDialogBloc>(context).add(OpenProfile(
-    userID: id,
+    id: id,
   ));
-  return ProfileDialog(userID: id, isDialog: isDialog);
+  return ProfileDialog(
+    userID: id,
+    isDialog: isDialog,
+    groupMemberCount: groupMemberCount,
+  );
 }
 
 // Create a Dialog that show the profile of user
 class ProfileDialog extends StatefulWidget {
   final int userID;
   final bool isDialog;
+  final int groupMemberCount;
 
   const ProfileDialog({
     Key? key,
     required this.userID,
     required this.isDialog,
+    required this.groupMemberCount,
   }) : super(key: key);
 
   @override
@@ -84,12 +99,13 @@ class _ProfileDialogState extends State<ProfileDialog> {
                         !state.isSender &&
                         !state.isReceiver)
                       const NoneArea(),
+                    if (state is GroupProfile) const GroupArea(),
                   ],
                 ),
               ),
             ),
             // A Button to close the dialog
-            if (widget.isDialog)
+            if (widget.isDialog && state is! NoProfile)
               Opacity(
                 opacity: 0.8,
                 child: FloatingActionButton(
