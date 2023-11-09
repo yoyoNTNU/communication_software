@@ -148,6 +148,7 @@ flutter:
     - assets/icons/leave.png
     - assets/icons/download.png
     - assets/icons/edit_teal.png
+    - assets/icons/refresh_2.png
 
     # Animations
     - assets/animations/loading.gif
