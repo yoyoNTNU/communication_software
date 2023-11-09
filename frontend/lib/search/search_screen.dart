@@ -15,7 +15,8 @@ class _SearchPageState extends State<SearchPage> {
   final _iDController = TextEditingController();
   final _phoneController = TextEditingController();
   final _nationController = TextEditingController();
-  int? friendID;
+  final _isoCodeController = TextEditingController();
+  int? friendID = 0;
 
   Future<void> _searchByPhone(String phone) async {
     try {
@@ -39,6 +40,12 @@ class _SearchPageState extends State<SearchPage> {
     } catch (e) {
       print('API request error: $e');
     }
+  }
+
+  @override
+  void initState() {
+    _isoCodeController.text = "TW";
+    super.initState();
   }
 
   @override
@@ -76,7 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                 Switcher(
                   onChanged: (value) {
                     setState(() {
-                      friendID = null;
+                      friendID = 0;
                       _isChecked = value;
                     });
                   },
@@ -90,9 +97,10 @@ class _SearchPageState extends State<SearchPage> {
                         child: PhoneTextField(
                           controller: _phoneController,
                           controller2: _nationController,
+                          controller3: _isoCodeController,
                           onChanged: (value) {
                             setState(() {
-                              friendID = null;
+                              friendID = 0;
                             });
                           },
                           onSubmit: () async {
@@ -103,8 +111,6 @@ class _SearchPageState extends State<SearchPage> {
                                     : _nationController.text +
                                         _phoneController.text
                                 : "");
-                            //TODO:顯示搜尋結果
-                            print(friendID);
                           },
                         ),
                       )
@@ -114,13 +120,11 @@ class _SearchPageState extends State<SearchPage> {
                           controller: _iDController,
                           onChanged: (value) {
                             setState(() {
-                              friendID = null;
+                              friendID = 0;
                             });
                           },
                           onSubmit: (value) async {
                             await _searchByUserID(_iDController.text);
-                            //TODO:顯示搜尋結果
-                            print(friendID);
                           },
                         ),
                       ),
@@ -131,12 +135,34 @@ class _SearchPageState extends State<SearchPage> {
             height: 1,
             color: AppStyle.blue[100],
           ),
-          if (friendID != null)
+          if (friendID != null && friendID != 0)
             Expanded(
               child: profile(
                 context,
                 id: friendID!,
                 isDialog: false,
+              ),
+            ),
+          if (friendID == null)
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset("assets/images/fail_logo_dark.png"),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      "查無結果",
+                      style:
+                          AppStyle.info(level: 2, color: AppStyle.gray[700]!),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
               ),
             ),
         ],

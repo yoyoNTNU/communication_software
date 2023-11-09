@@ -3,6 +3,7 @@ part of 'search_widget.dart';
 class PhoneTextField extends StatefulWidget {
   final TextEditingController controller;
   final TextEditingController controller2;
+  final TextEditingController controller3;
   final void Function(String) onChanged;
   final void Function() onSubmit;
 
@@ -10,6 +11,7 @@ class PhoneTextField extends StatefulWidget {
     super.key,
     required this.controller,
     required this.controller2,
+    required this.controller3,
     required this.onChanged,
     required this.onSubmit,
   });
@@ -44,13 +46,14 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
         "ID"
       ],
       initialValue: PhoneNumber(
-        isoCode: 'TW',
+        isoCode: widget.controller3.text,
       ),
       spaceBetweenSelectorAndTextField: 0,
       selectorTextStyle: AppStyle.body(
           level: 1, color: AppStyle.gray.shade900, weight: FontWeight.w500),
       onInputChanged: (PhoneNumber number) {
         widget.controller2.text = number.dialCode!;
+        widget.controller3.text = number.isoCode!;
         widget.onChanged(number.toString());
       },
       onSubmit: () {
