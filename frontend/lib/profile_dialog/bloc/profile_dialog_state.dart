@@ -23,7 +23,7 @@ final class FriendProfile extends ProfileDialogState {
   final bool isFriend;
   final bool isReceiver;
   final bool isSender;
-  final int? friendshipID;
+  final String? message;
 
   const FriendProfile({
     required Map<String, dynamic> data,
@@ -31,7 +31,7 @@ final class FriendProfile extends ProfileDialogState {
     this.isFriend = false,
     this.isReceiver = false,
     this.isSender = false,
-    this.friendshipID,
+    this.message,
   }) : super(data: data);
 
   @override

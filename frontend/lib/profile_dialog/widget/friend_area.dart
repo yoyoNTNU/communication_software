@@ -16,7 +16,7 @@ class _FriendAreaState extends State<FriendArea> {
 
   Future<void> _typeIDToChatroomID(String type, int id) async {
     try {
-      int chatroom = await TransferAPI.typeIDToChatroomID(type, id);
+      int chatroom = await TransferAPI.typeIDToChatroomID(type, friendID: id);
       setState(() {
         chatroomID = chatroom;
       });
@@ -78,11 +78,7 @@ class _FriendAreaState extends State<FriendArea> {
             Expanded(
               child: GestureDetector(
                 onTap: () async {
-                  await _typeIDToChatroomID(
-                      "friend",
-                      (state is FriendProfile && state.isFriend)
-                          ? state.friendshipID!
-                          : 0);
+                  await _typeIDToChatroomID("friend", state.data['memberID']);
                   _readMessage();
                   if (!mounted) return;
                   Navigator.pushNamed(context, "/chatroom",

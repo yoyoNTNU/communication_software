@@ -22,14 +22,13 @@ class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
         Map<String, dynamic> temp = await FriendAPI.getCheckFriend(event.id);
         String check = temp['relationship'];
         Map<String, dynamic> info = await FriendAPI.getFriendInfo(event.id);
-        print(temp);
         emit(FriendProfile(
           data: info,
           friendID: event.id,
           isFriend: check == 'Friend',
           isReceiver: check == 'Receiver',
           isSender: check == 'Sender',
-          friendshipID: temp['friendshipID'],
+          message: temp['message'],
         ));
       } else if (event.id != -1 && event.isGroup == true) {
         Map<String, dynamic> info = await GetGroupAPI.getGroupInfo(event.id);

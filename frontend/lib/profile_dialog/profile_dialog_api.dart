@@ -16,10 +16,10 @@ class FriendAPI {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Map<String, dynamic> infoData = responseData['data'];
-      final int? friendshipID = infoData['friendship_id'];
+      final String? message = infoData['message'];
       return {
         "relationship": infoData['relationship'],
-        "friendshipID": friendshipID,
+        "message": message,
       };
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
@@ -143,9 +143,15 @@ class GetGroupAPI {
 }
 
 class TransferAPI {
-  static Future<int> typeIDToChatroomID(String type, int id) async {
-    final response = await http.get(
-        Uri.parse('https://$host/TypeIDToChatroomID?type_=$type&type_id=$id'));
+  static Future<int> typeIDToChatroomID(
+    String type, {
+    int friendID = 0,
+    int groupID = 0,
+  }) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final memberID = dbToken?.userID;
+    final response = await http.get(Uri.parse(
+        'https://$host/TypeIDToChatroomID?type_=$type&member_id_1=$memberID&member_id_2=$friendID&group_id=$groupID'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Map<String, dynamic> infoData = responseData['data'];
