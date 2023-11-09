@@ -127,7 +127,7 @@ class _ChatroomPageState extends State<ChatroomPage>
           groupPeopleCount: 10,
           isMuted: true,
           isPinned: true,
-          name: "範例2號",
+          name: "聊天室$chatroomID內部",
           isExpanded: isExpanded,
           onTapMemberCount: () {
             setBottomHeightAnimated(isExpanded ? 1 : 41);

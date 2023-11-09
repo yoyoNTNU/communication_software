@@ -1,8 +1,10 @@
 part of 'profile_dialog_widget.dart';
 
 class FriendArea extends StatefulWidget {
+  final void Function() setStateProfile;
   const FriendArea({
     super.key,
+    required this.setStateProfile,
   });
 
   @override
@@ -10,6 +12,27 @@ class FriendArea extends StatefulWidget {
 }
 
 class _FriendAreaState extends State<FriendArea> {
+  int chatroomID = 0;
+
+  Future<void> _typeIDToChatroomID(String type, int id) async {
+    try {
+      int chatroom = await TransferAPI.typeIDToChatroomID(type, id);
+      setState(() {
+        chatroomID = chatroom;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  Future<void> _readMessage() async {
+    try {
+      await HelperAPI.readAllMessage(chatroomID);
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
@@ -25,9 +48,17 @@ class _FriendAreaState extends State<FriendArea> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  print("修改暱稱${state.data['memberID']}");
-                  //TODO: show dialog
+                onTap: () async {
+                  final temp = await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) =>
+                        EditNickname(friendID: state.data['memberID']),
+                  );
+                  if (temp != null) {
+                    state.data['name'] = temp;
+                    widget.setStateProfile();
+                  }
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -46,9 +77,16 @@ class _FriendAreaState extends State<FriendArea> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  print("開啟聊天");
-                  //TODO: 導入聊天室
+                onTap: () async {
+                  await _typeIDToChatroomID(
+                      "friend",
+                      (state is FriendProfile && state.isFriend)
+                          ? state.friendshipID!
+                          : 0);
+                  _readMessage();
+                  if (!mounted) return;
+                  Navigator.pushNamed(context, "/chatroom",
+                      arguments: chatroomID);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

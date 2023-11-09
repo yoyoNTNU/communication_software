@@ -1,8 +1,10 @@
 part of 'profile_dialog_widget.dart';
 
 class CommonArea extends StatefulWidget {
+  final String? name;
   const CommonArea({
     super.key,
+    required this.name,
   });
 
   @override
@@ -84,9 +86,7 @@ class _CommonAreaState extends State<CommonArea> {
                 child: Column(
                   children: [
                     Text(
-                      state.data['name'] != null
-                          ? state.data['name'].toString()
-                          : "",
+                      widget.name != null ? widget.name! : "",
                       style: AppStyle.header(),
                       textAlign: TextAlign.center,
                       maxLines: 2,

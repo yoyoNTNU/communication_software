@@ -85,11 +85,17 @@ class _ProfileDialogState extends State<ProfileDialog> {
                 ),
                 child: Column(
                   children: [
-                    const CommonArea(),
+                    CommonArea(
+                      name: state.data['name'],
+                    ),
                     // Button Area
                     if (state is SelfProfile) const SelfArea(),
                     if (state is FriendProfile && state.isFriend)
-                      const FriendArea(),
+                      FriendArea(
+                        setStateProfile: () {
+                          setState(() {});
+                        },
+                      ),
                     if (state is FriendProfile && state.isReceiver)
                       const ReceiverArea(),
                     if (state is FriendProfile && state.isSender)
