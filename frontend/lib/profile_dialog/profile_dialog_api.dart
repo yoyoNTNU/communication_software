@@ -103,6 +103,16 @@ class FriendAPI {
       throw Exception('API request failed with status ${response.statusCode}');
     }
   }
+
+  static Future<int> deleteFriend(int friendID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+      Uri(scheme: 'https', host: host, path: '/api/friends/$friendID'),
+      headers: {'Authorization': token ?? ""},
+    );
+    return response.statusCode;
+  }
 }
 
 class GetGroupAPI {
