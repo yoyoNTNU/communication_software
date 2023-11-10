@@ -123,30 +123,31 @@ void fullViewImage(
                 ),
               ),
             ),
-            if (isNeedEdit)
-              Container(
-                height: 86,
-                padding: const EdgeInsets.symmetric(vertical: 25),
-                child: OutlinedButton(
-                  onPressed: () {
-                    print("顯示相片來源選單");
-                  },
-                  style: AppStyle.secondaryBtn(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: Image.asset("assets/icons/edit_teal.png"),
+            Container(
+              height: 86,
+              padding: const EdgeInsets.symmetric(vertical: 25),
+              child: isNeedEdit
+                  ? OutlinedButton(
+                      onPressed: () {
+                        print("顯示相片來源選單");
+                      },
+                      style: AppStyle.secondaryBtn(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: Image.asset("assets/icons/edit_teal.png"),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text("編輯"),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      const Text("編輯"),
-                    ],
-                  ),
-                ),
-              )
+                    )
+                  : const SizedBox(),
+            )
           ],
         );
       },
