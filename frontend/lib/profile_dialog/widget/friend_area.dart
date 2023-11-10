@@ -80,6 +80,7 @@ class _FriendAreaState extends State<FriendArea> {
                 onTap: () async {
                   await _typeIDToChatroomID("friend", state.data['memberID']);
                   _readMessage();
+                  if (chatroomID == 0) return;
                   if (!mounted) return;
                   Navigator.pushNamed(context, "/chatroom",
                       arguments: chatroomID);
@@ -101,9 +102,17 @@ class _FriendAreaState extends State<FriendArea> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  print("刪除好友");
-                  //TODO: 接API
+                onTap: () async {
+                  bool temp = await showDelete(context);
+                  if (temp) {
+                    if (!mounted) return;
+                    showLoading(context);
+                    await FriendAPI.deleteFriend(state.data['memberID']);
+                    await DatabaseHelper.instance.clearCache();
+                    await DatabaseHelper.instance.setHomepageIndex(0);
+                    if (!mounted) return;
+                    Navigator.popAndPushNamed(context, '/home');
+                  }
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

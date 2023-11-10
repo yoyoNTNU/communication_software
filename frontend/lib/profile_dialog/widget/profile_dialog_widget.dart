@@ -5,6 +5,7 @@ import 'package:proj/profile_dialog/bloc/profile_dialog_bloc.dart';
 import 'package:proj/profile_dialog/profile_dialog_api.dart';
 import 'package:proj/style.dart';
 import 'package:proj/widget.dart';
+import 'package:proj/data.dart';
 
 part 'common_area.dart';
 part 'friend_area.dart';
@@ -14,3 +15,4 @@ part 'receiver_area.dart';
 part 'self_area.dart';
 part 'sender_area.dart';
 part 'edit_nickname.dart';
+part 'delete_dialog.dart';
