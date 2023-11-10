@@ -98,7 +98,7 @@ class _CommonAreaState extends State<CommonArea> {
                       Text(
                         state.data['intro'].toString(),
                         style: AppStyle.body(color: AppStyle.teal),
-                        maxLines: 8,
+                        maxLines: 4,
                         overflow: TextOverflow.ellipsis,
                       ),
                     if (state is GroupProfile)
