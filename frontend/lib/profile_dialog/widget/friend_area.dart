@@ -105,13 +105,17 @@ class _FriendAreaState extends State<FriendArea> {
                 onTap: () async {
                   bool temp = await showDelete(context);
                   if (temp) {
+                    int tempID = state.data['memberID'];
                     if (!mounted) return;
                     showLoading(context);
                     await FriendAPI.deleteFriend(state.data['memberID']);
                     await DatabaseHelper.instance.clearCache();
-                    await DatabaseHelper.instance.setHomepageIndex(0);
                     if (!mounted) return;
-                    Navigator.popAndPushNamed(context, '/home');
+                    Navigator.pop(context);
+                    BlocProvider.of<ProfileDialogBloc>(context)
+                        .add(ResetProfile());
+                    BlocProvider.of<ProfileDialogBloc>(context)
+                        .add(OpenProfile(id: tempID));
                   }
                 },
                 child: Column(
