@@ -74,15 +74,10 @@ void fullViewImage(
     MaterialPageRoute(
       builder: (context) {
         //要有下載按鈕
-        return Stack(
+        return Column(
           children: [
-            PhotoView(
-              imageProvider: NetworkImage(content),
-              minScale: PhotoViewComputedScale.contained * 1,
-              maxScale: PhotoViewComputedScale.covered * 1.5,
-            ),
             Container(
-              height: 60,
+              height: 86,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               child: Row(
                 children: [
@@ -114,31 +109,41 @@ void fullViewImage(
                 ],
               ),
             ),
+            Expanded(
+              child: ClipRect(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.expand(),
+                  child: PhotoView(
+                    backgroundDecoration:
+                        BoxDecoration(color: Colors.grey.shade900),
+                    imageProvider: NetworkImage(content),
+                    minScale: PhotoViewComputedScale.contained * 1,
+                    maxScale: PhotoViewComputedScale.covered * 1.5,
+                  ),
+                ),
+              ),
+            ),
             if (isNeedEdit)
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 42),
-                  child: OutlinedButton(
-                    onPressed: () {
-                      print("顯示相片來源選單");
-                    },
-                    style: AppStyle.secondaryBtn(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: Image.asset("assets/icons/edit_teal.png"),
-                        ),
-                        const SizedBox(width: 8),
-                        const Text("編輯"),
-                      ],
-                    ),
+              Container(
+                height: 86,
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                child: OutlinedButton(
+                  onPressed: () {
+                    print("顯示相片來源選單");
+                  },
+                  style: AppStyle.secondaryBtn(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Image.asset("assets/icons/edit_teal.png"),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text("編輯"),
+                    ],
                   ),
                 ),
               )
