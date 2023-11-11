@@ -10,6 +10,26 @@ class GroupArea extends StatefulWidget {
 }
 
 class _GroupAreaState extends State<GroupArea> {
+  int chatroomID = 0;
+  Future<void> _typeIDToChatroomID(String type, int id) async {
+    try {
+      int chatroom = await TransferAPI.typeIDToChatroomID(type, groupID: id);
+      setState(() {
+        chatroomID = chatroom;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
+  Future<void> _readMessage() async {
+    try {
+      await HelperAPI.readAllMessage(chatroomID);
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
@@ -25,9 +45,13 @@ class _GroupAreaState extends State<GroupArea> {
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  print("開啟聊天");
-                  //TODO: 導入聊天室
+                onTap: () async {
+                  await _typeIDToChatroomID("group", state.data['groupID']);
+                  _readMessage();
+                  if (chatroomID == 0) return;
+                  if (!mounted) return;
+                  Navigator.pushNamed(context, "/chatroom",
+                      arguments: chatroomID);
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -46,9 +70,17 @@ class _GroupAreaState extends State<GroupArea> {
             ),
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  print("退出群組");
-                  //TODO: 接API
+                onTap: () async {
+                  bool temp = await showDelete(context, isGroup: true);
+                  if (temp) {
+                    if (!mounted) return;
+                    showLoading(context);
+                    await GroupAPI.leaveGroup(state.data['groupID']);
+                    await DatabaseHelper.instance.clearCache();
+                    await DatabaseHelper.instance.setHomepageIndex(0);
+                    if (!mounted) return;
+                    Navigator.popAndPushNamed(context, "/home");
+                  }
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

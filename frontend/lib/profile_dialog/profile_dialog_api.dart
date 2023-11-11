@@ -159,7 +159,7 @@ class FriendAPI {
   }
 }
 
-class GetGroupAPI {
+class GroupAPI {
   static Future<Map<String, dynamic>> getGroupInfo(int groupID) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
@@ -183,6 +183,16 @@ class GetGroupAPI {
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }
+  }
+
+  static Future<int> leaveGroup(int groupID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+      Uri(scheme: 'https', host: host, path: '/api/groups/$groupID'),
+      headers: {'Authorization': token ?? ""},
+    );
+    return response.statusCode;
   }
 }
 

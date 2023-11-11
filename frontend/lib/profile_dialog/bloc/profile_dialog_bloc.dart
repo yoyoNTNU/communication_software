@@ -31,7 +31,7 @@ class ProfileDialogBloc extends Bloc<ProfileDialogEvent, ProfileDialogState> {
           message: temp['message'],
         ));
       } else if (event.id != -1 && event.isGroup == true) {
-        Map<String, dynamic> info = await GetGroupAPI.getGroupInfo(event.id);
+        Map<String, dynamic> info = await GroupAPI.getGroupInfo(event.id);
         emit(GroupProfile(data: info, memberCount: event.groupMemberCount));
       }
     });
