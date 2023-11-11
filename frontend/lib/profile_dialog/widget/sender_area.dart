@@ -16,6 +16,9 @@ class _SenderAreaState extends State<SenderArea> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
       builder: (context, state) {
+        if (state is FriendProfile) {
+          _inviteController.text = state.message ?? "";
+        }
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           decoration: BoxDecoration(
@@ -73,10 +76,17 @@ class _SenderAreaState extends State<SenderArea> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          print("點擊後取消申請");
-                        });
+                      onTap: () async {
+                        int tempID = state.data['memberID'];
+                        if (!mounted) return;
+                        showLoading(context);
+                        await FriendAPI.cancelInvite(state.data['memberID']);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        BlocProvider.of<ProfileDialogBloc>(context)
+                            .add(ResetProfile());
+                        BlocProvider.of<ProfileDialogBloc>(context)
+                            .add(OpenProfile(id: tempID));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

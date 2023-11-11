@@ -113,6 +113,50 @@ class FriendAPI {
     );
     return response.statusCode;
   }
+
+  static Future<int> sentInvite(int friendID, String message) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.post(
+      Uri(scheme: 'https', host: host, path: '/api/friend_requests'),
+      headers: {'Authorization': token ?? ""},
+      body: {"friend_id": friendID.toString(), "content": message},
+    );
+    return response.statusCode;
+  }
+
+  static Future<int> acceptInvite(int friendID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.post(
+      Uri(scheme: 'https', host: host, path: '/api/friend_requests/accept'),
+      headers: {'Authorization': token ?? ""},
+      body: {"friend_id": friendID.toString()},
+    );
+    return response.statusCode;
+  }
+
+  static Future<int> rejectInvite(int friendID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+      Uri(scheme: 'https', host: host, path: '/api/friend_requests/reject'),
+      headers: {'Authorization': token ?? ""},
+      body: {"friend_id": friendID.toString()},
+    );
+    return response.statusCode;
+  }
+
+  static Future<int> cancelInvite(int friendID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+      Uri(scheme: 'https', host: host, path: '/api/friend_requests/cancel'),
+      headers: {'Authorization': token ?? ""},
+      body: {"friend_id": friendID.toString()},
+    );
+    return response.statusCode;
+  }
 }
 
 class GetGroupAPI {
