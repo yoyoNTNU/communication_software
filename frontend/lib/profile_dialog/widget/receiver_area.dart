@@ -16,6 +16,9 @@ class _ReceiverAreaState extends State<ReceiverArea> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileDialogBloc, ProfileDialogState>(
       builder: (context, state) {
+        if (state is FriendProfile) {
+          _inviteController.text = state.message ?? "";
+        }
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
           decoration: BoxDecoration(
@@ -72,9 +75,17 @@ class _ReceiverAreaState extends State<ReceiverArea> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        print("同意邀請");
-                        //TODO: 接API
+                      onTap: () async {
+                        int tempID = state.data['memberID'];
+                        if (!mounted) return;
+                        showLoading(context);
+                        await FriendAPI.acceptInvite(state.data['memberID']);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        BlocProvider.of<ProfileDialogBloc>(context)
+                            .add(ResetProfile());
+                        BlocProvider.of<ProfileDialogBloc>(context)
+                            .add(OpenProfile(id: tempID));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -93,9 +104,17 @@ class _ReceiverAreaState extends State<ReceiverArea> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        print("拒絕邀請");
-                        //TODO: 接API
+                      onTap: () async {
+                        int tempID = state.data['memberID'];
+                        if (!mounted) return;
+                        showLoading(context);
+                        await FriendAPI.rejectInvite(state.data['memberID']);
+                        if (!mounted) return;
+                        Navigator.pop(context);
+                        BlocProvider.of<ProfileDialogBloc>(context)
+                            .add(ResetProfile());
+                        BlocProvider.of<ProfileDialogBloc>(context)
+                            .add(OpenProfile(id: tempID));
                       },
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
