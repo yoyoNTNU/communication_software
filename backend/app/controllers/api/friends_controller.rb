@@ -54,7 +54,6 @@ class Api::FriendsController < ApplicationController
           message: "succeed to get relationship",
           data: {
             relationship: "Friend",
-            friendship_id: @friendship.id,
             info:"#{current_member.name} and #{@friend.name} is friends."
           }
         }.to_json, status: 200
