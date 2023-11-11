@@ -1,7 +1,8 @@
 part of 'profile_dialog_widget.dart';
 
 class DeleteDialog extends StatelessWidget {
-  const DeleteDialog({super.key});
+  final bool isGroup;
+  const DeleteDialog({super.key, this.isGroup = false});
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +15,16 @@ class DeleteDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "確定要刪除好友嗎？",
+            isGroup ? "確定要退出群組嗎？" : "確定要刪除好友嗎？",
             style: AppStyle.header(),
           ),
           const SizedBox(
             height: 16,
           ),
           Text(
-            "好友刪除後，將無法恢復，\n刪除後若要聯繫該好友，需要重新發送好友邀請，\n請謹慎操作。",
+            isGroup
+                ? "退出群組後，將無法恢復，\n退出後若要再次加入該群組，需要重新獲得群組邀請，\n請謹慎操作。"
+                : "好友刪除後，將無法恢復，\n刪除後若要聯繫該好友，需要重新發送好友邀請，\n請謹慎操作。",
             style: AppStyle.body(color: AppStyle.gray[500]!),
             textAlign: TextAlign.center,
           ),
@@ -47,12 +50,14 @@ class DeleteDialog extends StatelessWidget {
                       SizedBox(
                         width: 24,
                         height: 24,
-                        child: Image.asset("assets/icons/delete.png"),
+                        child: Image.asset(isGroup
+                            ? "assets/icons/leave.png"
+                            : "assets/icons/delete.png"),
                       ),
                       const SizedBox(
                         width: 8,
                       ),
-                      const Text("刪除")
+                      Text(isGroup ? "退出" : "刪除"),
                     ],
                   ),
                 ),
@@ -98,11 +103,11 @@ class DeleteDialog extends StatelessWidget {
   }
 }
 
-Future<bool> showDelete(BuildContext context) async {
+Future<bool> showDelete(BuildContext context, {bool isGroup = false}) async {
   final temp = await showDialog(
     context: context,
     barrierDismissible: false,
-    builder: (context) => const DeleteDialog(),
+    builder: (context) => DeleteDialog(isGroup: isGroup),
   );
   return temp;
 }
