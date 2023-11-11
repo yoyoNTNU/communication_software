@@ -74,9 +74,18 @@ class _NoneAreaState extends State<NoneArea> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: () {
-                              print("送出邀請");
-                              //TODO: 接API
+                            onTap: () async {
+                              int tempID = state.data['memberID'];
+                              if (!mounted) return;
+                              showLoading(context);
+                              await FriendAPI.sentInvite(state.data['memberID'],
+                                  _inviteController.text);
+                              if (!mounted) return;
+                              Navigator.pop(context);
+                              BlocProvider.of<ProfileDialogBloc>(context)
+                                  .add(ResetProfile());
+                              BlocProvider.of<ProfileDialogBloc>(context)
+                                  .add(OpenProfile(id: tempID));
                             },
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
