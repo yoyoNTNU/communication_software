@@ -27,7 +27,9 @@ class _CommonAreaState extends State<CommonArea> {
                   (state.data['background'] != "" &&
                           state.data['background'] != null)
                       ? fullViewImage(context, state.data['background'],
-                          isNeedEdit: state is SelfProfile, title: "封面相片")
+                          isNeedEdit:
+                              state is SelfProfile || state is GroupProfile,
+                          title: "封面相片")
                       : null;
                 },
                 child: Container(
@@ -54,7 +56,9 @@ class _CommonAreaState extends State<CommonArea> {
                         (state.data['photo'] != "" &&
                                 state.data['photo'] != null)
                             ? fullViewImage(context, state.data['photo'],
-                                isNeedEdit: state is SelfProfile, title: "頭貼相片")
+                                isNeedEdit: state is SelfProfile ||
+                                    state is GroupProfile,
+                                title: "頭貼相片")
                             : null;
                       },
                       child: Container(
