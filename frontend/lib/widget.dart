@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:proj/profile_dialog/profile_dialog_screen.dart';
 import 'package:proj/style.dart';
+import 'package:flutter/services.dart';
+import 'package:photo_view/photo_view.dart';
 import 'dart:io';
 
 class LoadingDialog extends StatelessWidget {
@@ -34,9 +36,124 @@ void showLoading(BuildContext context) {
 }
 
 // Dialog Showing the profile of user
-void showProfileDialog(BuildContext context,
-    {bool isGroup = false, int id = -1}) {
-  showProfile(context, isGroup: isGroup, id: id);
+void showProfileDialog(
+  BuildContext context, {
+  bool isGroup = false,
+  int id = -1,
+  int groupMemberCount = 0,
+}) {
+  showProfile(
+    context,
+    isGroup: isGroup,
+    id: id,
+    groupMemberCount: groupMemberCount,
+  );
+}
+
+void copyToClipboard(BuildContext context, String text) {
+  Clipboard.setData(ClipboardData(text: text));
+  SnackBar snackBar = SnackBar(
+    content: Text(
+      '已複製到剪貼板',
+      style: AppStyle.body(color: AppStyle.white),
+    ),
+    duration: const Duration(milliseconds: 1500),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+void fullViewImage(
+  BuildContext context,
+  String content, {
+  String title = "",
+  bool isNeedDownload = false,
+  bool isNeedEdit = false,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) {
+        //要有下載按鈕
+        return Column(
+          children: [
+            Container(
+              height: 86,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Row(
+                children: [
+                  isNeedDownload
+                      ? GestureDetector(
+                          onTap: () {
+                            print("下載圖片");
+                            //TODO: 下載圖片
+                          },
+                          child: Image.asset("assets/icons/download.png"),
+                        )
+                      : const SizedBox(
+                          width: 24,
+                          height: 24,
+                        ),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: AppStyle.header(color: AppStyle.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Image.asset("assets/icons/x_white.png"),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ClipRect(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.expand(),
+                  child: PhotoView(
+                    backgroundDecoration:
+                        BoxDecoration(color: Colors.grey.shade900),
+                    imageProvider: NetworkImage(content),
+                    minScale: PhotoViewComputedScale.contained * 1,
+                    maxScale: PhotoViewComputedScale.covered * 1.5,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 86,
+              padding: const EdgeInsets.symmetric(vertical: 25),
+              child: isNeedEdit
+                  ? OutlinedButton(
+                      onPressed: () {
+                        //TODO: 編輯圖片
+                        print("顯示相片來源選單");
+                      },
+                      style: AppStyle.secondaryBtn(),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: Image.asset("assets/icons/edit_teal.png"),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text("編輯"),
+                        ],
+                      ),
+                    )
+                  : const SizedBox(),
+            )
+          ],
+        );
+      },
+    ),
+  );
 }
 
 //final ImagePicker picker = ImagePicker();

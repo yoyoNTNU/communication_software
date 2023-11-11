@@ -28,33 +28,7 @@ class _PhotoMsgState extends State<PhotoMsg> {
     double screenWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              //要有下載按鈕
-              return Stack(
-                children: [
-                  PhotoView(
-                    imageProvider: NetworkImage(widget.content),
-                    minScale: PhotoViewComputedScale.contained * 1,
-                    maxScale: PhotoViewComputedScale.covered * 1.5,
-                  ),
-                  Positioned(
-                    top: 24,
-                    right: 24,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Image.asset("assets/icons/x_white.png"),
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        );
+        fullViewImage(context, widget.content, isNeedDownload: true);
       },
       onLongPress: widget.onLongPressed,
       child: Container(

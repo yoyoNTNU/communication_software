@@ -9,18 +9,18 @@ sealed class ProfileDialogEvent extends Equatable {
 }
 
 class OpenProfile extends ProfileDialogEvent {
-  final int userID;
-  final int groupID;
+  final int id;
   final bool isGroup;
+  final int groupMemberCount;
 
   const OpenProfile({
-    this.userID = -1,
-    this.groupID = -1,
+    this.id = -1,
     this.isGroup = false,
+    this.groupMemberCount = 0,
   });
 
   @override
-  List<Object> get props => [userID];
+  List<Object> get props => [id];
 }
 
 class ResetProfile extends ProfileDialogEvent {

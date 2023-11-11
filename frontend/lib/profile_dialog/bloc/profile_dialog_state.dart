@@ -10,6 +10,10 @@ abstract class ProfileDialogState extends Equatable {
   List<Object> get props => [data];
 }
 
+final class NoProfile extends ProfileDialogState {
+  const NoProfile({required Map<String, dynamic> data}) : super(data: data);
+}
+
 final class SelfProfile extends ProfileDialogState {
   const SelfProfile({required Map<String, dynamic> data}) : super(data: data);
 }
@@ -17,15 +21,17 @@ final class SelfProfile extends ProfileDialogState {
 final class FriendProfile extends ProfileDialogState {
   final int friendID;
   final bool isFriend;
-  final bool isInvited;
-  final bool isRequested;
+  final bool isReceiver;
+  final bool isSender;
+  final String? message;
 
   const FriendProfile({
     required Map<String, dynamic> data,
     required this.friendID,
     this.isFriend = false,
-    this.isInvited = false,
-    this.isRequested = false,
+    this.isReceiver = false,
+    this.isSender = false,
+    this.message,
   }) : super(data: data);
 
   @override
@@ -33,11 +39,12 @@ final class FriendProfile extends ProfileDialogState {
 }
 
 final class GroupProfile extends ProfileDialogState {
-  final int id;
-
-  const GroupProfile({required Map<String, dynamic> data, required this.id})
-      : super(data: data);
+  final int memberCount;
+  const GroupProfile({
+    required Map<String, dynamic> data,
+    this.memberCount = 0,
+  }) : super(data: data);
 
   @override
-  List<Object> get props => [id, data];
+  List<Object> get props => [data];
 }

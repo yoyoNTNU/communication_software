@@ -7,23 +7,11 @@ class CopyableText extends StatelessWidget {
     required this.text_,
   });
 
-  void _copyToClipboard(BuildContext context) {
-    Clipboard.setData(ClipboardData(text: text_)); //換成API
-    SnackBar snackBar = SnackBar(
-      content: Text(
-        '已將ID複製到剪貼板',
-        style: AppStyle.body(color: AppStyle.white),
-      ),
-      duration: const Duration(milliseconds: 1500),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          _copyToClipboard(context);
+          copyToClipboard(context, text_);
         },
         child: Container(
           constraints: BoxConstraints(
