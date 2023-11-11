@@ -77,12 +77,17 @@ class Api::FriendRequestsController < ApplicationController
   def set_friend_request
     @friend_request = FriendRequest.find_by(member: current_member, friend_id: params[:friend_id])
     if !@friend_request
-      render json: {
-        error: true,
-        message: "failed to get specific request",
-        data: {}
-      }.to_json, status: 400
-      return
+      @friend_request2 = FriendRequest.find_by(member_id: params[:friend_id], friend: current_member)
+      if !@friend_request2
+        render json: {
+          error: true,
+          message: "failed to get specific request",
+          data: {}
+        }.to_json, status: 400
+        return
+      else
+        @friend_request = @friend_request2
+      end
     end
   end
 
