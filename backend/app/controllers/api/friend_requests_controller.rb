@@ -75,7 +75,7 @@ class Api::FriendRequestsController < ApplicationController
   private
 
   def set_friend_request
-    @friend_request = FriendRequest.find_by(id:params[:friend_request_id])
+    @friend_request = FriendRequest.find_by(member: current_member, friend_id: params[:friend_id])
     if !@friend_request
       render json: {
         error: true,
