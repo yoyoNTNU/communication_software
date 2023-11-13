@@ -108,6 +108,24 @@ class Api::MessageController < ApplicationController
     end
   end
 
+  def read_count
+    @message=Message.find_by(id:params[:message_id])
+    if @message
+      count=MessageReader.where(message:@message).length
+      render json: {
+        error: false,
+        message: "succeed to get message read count",
+        data: count
+      }.to_json, status: 200
+    else
+      render json: {
+        error: true,
+        message: "failed to get message read count",
+        data: "This message is not exist."
+      }.to_json, status: 400
+    end
+  end
+
   private
 
   def message_params
