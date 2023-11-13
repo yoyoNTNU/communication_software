@@ -40,6 +40,7 @@ Rails.application.routes.draw do
       delete 'delete_background'=>'chatroom#destroy_background'
       resources :message do
         post 'read' => 'message#read'
+        get 'read_count' => 'message#read_count'
       end
     end
     resources :groups do
