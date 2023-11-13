@@ -197,6 +197,26 @@ class MemberAPI {
       throw Exception('API request failed with status ${response.statusCode}');
     }
   }
+
+  static Future<Map<String, dynamic>> getSelfInfo() async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.get(
+      Uri(scheme: 'https', host: host, path: '/api/member/info'),
+      headers: {'Authorization': token ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final dynamic member = responseData['data'];
+      final Map<String, dynamic> m = {
+        "name": member['name'],
+        "avatar": member['photo'] == null ? null : member['photo']['url'],
+      };
+      return m;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
 }
 
 class ChatroomAPI {
@@ -238,10 +258,24 @@ class ChatroomAPI {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Map<String, dynamic> infoInfoData2 = responseData['data'];
-      dynamic groupsWithInfo;
+      Map<String, dynamic> groupsWithInfo = {};
       groupsWithInfo["count"] = infoInfoData2['count'];
       groupsWithInfo["member"] = infoInfoData2['member'];
       return groupsWithInfo;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
+}
+
+class TransferAPI {
+  static Future<int> chatroomIDtoTypeID(int chatroomID) async {
+    final response = await http.get(
+        Uri.parse('https://$host/ChatroomIDToTypeID?chatroom_id=$chatroomID'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final Map<String, dynamic> infoData = responseData['data'];
+      return infoData['group_id'];
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }

@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:intl/intl.dart';
 
 class ChatroomPage extends StatefulWidget {
   final int id;
@@ -28,8 +27,12 @@ class _ChatroomPageState extends State<ChatroomPage>
   final FocusNode _messageFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
+  Map<String, dynamic> chatroomData = {};
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   List<Map<String, dynamic>> messageData = [];
+  List<dynamic> memberNumber = [];
+  List<Map<String, dynamic>> memberData = [];
+  int memberCount = 0;
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
@@ -54,6 +57,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _getChatroom();
     _getAllMessage();
     super.initState();
   }
@@ -101,6 +105,58 @@ class _ChatroomPageState extends State<ChatroomPage>
     super.dispose();
   }
 
+  Future<void> _getChatroom() async {
+    try {
+      final Map<String, dynamic> data =
+          await ChatroomAPI.getChatroom(widget.id);
+      setState(() {
+        chatroomData = data;
+      });
+      if (data["type"] == "group") {
+        await _getGroupMember();
+      }
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
+  Future<void> _getGroupMember() async {
+    try {
+      int groupID = await TransferAPI.chatroomIDtoTypeID(widget.id);
+      final Map<String, dynamic> data =
+          await ChatroomAPI.getGroupMember(groupID);
+      setState(() {
+        memberNumber = data["member"];
+        memberCount = data["count"];
+      });
+      for (int i = 0; i < memberCount; i++) {
+        await _getMemberAvatar(memberNumber[i]);
+      }
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
+  Future<void> _getMemberAvatar(int memberID) async {
+    try {
+      Map<String, dynamic> data;
+      if (memberID == currentMemberID) {
+        data = await MemberAPI.getSelfInfo();
+      } else {
+        data = await MemberAPI.getMemberInfo(memberID);
+      }
+      setState(() {
+        memberData.add({
+          "id": memberID,
+          "name": data["name"],
+          "avatar": data["avatar"],
+        });
+      });
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
   Future<void> _getAllMessage() async {
     showLoading(context);
     try {
@@ -140,11 +196,11 @@ class _ChatroomPageState extends State<ChatroomPage>
         backgroundColor: AppStyle.white,
         elevation: 0,
         title: TitleLine(
-          chatroomType: "friend",
-          groupPeopleCount: 10,
-          isMuted: true,
-          isPinned: true,
-          name: "聊天室${widget.id}內部",
+          chatroomType: chatroomData["type"] ?? "",
+          groupPeopleCount: memberCount,
+          isMuted: chatroomData["isMuted"] ?? false,
+          isPinned: chatroomData["isPinned"] ?? false,
+          name: chatroomData["chatroomName"] ?? "",
           isExpanded: isExpanded,
           onTapMemberCount: () {
             setBottomHeightAnimated(isExpanded ? 1 : 41);
@@ -176,107 +232,35 @@ class _ChatroomPageState extends State<ChatroomPage>
                     child: Row(
                       children: [
                         Expanded(
-                          child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
-                              children: [
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
+                            itemCount: memberCount,
+                            itemBuilder: (BuildContext context, int index) {
+                              var member = memberData[index];
+                              return Row(
+                                children: [
+                                  ClipOval(
+                                    clipBehavior: Clip.hardEdge,
+                                    child: member["avatar"] == null
+                                        ? Image.asset(
+                                            "assets/images/avatar.png",
+                                            width: 32,
+                                            height: 32,
+                                          )
+                                        : Image.network(
+                                            member["avatar"],
+                                            width: 32,
+                                            height: 32,
+                                          ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
+                                  const SizedBox(
+                                    width: 4,
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                              ]),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                         const SizedBox(
                           width: 8,
