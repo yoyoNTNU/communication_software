@@ -10,8 +10,10 @@ import 'package:web_socket_channel/io.dart';
 import 'package:intl/intl.dart';
 
 class ChatroomPage extends StatefulWidget {
+  final int id;
   const ChatroomPage({
     super.key,
+    required this.id,
   });
 
   @override
@@ -20,7 +22,6 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends State<ChatroomPage>
     with TickerProviderStateMixin {
-  late int? chatroomID;
   late AnimationController _animationController;
   late Animation<double> _animation;
   final _messageController = TextEditingController();
@@ -53,23 +54,24 @@ class _ChatroomPageState extends State<ChatroomPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _getAllMessage();
     super.initState();
   }
 
   @override
   void didChangeDependencies() async {
-    chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
     final dbToken = await DatabaseHelper.instance.getToken();
     final id = dbToken?.userID;
     if (!mounted) return;
     setState(() {
       currentMemberID = id!;
     });
+
     channel.sink.add(jsonEncode({
       'command': 'subscribe',
       'identifier': jsonEncode({
         'channel': 'ChatChannel',
-        'chatroom_id': chatroomID,
+        'chatroom_id': widget.id,
       }),
     }));
     channel.stream.listen((message) {
@@ -97,6 +99,21 @@ class _ChatroomPageState extends State<ChatroomPage>
     _animationController.dispose();
     channel.sink.close();
     super.dispose();
+  }
+
+  Future<void> _getAllMessage() async {
+    showLoading(context);
+    try {
+      final List<Map<String, dynamic>> messages =
+          await MessageAPI.allMessage(widget.id);
+      setState(() {
+        messageData = messages;
+      });
+    } catch (e) {
+      print("API request error: $e");
+    }
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
   }
 
   @override
@@ -127,7 +144,7 @@ class _ChatroomPageState extends State<ChatroomPage>
           groupPeopleCount: 10,
           isMuted: true,
           isPinned: true,
-          name: "聊天室$chatroomID內部",
+          name: "聊天室${widget.id}內部",
           isExpanded: isExpanded,
           onTapMemberCount: () {
             setBottomHeightAnimated(isExpanded ? 1 : 41);
@@ -393,10 +410,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                               'command': 'message',
                               'identifier': jsonEncode({
                                 'channel': 'ChatChannel',
-                                'chatroom_id': chatroomID,
+                                'chatroom_id': widget.id,
                               }),
                               'data': jsonEncode({
-                                "chatroom_id": chatroomID,
+                                "chatroom_id": widget.id,
                                 "member_id": currentMemberID,
                                 "type_": "string",
                                 "content": _messageController.text,
@@ -439,10 +456,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                             'command': 'message',
                             'identifier': jsonEncode({
                               'channel': 'ChatChannel',
-                              'chatroom_id': chatroomID,
+                              'chatroom_id': widget.id,
                             }),
                             'data': jsonEncode({
-                              "chatroom_id": chatroomID,
+                              "chatroom_id": widget.id,
                               "member_id": currentMemberID,
                               "type_": "string",
                               "content": _messageController.text,
