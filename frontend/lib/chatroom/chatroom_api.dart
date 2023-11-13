@@ -172,6 +172,25 @@ class MessageAPI {
         body: {"isPinned": isPinned});
     return response.statusCode;
   }
+
+  static Future<int> getReadCount(int messageID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.get(
+      Uri(
+          scheme: 'https',
+          host: host,
+          path: '/api/chatroom/0/message/$messageID/read_count'),
+      headers: {'Authorization': token ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final int count = responseData['data'];
+      return count;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
 }
 
 class MemberAPI {

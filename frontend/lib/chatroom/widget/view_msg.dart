@@ -3,6 +3,7 @@ part of 'chatroom_widget.dart';
 class ViewMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
+  final int? messageID;
   final int? senderID;
   final String content;
   final String msgTime;
@@ -14,6 +15,7 @@ class ViewMsg extends StatefulWidget {
     this.senderID,
     required this.content,
     required this.msgTime,
+    required this.messageID,
   });
 
   @override
@@ -21,6 +23,19 @@ class ViewMsg extends StatefulWidget {
 }
 
 class _ViewMsgState extends State<ViewMsg> {
+  String read = "";
+
+  @override
+  void didChangeDependencies() async {
+    if (widget.senderIsMe) {
+      String temp = await readCount(widget.messageID, widget.chatroomType);
+      setState(() {
+        read = temp;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -133,7 +148,7 @@ class _ViewMsgState extends State<ViewMsg> {
               bottom: 0,
               right: 0,
               child: Text(
-                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                "$read${widget.msgTime}",
                 style: AppStyle.info(
                     level: 2,
                     color: widget.senderIsMe

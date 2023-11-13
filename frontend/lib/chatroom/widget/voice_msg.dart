@@ -3,6 +3,7 @@ part of 'chatroom_widget.dart';
 class VoiceMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
+  final int? messageID;
   final int? senderID;
   final String content;
   final String msgTime;
@@ -16,6 +17,7 @@ class VoiceMsg extends StatefulWidget {
     required this.content,
     required this.msgTime,
     this.onLongPressed,
+    required this.messageID,
   });
 
   @override
@@ -32,14 +34,23 @@ class _VoiceMsgState extends State<VoiceMsg> {
   Timer? timer1;
   Timer? timer2;
 
+  String read = "";
+
   @override
   void didChangeDependencies() async {
+    if (widget.senderIsMe) {
+      String temp = await readCount(widget.messageID, widget.chatroomType);
+      setState(() {
+        read = temp;
+      });
+    }
+
     await audioPlayer.setSourceUrl(widget.content);
     //audioplayers 套件目前有問題會報錯 但不影響
-    final Duration? temp = await audioPlayer.getDuration();
-    if (temp != null && mounted) {
+    final Duration? temp_ = await audioPlayer.getDuration();
+    if (temp_ != null && mounted) {
       setState(() {
-        audioDuration = temp;
+        audioDuration = temp_;
       });
     }
     noise = ContactNoise(
@@ -203,7 +214,7 @@ class _VoiceMsgState extends State<VoiceMsg> {
               bottom: 0,
               right: 0,
               child: Text(
-                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                "$read${widget.msgTime}",
                 style: AppStyle.info(
                     level: 2,
                     color: widget.senderIsMe

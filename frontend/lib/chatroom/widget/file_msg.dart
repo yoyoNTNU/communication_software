@@ -3,6 +3,7 @@ part of 'chatroom_widget.dart';
 class FileMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
+  final int? messageID;
   final int? senderID;
   final String content;
   final String msgTime;
@@ -16,6 +17,7 @@ class FileMsg extends StatefulWidget {
     required this.content,
     required this.msgTime,
     this.onLongPressed,
+    required this.messageID,
   });
 
   @override
@@ -24,8 +26,16 @@ class FileMsg extends StatefulWidget {
 
 class _FileMsgState extends State<FileMsg> {
   String fileSize = "byte";
+  String read = "";
+
   @override
   void didChangeDependencies() async {
+    if (widget.senderIsMe) {
+      String temp = await readCount(widget.messageID, widget.chatroomType);
+      setState(() {
+        read = temp;
+      });
+    }
     try {
       var response = await http.head(Uri.parse(widget.content));
       double contentLength = double.parse(response.headers['content-length']!);
@@ -145,7 +155,7 @@ class _FileMsgState extends State<FileMsg> {
               bottom: 0,
               right: 0,
               child: Text(
-                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                "$read${widget.msgTime}",
                 style: AppStyle.info(
                     level: 2,
                     color: widget.senderIsMe

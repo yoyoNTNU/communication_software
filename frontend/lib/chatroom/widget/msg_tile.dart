@@ -109,6 +109,7 @@ class _MsgTileState extends State<MsgTile> {
               classifyMsg(
                 chatroomType: widget.chatroomType,
                 senderIsMe: widget.senderIsMe,
+                messageID: widget.index,
                 senderID: widget.senderID,
                 messageType: widget.messageType,
                 isReply: widget.isReply,
