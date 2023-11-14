@@ -129,3 +129,27 @@ class ChatRoomRowAPI {
     );
   }
 }
+
+class MemberAPI {
+  static Future<String> getSenderName(int senderID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final id = dbToken?.userID;
+    if (senderID == id) {
+      return "您";
+    } else {
+      final response = await http.get(
+        Uri(scheme: 'https', host: host, path: '/api/friends/$senderID'),
+        headers: {'Authorization': token ?? ""},
+      );
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final dynamic member = responseData['data'];
+        return member['name'];
+      } else {
+        throw Exception(
+            'API request failed with status ${response.statusCode}');
+      }
+    }
+  }
+}
