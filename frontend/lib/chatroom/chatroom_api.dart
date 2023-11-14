@@ -288,13 +288,25 @@ class ChatroomAPI {
 }
 
 class TransferAPI {
-  static Future<int> chatroomIDtoTypeID(int chatroomID) async {
+  static Future<int> chatroomIDtoGroupID(int chatroomID) async {
     final response = await http.get(
         Uri.parse('https://$host/ChatroomIDToTypeID?chatroom_id=$chatroomID'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Map<String, dynamic> infoData = responseData['data'];
       return infoData['group_id'];
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
+
+  static Future<List<int>> chatroomIDtoFriendID(int chatroomID) async {
+    final response = await http.get(
+        Uri.parse('https://$host/ChatroomIDToTypeID?chatroom_id=$chatroomID'));
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final Map<String, dynamic> infoData = responseData['data'];
+      return [infoData['member_id_1'], infoData['member_id_2']];
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }

@@ -57,8 +57,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _getChatroom();
-    _getAllMessage();
+    _getAllMessageAndChatroomInfo();
     super.initState();
   }
 
@@ -109,11 +108,18 @@ class _ChatroomPageState extends State<ChatroomPage>
     try {
       final Map<String, dynamic> data =
           await ChatroomAPI.getChatroom(widget.id);
+      if (!mounted) return;
       setState(() {
         chatroomData = data;
       });
       if (data["type"] == "group") {
         await _getGroupMember();
+      } else {
+        List<int> friendship =
+            await TransferAPI.chatroomIDtoFriendID(widget.id);
+        for (int i = 0; i < 2; i++) {
+          await _getMemberAvatar(friendship[i]);
+        }
       }
     } catch (e) {
       print("API request error: $e");
@@ -122,9 +128,10 @@ class _ChatroomPageState extends State<ChatroomPage>
 
   Future<void> _getGroupMember() async {
     try {
-      int groupID = await TransferAPI.chatroomIDtoTypeID(widget.id);
+      int groupID = await TransferAPI.chatroomIDtoGroupID(widget.id);
       final Map<String, dynamic> data =
           await ChatroomAPI.getGroupMember(groupID);
+      if (!mounted) return;
       setState(() {
         memberNumber = data["member"];
         memberCount = data["count"];
@@ -145,6 +152,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       } else {
         data = await MemberAPI.getMemberInfo(memberID);
       }
+      if (!mounted) return;
       setState(() {
         memberData.add({
           "id": memberID,
@@ -158,16 +166,22 @@ class _ChatroomPageState extends State<ChatroomPage>
   }
 
   Future<void> _getAllMessage() async {
-    showLoading(context);
     try {
       final List<Map<String, dynamic>> messages =
           await MessageAPI.allMessage(widget.id);
+      if (!mounted) return;
       setState(() {
         messageData = messages;
       });
     } catch (e) {
       print("API request error: $e");
     }
+  }
+
+  Future<void> _getAllMessageAndChatroomInfo() async {
+    showLoading(context);
+    await _getChatroom();
+    await _getAllMessage();
     if (!context.mounted) return;
     Navigator.of(context).pop();
   }
@@ -334,6 +348,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     msgTime: messageData[index]["msgTime"],
                     setAllDisSelected: isOnTap,
                     tileIsSelectedIndex: tileIsSelectedIndex,
+                    memberInfos: memberData,
                     setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
                       setState(() {
                         isOnTap = boolean;

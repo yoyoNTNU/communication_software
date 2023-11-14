@@ -13,6 +13,7 @@ class MsgTile extends StatefulWidget {
   final int? index;
   final int? tileIsSelectedIndex;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
+  final List<Map<String, dynamic>> memberInfos;
 
   const MsgTile({
     super.key,
@@ -28,6 +29,7 @@ class MsgTile extends StatefulWidget {
     this.tileIsSelectedIndex,
     this.index,
     required this.setScreenOnTapAndSelectedIndex,
+    required this.memberInfos,
   });
 
   @override
@@ -35,8 +37,39 @@ class MsgTile extends StatefulWidget {
 }
 
 class _MsgTileState extends State<MsgTile> {
-  //直接在這頁撈sender資訊
   bool isSelected = false;
+  String senderName = "";
+  String? senderAvatar;
+
+  int getIndex(int senderID) {
+    int index = widget.memberInfos.indexWhere((element) {
+      if (element["id"] == senderID) {
+        return true;
+      }
+      return false;
+    });
+    return index;
+  }
+
+  @override
+  void initState() {
+    int index = getIndex(widget.senderID!);
+    if (!mounted) return;
+    setState(() {
+      senderName = widget.senderIsMe
+          ? ""
+          : index == -1
+              ? ""
+              : widget.memberInfos[index]["name"];
+      senderAvatar = widget.senderIsMe
+          ? null
+          : index == -1
+              ? null
+              : widget.memberInfos[index]["avatar"];
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +116,9 @@ class _MsgTileState extends State<MsgTile> {
               width: 36,
               child: ClipOval(
                 clipBehavior: Clip.hardEdge,
-                child: Image.asset("assets/images/avatar.png"),
+                child: senderAvatar != null
+                    ? Image.network(senderAvatar!)
+                    : Image.asset("assets/images/avatar.png"),
               ),
             ),
           if (!widget.senderIsMe)
@@ -98,9 +133,14 @@ class _MsgTileState extends State<MsgTile> {
                 : CrossAxisAlignment.start,
             children: [
               if (!widget.senderIsMe)
-                Text(
-                  "範例2號",
-                  style: AppStyle.header(level: 3),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Text(
+                    senderName,
+                    style: AppStyle.header(level: 3),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               if (!widget.senderIsMe)
                 const SizedBox(
