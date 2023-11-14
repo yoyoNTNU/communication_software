@@ -212,6 +212,11 @@ class _ChatroomPageState extends State<ChatroomPage>
         title: TitleLine(
           chatroomType: chatroomData["type"] ?? "",
           groupPeopleCount: memberCount,
+          friendID: chatroomData["type"] == "friend" && memberData.length == 2
+              ? memberData[0]["id"] == currentMemberID
+                  ? memberData[1]["id"]
+                  : memberData[0]["id"]
+              : null,
           isMuted: chatroomData["isMuted"] ?? false,
           isPinned: chatroomData["isPinned"] ?? false,
           name: chatroomData["chatroomName"] ?? "",

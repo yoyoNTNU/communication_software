@@ -3,6 +3,7 @@ part of 'chatroom_widget.dart';
 class TitleLine extends StatefulWidget {
   final String chatroomType;
   final String name;
+  final int? friendID;
   final int? groupPeopleCount;
   final bool isPinned;
   final bool isMuted;
@@ -13,6 +14,7 @@ class TitleLine extends StatefulWidget {
     super.key,
     required this.chatroomType,
     this.groupPeopleCount,
+    this.friendID,
     required this.isMuted,
     required this.isPinned,
     required this.name,
@@ -30,11 +32,20 @@ class _TitleLineState extends State<TitleLine> {
       children: [
         Flexible(
           fit: FlexFit.loose,
-          child: Text(
-            widget.name,
-            style: AppStyle.header(level: 2),
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+          child: GestureDetector(
+            onTap: () {
+              if (widget.chatroomType == "group") {
+                widget.onTapMemberCount();
+              } else {
+                showProfileDialog(context, id: widget.friendID!);
+              }
+            },
+            child: Text(
+              widget.name,
+              style: AppStyle.header(level: 2),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
         ),
         if (widget.chatroomType == "group")
