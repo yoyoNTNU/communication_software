@@ -74,24 +74,29 @@ class _ConfirmListState extends State<ConfirmList> {
                       var friend = confirmList[index];
                       return Column(
                         children: <Widget>[
-                          ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 0),
-                            title: Text(
-                              friend['nickname'],
-                              style: AppStyle.header(
-                                  level: 3, color: AppStyle.gray[700]!),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                            leading: CircleAvatar(
-                              radius: 20,
-                              backgroundImage: friend["photo"] != null
-                                  ? NetworkImage(friend['photo'])
-                                      as ImageProvider
-                                  : const AssetImage(
-                                      'assets/images/avatar.png'),
-                              backgroundColor: Colors.transparent,
+                          GestureDetector(
+                            onTap: () {
+                              showProfileDialog(context, id: friend['id']);
+                            },
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 0),
+                              title: Text(
+                                friend['nickname'],
+                                style: AppStyle.header(
+                                    level: 3, color: AppStyle.gray[700]!),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              leading: CircleAvatar(
+                                radius: 20,
+                                backgroundImage: friend["photo"] != null
+                                    ? NetworkImage(friend['photo'])
+                                        as ImageProvider
+                                    : const AssetImage(
+                                        'assets/images/avatar.png'),
+                                backgroundColor: Colors.transparent,
+                              ),
                             ),
                           ),
                           Divider(

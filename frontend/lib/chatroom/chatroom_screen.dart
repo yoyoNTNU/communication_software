@@ -254,19 +254,25 @@ class _ChatroomPageState extends State<ChatroomPage>
                               var member = memberData[index];
                               return Row(
                                 children: [
-                                  ClipOval(
-                                    clipBehavior: Clip.hardEdge,
-                                    child: member["avatar"] == null
-                                        ? Image.asset(
-                                            "assets/images/avatar.png",
-                                            width: 32,
-                                            height: 32,
-                                          )
-                                        : Image.network(
-                                            member["avatar"],
-                                            width: 32,
-                                            height: 32,
-                                          ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showProfileDialog(context,
+                                          id: member["id"]);
+                                    },
+                                    child: ClipOval(
+                                      clipBehavior: Clip.hardEdge,
+                                      child: member["avatar"] == null
+                                          ? Image.asset(
+                                              "assets/images/avatar.png",
+                                              width: 32,
+                                              height: 32,
+                                            )
+                                          : Image.network(
+                                              member["avatar"],
+                                              width: 32,
+                                              height: 32,
+                                            ),
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 4,
