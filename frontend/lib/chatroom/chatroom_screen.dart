@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
 import 'package:web_socket_channel/io.dart';
+import 'dart:io';
 
 class ChatroomPage extends StatefulWidget {
   final int id;
@@ -30,6 +31,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   Map<String, dynamic> chatroomData = {};
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   List<Map<String, dynamic>> messageData = [];
+  List<Map<String, dynamic>> announcementData = [];
   List<dynamic> memberNumber = [];
   List<Map<String, dynamic>> memberData = [];
   int memberCount = 0;
@@ -39,6 +41,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   bool isOnTap = false;
   int? tileIsSelectedIndex;
   int currentMemberID = 0;
+  bool atBottom = true;
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -57,6 +60,18 @@ class _ChatroomPageState extends State<ChatroomPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          atBottom = true;
+        });
+      } else {
+        setState(() {
+          atBottom = false;
+        });
+      }
+    });
     _getAllMessageAndChatroomInfo();
     super.initState();
   }
@@ -169,9 +184,12 @@ class _ChatroomPageState extends State<ChatroomPage>
     try {
       final List<Map<String, dynamic>> messages =
           await MessageAPI.allMessage(widget.id);
+      final List<Map<String, dynamic>> announcements =
+          messages.where((element) => element["isPinned"] == true).toList();
       if (!mounted) return;
       setState(() {
         messageData = messages;
+        announcementData = announcements;
       });
     } catch (e) {
       print("API request error: $e");
@@ -188,6 +206,13 @@ class _ChatroomPageState extends State<ChatroomPage>
 
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    bool isKeyboardOpen = false;
+    if (mediaQuery.viewInsets.bottom > 0) {
+      isKeyboardOpen = true;
+    } else {
+      isKeyboardOpen = false;
+    }
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
@@ -333,49 +358,87 @@ class _ChatroomPageState extends State<ChatroomPage>
                   tileIsSelectedIndex = null;
                 });
               },
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: messageData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (step == 0) {
-                      _scrollController.jumpTo(
-                          _scrollController.position.maxScrollExtent + 100);
-                      setState(() {
-                        step++;
-                      });
-                    }
-                  });
-                  return MsgTile(
-                    index: messageData[index]["messageID"],
-                    chatroomType: "group",
-                    senderIsMe:
-                        messageData[index]["senderID"] == currentMemberID,
-                    senderID: messageData[index]["senderID"],
-                    messageType: messageData[index]["type"],
-                    isReply: messageData[index]["isReply"],
-                    replyMsgID: messageData[index]["replyToID"],
-                    content: messageData[index]["content"],
-                    msgTime: messageData[index]["msgTime"],
-                    setAllDisSelected: isOnTap,
-                    tileIsSelectedIndex: tileIsSelectedIndex,
-                    memberInfos: memberData,
-                    setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
-                      setState(() {
-                        isOnTap = boolean;
-                        if (indexValue != -1) {
-                          tileIsSelectedIndex = indexValue;
+              child: Stack(
+                children: [
+                  ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messageData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (step == 0) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.maxScrollExtent + 100);
+                          setState(() {
+                            step++;
+                          });
                         }
                       });
+                      return MsgTile(
+                        index: messageData[index]["messageID"],
+                        chatroomType: "group",
+                        senderIsMe:
+                            messageData[index]["senderID"] == currentMemberID,
+                        senderID: messageData[index]["senderID"],
+                        messageType: messageData[index]["type"],
+                        isReply: messageData[index]["isReply"],
+                        replyMsgID: messageData[index]["replyToID"],
+                        content: messageData[index]["content"],
+                        msgTime: messageData[index]["msgTime"],
+                        setAllDisSelected: isOnTap,
+                        tileIsSelectedIndex: tileIsSelectedIndex,
+                        memberInfos: memberData,
+                        setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
+                          setState(() {
+                            isOnTap = boolean;
+                            if (indexValue != -1) {
+                              tileIsSelectedIndex = indexValue;
+                            }
+                          });
+                        },
+                        cancelSelected: () {
+                          setState(() {
+                            isOnTap = true;
+                            tileIsSelectedIndex = null;
+                          });
+                        },
+                      );
                     },
-                    cancelSelected: () {
-                      setState(() {
-                        isOnTap = true;
-                        tileIsSelectedIndex = null;
-                      });
-                    },
-                  );
-                },
+                  ),
+                  if ((((Platform.isAndroid || Platform.isIOS) &&
+                              !isKeyboardOpen) ||
+                          (!Platform.isAndroid && !Platform.isIOS)) &&
+                      !atBottom)
+                    Positioned(
+                      bottom: 12,
+                      left: MediaQuery.of(context).size.width * 0.5 - 55,
+                      child: SizedBox(
+                        height: 28,
+                        width: 110,
+                        child: FloatingActionButton(
+                          onPressed: () async {
+                            await _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                            setState(() {});
+                          },
+                          backgroundColor: AppStyle.gray[100]!,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(
+                              "回到最新訊息",
+                              style: AppStyle.body(color: AppStyle.gray[700]!),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
