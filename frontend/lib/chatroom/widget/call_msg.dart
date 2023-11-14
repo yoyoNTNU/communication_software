@@ -29,6 +29,7 @@ class _CallMsgState extends State<CallMsg> {
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
       String temp = await readCount(widget.messageID, widget.chatroomType);
+      if (!mounted) return;
       setState(() {
         read = temp;
       });

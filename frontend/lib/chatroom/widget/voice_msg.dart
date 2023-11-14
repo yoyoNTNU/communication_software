@@ -40,6 +40,7 @@ class _VoiceMsgState extends State<VoiceMsg> {
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
       String temp = await readCount(widget.messageID, widget.chatroomType);
+      if (!mounted) return;
       setState(() {
         read = temp;
       });

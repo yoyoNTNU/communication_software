@@ -35,6 +35,7 @@ class _VideoMsgState extends State<VideoMsg> {
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
       String temp = await readCount(widget.messageID, widget.chatroomType);
+      if (!mounted) return;
       setState(() {
         read = temp;
       });
@@ -43,6 +44,7 @@ class _VideoMsgState extends State<VideoMsg> {
     await player.open(playable);
     await controller.waitUntilFirstFrameRendered;
     await player.setVolume(0.0);
+    if (!mounted) return;
     setState(() {
       _height = controller.rect.value?.height.toDouble() ?? 0;
       _width = controller.rect.value?.width.toDouble() ?? 0;

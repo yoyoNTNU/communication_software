@@ -32,6 +32,7 @@ class _FileMsgState extends State<FileMsg> {
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
       String temp = await readCount(widget.messageID, widget.chatroomType);
+      if (!mounted) return;
       setState(() {
         read = temp;
       });
