@@ -158,18 +158,16 @@ class MessageAPI {
     return response.statusCode;
   }
 
-  static Future<int> setIsPinned(
-      int chatroomID, int messageID, bool isPinned) async {
+  static Future<int> setIsPinned(int messageID, bool isPinned) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.patch(
         Uri(
             scheme: 'https',
             host: host,
-            path:
-                '/api/chatroom/${chatroomID.toString()}/message/${messageID.toString()}'),
+            path: '/api/chatroom/0/message/${messageID.toString()}'),
         headers: {'Authorization': token ?? ""},
-        body: {"isPinned": isPinned});
+        body: {"isPinned": isPinned.toString()});
     return response.statusCode;
   }
 

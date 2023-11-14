@@ -3,11 +3,17 @@ part of 'chatroom_widget.dart';
 class SelectBar extends StatefulWidget {
   final bool senderIsMe;
   final String messageType;
+  final int messageID;
+  final VoidCallback cancelSelected;
+  final String content;
 
   const SelectBar({
     super.key,
     required this.senderIsMe,
     required this.messageType,
+    required this.messageID,
+    required this.cancelSelected,
+    required this.content,
   });
 
   @override
@@ -23,8 +29,12 @@ class _SelectBarState extends State<SelectBar> {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () {
-              print("公告");
+            onTap: () async {
+              try {
+                await MessageAPI.setIsPinned(widget.messageID, true);
+              } catch (e) {
+                print("API request error: $e");
+              }
             },
             child: Container(
               color: Colors.transparent,
@@ -72,7 +82,8 @@ class _SelectBarState extends State<SelectBar> {
           if (widget.messageType == "string")
             GestureDetector(
               onTap: () {
-                print("複製");
+                copyToClipboard(context, widget.content);
+                widget.cancelSelected();
               },
               child: Container(
                 decoration: BoxDecoration(

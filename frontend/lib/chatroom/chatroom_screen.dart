@@ -368,6 +368,12 @@ class _ChatroomPageState extends State<ChatroomPage>
                         }
                       });
                     },
+                    cancelSelected: () {
+                      setState(() {
+                        isOnTap = true;
+                        tileIsSelectedIndex = null;
+                      });
+                    },
                   );
                 },
               ),

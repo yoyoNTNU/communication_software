@@ -14,6 +14,7 @@ class MsgTile extends StatefulWidget {
   final int? tileIsSelectedIndex;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
   final List<Map<String, dynamic>> memberInfos;
+  final VoidCallback cancelSelected;
 
   const MsgTile({
     super.key,
@@ -30,6 +31,7 @@ class MsgTile extends StatefulWidget {
     this.index,
     required this.setScreenOnTapAndSelectedIndex,
     required this.memberInfos,
+    required this.cancelSelected,
   });
 
   @override
@@ -167,10 +169,13 @@ class _MsgTileState extends State<MsgTile> {
                 const SizedBox(
                   height: 4,
                 ),
-              if (isSelected)
+              if (isSelected && widget.index != null)
                 SelectBar(
                   senderIsMe: widget.senderIsMe,
                   messageType: widget.messageType,
+                  messageID: widget.index!,
+                  cancelSelected: widget.cancelSelected,
+                  content: widget.content,
                 ),
             ],
           )
