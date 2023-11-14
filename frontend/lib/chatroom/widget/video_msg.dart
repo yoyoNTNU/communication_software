@@ -92,7 +92,7 @@ class _VideoMsgState extends State<VideoMsg> {
           ),
         );
       },
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),

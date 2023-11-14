@@ -71,7 +71,7 @@ class _FileMsgState extends State<FileMsg> {
       onTap: () {
         print("這裡應該下載檔案");
       },
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),

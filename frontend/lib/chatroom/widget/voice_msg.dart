@@ -72,7 +72,7 @@ class _VoiceMsgState extends State<VoiceMsg> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return GestureDetector(
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),

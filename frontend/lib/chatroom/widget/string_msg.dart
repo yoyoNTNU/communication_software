@@ -52,7 +52,7 @@ class _StringMsgState extends State<StringMsg> {
           print("這邊應該要跳到回覆的那則訊息");
         }
       },
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),

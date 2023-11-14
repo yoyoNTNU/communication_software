@@ -46,7 +46,7 @@ class _PhotoMsgState extends State<PhotoMsg> {
       onTap: () {
         fullViewImage(context, widget.content, isNeedDownload: true);
       },
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),
