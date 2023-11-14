@@ -41,7 +41,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   bool isOnTap = false;
   int? tileIsSelectedIndex;
   int currentMemberID = 0;
-  bool atBottom = true;
+  bool msgFinish = false;
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -61,16 +61,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       duration: const Duration(milliseconds: 300),
     );
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
-        setState(() {
-          atBottom = true;
-        });
-      } else {
-        setState(() {
-          atBottom = false;
-        });
-      }
+      setState(() {});
     });
     _getAllMessageAndChatroomInfo();
     super.initState();
@@ -190,6 +181,7 @@ class _ChatroomPageState extends State<ChatroomPage>
       setState(() {
         messageData = messages;
         announcementData = announcements;
+        msgFinish = true;
       });
     } catch (e) {
       print("API request error: $e");
@@ -404,10 +396,12 @@ class _ChatroomPageState extends State<ChatroomPage>
                       );
                     },
                   ),
-                  if ((((Platform.isAndroid || Platform.isIOS) &&
-                              !isKeyboardOpen) ||
-                          (!Platform.isAndroid && !Platform.isIOS)) &&
-                      !atBottom)
+                  if (msgFinish &&
+                      ((((Platform.isAndroid || Platform.isIOS) &&
+                                  !isKeyboardOpen) ||
+                              (!Platform.isAndroid && !Platform.isIOS)) &&
+                          _scrollController.position.pixels !=
+                              _scrollController.position.maxScrollExtent))
                     Positioned(
                       bottom: 12,
                       left: MediaQuery.of(context).size.width * 0.5 - 55,
