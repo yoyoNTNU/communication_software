@@ -30,7 +30,7 @@ class ChatChannel < ApplicationCable::Channel
       "isPinned": m.isPinned,
     } })
     chatroom_members=ChatroomMember.where(chatroom_id:m.chatroom_id)
-    MessageRead.create(message:m,member:m.member)
+    MessageReader.create(message:m,member:m.member)
     chatroom_members.each do |c|
       c.isDisabled=false
       c.save
