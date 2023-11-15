@@ -3,6 +3,7 @@ import 'package:proj/style.dart';
 import 'package:proj/main.dart';
 import 'package:proj/chatroom/chatroom_api.dart';
 import 'package:proj/chatroom/widget/chatroom_widget.dart';
+import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'dart:convert';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
@@ -42,6 +43,9 @@ class _ChatroomPageState extends State<ChatroomPage>
   int? tileIsSelectedIndex;
   int currentMemberID = 0;
   bool msgFinish = false;
+  bool isAnnounceExpanded = false;
+  bool isAnnounceExpandedForAnime = false;
+  bool isHide = false;
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -177,6 +181,9 @@ class _ChatroomPageState extends State<ChatroomPage>
           await MessageAPI.allMessage(widget.id);
       final List<Map<String, dynamic>> announcements =
           messages.where((element) => element["isPinned"] == true).toList();
+      if (announcements.isNotEmpty) {
+        announcements.sort((a, b) => b["updatedAt"].compareTo(a["updatedAt"]));
+      }
       if (!mounted) return;
       setState(() {
         messageData = messages;
@@ -393,9 +400,212 @@ class _ChatroomPageState extends State<ChatroomPage>
                             tileIsSelectedIndex = null;
                           });
                         },
+                        setAnnounce: (msgID) {
+                          setState(() {
+                            var msg = messageData
+                                .where(
+                                    (element) => element["messageID"] == msgID)
+                                .first;
+                            msg["isPinned"] = true;
+                            if (announcementData.indexWhere((element) =>
+                                    element["messageID"] == msgID) ==
+                                -1) {
+                              announcementData.insert(0, msg);
+                            }
+                          });
+                        },
                       );
                     },
                   ),
+                  if (announcementData.isNotEmpty && !isHide)
+                    Positioned(
+                      top: 4,
+                      left: 8,
+                      right: 8,
+                      child: isAnnounceExpanded
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: announcementData.length > 3
+                                        ? 3
+                                        : announcementData.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      var announce = announcementData[index];
+                                      return Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              print(
+                                                  "跳轉到訊息 ${announce["messageID"]}");
+                                            },
+                                            child: AnimatedContainer(
+                                              height: index == 0
+                                                  ? 40
+                                                  : isAnnounceExpandedForAnime
+                                                      ? 40
+                                                      : 0,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              child: SwipeActionCell(
+                                                key: ValueKey(index),
+                                                backgroundColor: AppStyle.white,
+                                                trailingActions: [
+                                                  SwipeAction(
+                                                    widthSpace: 80,
+                                                    color:
+                                                        const Color(0xFFFFE7E6),
+                                                    content: Center(
+                                                      child: Text(
+                                                        '移除公告',
+                                                        style: AppStyle.caption(
+                                                            color:
+                                                                AppStyle.red),
+                                                      ),
+                                                    ),
+                                                    onTap: (CompletionHandler
+                                                        handler) async {
+                                                      handler(false);
+                                                    },
+                                                  ),
+                                                ],
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 24,
+                                                      vertical: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        "assets/icons/announce.png",
+                                                        width: 24,
+                                                        height: 24,
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Expanded(
+                                                        child: Text(
+                                                          announce["content"] ??
+                                                              "",
+                                                          style: AppStyle.body(
+                                                              color: AppStyle
+                                                                  .gray[700]!),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Divider(
+                                            height: 0,
+                                            thickness: 0,
+                                            color: AppStyle.gray[100],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  AnimatedContainer(
+                                    height: isAnnounceExpandedForAnime ? 40 : 0,
+                                    duration: const Duration(milliseconds: 300),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                    ),
+                                    color: AppStyle.white,
+                                    child: Row(
+                                      children: [
+                                        TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isHide = true;
+                                              });
+                                            },
+                                            style: AppStyle.textBtn(),
+                                            child: const Text("隱藏公告")),
+                                        const Expanded(child: SizedBox()),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            setState(() {
+                                              isAnnounceExpandedForAnime =
+                                                  false;
+                                            });
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 300));
+                                            setState(() {
+                                              isAnnounceExpanded = false;
+                                            });
+                                          },
+                                          child: const Icon(
+                                            Icons.keyboard_arrow_up_rounded,
+                                            size: 24,
+                                            color: AppStyle.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          : SizedBox(
+                              height: 40,
+                              child: FloatingActionButton(
+                                onPressed: () {
+                                  print("跳轉到該訊息");
+                                },
+                                backgroundColor: AppStyle.white,
+                                elevation: 2,
+                                hoverElevation: 2,
+                                hoverColor: AppStyle.white,
+                                splashColor: AppStyle.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 8),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        "assets/icons/announce.png",
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          announcementData[0]["content"] ?? "",
+                                          style: AppStyle.body(
+                                              color: AppStyle.gray[700]!),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          setState(() {
+                                            isAnnounceExpanded = true;
+                                          });
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 100));
+                                          setState(() {
+                                            isAnnounceExpandedForAnime = true;
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          size: 24,
+                                          color: AppStyle.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ),
                   if (msgFinish &&
                       ((((Platform.isAndroid || Platform.isIOS) &&
                                   !isKeyboardOpen) ||
@@ -504,6 +714,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "isReply": false, //依實際情況
                                 "replyToID": null, //要記得放回覆的msgID
                                 "isPinned": false,
+                                "updatedAt": dateTimeToString(DateTime.now()),
                               });
                               _messageController.text = "";
                             });
@@ -550,6 +761,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "isReply": false, //依實際情況
                               "replyToID": null, //要記得放回覆的msgID
                               "isPinned": false,
+                              "updatedAt": dateTimeToString(DateTime.now()),
                             });
                             _messageController.text = "";
                           });

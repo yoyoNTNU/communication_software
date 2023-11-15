@@ -34,6 +34,7 @@ class MessageAPI {
           "replyToID": msg['reply_to_id'],
           "isReply": msg['isReply'],
           "isPinned": msg['isPinned'],
+          "updatedAt": msg['updated_at'],
         };
       }).toList();
       return messages;

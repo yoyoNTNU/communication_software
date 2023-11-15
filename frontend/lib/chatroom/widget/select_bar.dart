@@ -5,6 +5,7 @@ class SelectBar extends StatefulWidget {
   final String messageType;
   final int messageID;
   final VoidCallback cancelSelected;
+  final void Function(int) setAnnounce;
   final String content;
 
   const SelectBar({
@@ -14,6 +15,7 @@ class SelectBar extends StatefulWidget {
     required this.messageID,
     required this.cancelSelected,
     required this.content,
+    required this.setAnnounce,
   });
 
   @override
@@ -28,31 +30,34 @@ class _SelectBarState extends State<SelectBar> {
           borderRadius: BorderRadius.circular(4), color: AppStyle.blue[50]),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () async {
-              try {
-                await MessageAPI.setIsPinned(widget.messageID, true);
-              } catch (e) {
-                print("API request error: $e");
-              }
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                children: [
-                  Image.asset("assets/icons/announce.png"),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "設為公告",
-                    style: AppStyle.caption(level: 2, color: AppStyle.blue),
-                  ),
-                ],
+          if (widget.messageType == "string")
+            GestureDetector(
+              onTap: () async {
+                try {
+                  widget.setAnnounce(widget.messageID);
+                  await MessageAPI.setIsPinned(widget.messageID, true);
+                } catch (e) {
+                  print("API request error: $e");
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Column(
+                  children: [
+                    Image.asset("assets/icons/announce.png"),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      "設為公告",
+                      style: AppStyle.caption(level: 2, color: AppStyle.blue),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
           GestureDetector(
             onTap: () {
               print("回覆");
