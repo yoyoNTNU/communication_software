@@ -33,6 +33,7 @@ class _SelectBarState extends State<SelectBar> {
           if (widget.messageType == "string")
             GestureDetector(
               onTap: () async {
+                widget.cancelSelected();
                 try {
                   widget.setAnnounce(widget.messageID);
                   await MessageAPI.setIsPinned(widget.messageID, true);

@@ -407,6 +407,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                     (element) => element["messageID"] == msgID)
                                 .first;
                             msg["isPinned"] = true;
+                            isHide = false;
                             if (announcementData.indexWhere((element) =>
                                     element["messageID"] == msgID) ==
                                 -1) {
@@ -469,6 +470,28 @@ class _ChatroomPageState extends State<ChatroomPage>
                                                     onTap: (CompletionHandler
                                                         handler) async {
                                                       handler(false);
+                                                      setState(() {
+                                                        announcementData
+                                                            .removeAt(index);
+                                                        if (announcementData
+                                                            .isEmpty) {
+                                                          isHide = true;
+                                                          isAnnounceExpanded =
+                                                              false;
+                                                          isAnnounceExpandedForAnime =
+                                                              false;
+                                                        }
+                                                      });
+                                                      try {
+                                                        await MessageAPI
+                                                            .setIsPinned(
+                                                                announce[
+                                                                    "messageID"],
+                                                                false);
+                                                      } catch (e) {
+                                                        print(
+                                                            "API request error: $e");
+                                                      }
                                                     },
                                                   ),
                                                 ],
@@ -522,10 +545,43 @@ class _ChatroomPageState extends State<ChatroomPage>
                                             onPressed: () {
                                               setState(() {
                                                 isHide = true;
+                                                isAnnounceExpanded = false;
+                                                isAnnounceExpandedForAnime =
+                                                    false;
                                               });
                                             },
                                             style: AppStyle.textBtn(),
                                             child: const Text("隱藏公告")),
+                                        const SizedBox(width: 8),
+                                        TextButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                isHide = true;
+                                                isAnnounceExpanded = false;
+                                                isAnnounceExpandedForAnime =
+                                                    false;
+                                              });
+                                              try {
+                                                for (var announce
+                                                    in announcementData) {
+                                                  await MessageAPI.setIsPinned(
+                                                      announce["messageID"],
+                                                      false);
+                                                }
+                                              } catch (e) {
+                                                print("API request error: $e");
+                                              }
+                                              if (!mounted) return;
+                                              setState(() {
+                                                announcementData.clear();
+                                              });
+                                            },
+                                            style: AppStyle.textBtn(),
+                                            child: Text(
+                                              "刪除所有公告",
+                                              style: AppStyle.caption(
+                                                  color: AppStyle.red),
+                                            )),
                                         const Expanded(child: SizedBox()),
                                         GestureDetector(
                                           onTap: () async {
