@@ -6,6 +6,7 @@ class SelectBar extends StatefulWidget {
   final int messageID;
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
+  final void Function(int) deleteMessage;
   final String content;
 
   const SelectBar({
@@ -16,6 +17,7 @@ class SelectBar extends StatefulWidget {
     required this.cancelSelected,
     required this.content,
     required this.setAnnounce,
+    required this.deleteMessage,
   });
 
   @override
@@ -32,14 +34,8 @@ class _SelectBarState extends State<SelectBar> {
         children: [
           if (widget.messageType == "string")
             GestureDetector(
-              onTap: () async {
-                widget.cancelSelected();
-                try {
-                  widget.setAnnounce(widget.messageID);
-                  await MessageAPI.setIsPinned(widget.messageID, true);
-                } catch (e) {
-                  print("API request error: $e");
-                }
+              onTap: () {
+                widget.setAnnounce(widget.messageID);
               },
               child: Container(
                 color: Colors.transparent,
@@ -117,7 +113,7 @@ class _SelectBarState extends State<SelectBar> {
           if (widget.senderIsMe)
             GestureDetector(
               onTap: () {
-                print("收回");
+                widget.deleteMessage(widget.messageID);
               },
               child: Container(
                 decoration: BoxDecoration(

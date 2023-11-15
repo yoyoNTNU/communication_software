@@ -16,6 +16,7 @@ class MsgTile extends StatefulWidget {
   final List<Map<String, dynamic>> memberInfos;
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
+  final void Function(int) deleteMessage;
 
   const MsgTile({
     super.key,
@@ -34,6 +35,7 @@ class MsgTile extends StatefulWidget {
     required this.memberInfos,
     required this.cancelSelected,
     required this.setAnnounce,
+    required this.deleteMessage,
   });
 
   @override
@@ -179,6 +181,7 @@ class _MsgTileState extends State<MsgTile> {
                   cancelSelected: widget.cancelSelected,
                   content: widget.content,
                   setAnnounce: widget.setAnnounce,
+                  deleteMessage: widget.deleteMessage,
                 ),
             ],
           )

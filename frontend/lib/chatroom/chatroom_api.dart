@@ -131,15 +131,14 @@ class MessageAPI {
   //   return response.statusCode;
   // }
 
-  static Future<int> deleteMessage(int chatroomID, int messageID) async {
+  static Future<int> deleteMessage(int messageID) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.delete(
       Uri(
           scheme: 'https',
           host: host,
-          path:
-              '/api/chatroom/${chatroomID.toString()}/message/${messageID.toString()}'),
+          path: '/api/chatroom/0/message/${messageID.toString()}'),
       headers: {'Authorization': token ?? ""},
     );
     return response.statusCode;

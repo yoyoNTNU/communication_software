@@ -400,20 +400,53 @@ class _ChatroomPageState extends State<ChatroomPage>
                             tileIsSelectedIndex = null;
                           });
                         },
-                        setAnnounce: (msgID) {
+                        setAnnounce: (msgID) async {
                           setState(() {
-                            var msg = messageData
-                                .where(
-                                    (element) => element["messageID"] == msgID)
-                                .first;
-                            msg["isPinned"] = true;
-                            isHide = false;
-                            if (announcementData.indexWhere((element) =>
-                                    element["messageID"] == msgID) ==
-                                -1) {
-                              announcementData.insert(0, msg);
-                            }
+                            isOnTap = true;
+                            tileIsSelectedIndex = null;
                           });
+                          try {
+                            setState(() {
+                              var msg = messageData
+                                  .where((element) =>
+                                      element["messageID"] == msgID)
+                                  .first;
+                              msg["isPinned"] = true;
+                              isHide = false;
+                              if (announcementData.indexWhere((element) =>
+                                      element["messageID"] == msgID) ==
+                                  -1) {
+                                announcementData.insert(0, msg);
+                              }
+                            });
+                            await MessageAPI.setIsPinned(msgID, true);
+                          } catch (e) {
+                            print("API request error: $e");
+                          }
+                        },
+                        deleteMessage: (msgID) async {
+                          setState(() {
+                            isOnTap = true;
+                            tileIsSelectedIndex = null;
+                          });
+                          try {
+                            setState(() {
+                              var msg = messageData
+                                  .where((element) =>
+                                      element["messageID"] == msgID)
+                                  .first;
+                              announcementData.remove(msg);
+                              messageData.remove(msg);
+                              if (announcementData.isEmpty) {
+                                isHide = true;
+                                isAnnounceExpanded = false;
+                                isAnnounceExpandedForAnime = false;
+                              }
+                            });
+                            await MessageAPI.deleteMessage(msgID);
+                          } catch (e) {
+                            print("API request error: $e");
+                          }
                         },
                       );
                     },
