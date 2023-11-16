@@ -180,6 +180,18 @@ class _ChatroomPageState extends State<ChatroomPage>
     try {
       final List<Map<String, dynamic>> messages =
           await MessageAPI.allMessage(widget.id);
+      for (var m in messages) {
+        if (m["senderID"] == currentMemberID) {
+          int count = 0;
+          try {
+            count = await MessageAPI.getReadCount(m["messageID"]);
+          } catch (e) {
+            count = 1;
+            print("API request error: $e");
+          }
+          m["readCount"] = count;
+        }
+      }
       final List<Map<String, dynamic>> announcements =
           messages.where((element) => element["isPinned"] == true).toList();
       if (announcements.isNotEmpty) {
@@ -428,6 +440,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         replyMsgID: messageData[index]["replyToID"],
                         content: messageData[index]["content"],
                         msgTime: messageData[index]["msgTime"],
+                        readCount: messageData[index]["readCount"],
                         setAllDisSelected: isOnTap,
                         tileIsSelectedIndex: tileIsSelectedIndex,
                         memberInfos: memberData,

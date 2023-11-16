@@ -5,6 +5,7 @@ class CallMsg extends StatefulWidget {
   final bool senderIsMe;
   final int? messageID;
   final int? senderID;
+  final int? readCount;
   final String content;
   final String msgTime;
 
@@ -14,6 +15,7 @@ class CallMsg extends StatefulWidget {
     required this.senderIsMe,
     this.senderID,
     required this.content,
+    required this.readCount,
     required this.msgTime,
     required this.messageID,
   });
@@ -26,10 +28,9 @@ class _CallMsgState extends State<CallMsg> {
   String read = "";
 
   @override
-  void didChangeDependencies() async {
+  void didChangeDependencies() {
     if (widget.senderIsMe) {
-      String temp = await readCount(widget.messageID, widget.chatroomType);
-      if (!mounted) return;
+      String temp = readCount(widget.readCount, widget.chatroomType);
       setState(() {
         read = temp;
       });

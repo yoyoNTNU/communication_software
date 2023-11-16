@@ -8,6 +8,7 @@ Widget classifyMsg({
   final String messageType = "string",
   final bool isReply = false,
   final int? replyMsgID,
+  final int? readCount,
   final String content = "",
   final String msgTime = "",
   final void Function()? onLongPressed,
@@ -21,6 +22,7 @@ Widget classifyMsg({
         senderID: senderID,
         isReply: isReply,
         replyMsgID: replyMsgID,
+        readCount: readCount,
         content: content,
         msgTime: msgTime,
         onLongPressed: onLongPressed,
@@ -32,6 +34,7 @@ Widget classifyMsg({
         senderIsMe: senderIsMe,
         senderID: senderID,
         content: content,
+        readCount: readCount,
         msgTime: msgTime,
         onLongPressed: onLongPressed,
       );
@@ -43,6 +46,7 @@ Widget classifyMsg({
         senderID: senderID,
         content: content,
         msgTime: msgTime,
+        readCount: readCount,
         onLongPressed: onLongPressed,
       );
     case "voice":
@@ -52,6 +56,7 @@ Widget classifyMsg({
         senderIsMe: senderIsMe,
         senderID: senderID,
         content: content,
+        readCount: readCount,
         msgTime: msgTime,
         onLongPressed: onLongPressed,
       );
@@ -61,6 +66,7 @@ Widget classifyMsg({
         messageID: messageID,
         senderIsMe: senderIsMe,
         senderID: senderID,
+        readCount: readCount,
         content: content,
         msgTime: msgTime,
       );
@@ -70,6 +76,7 @@ Widget classifyMsg({
         messageID: messageID,
         senderIsMe: senderIsMe,
         senderID: senderID,
+        readCount: readCount,
         content: content,
         msgTime: msgTime,
       );
@@ -79,6 +86,7 @@ Widget classifyMsg({
         messageID: messageID,
         senderIsMe: senderIsMe,
         senderID: senderID,
+        readCount: readCount,
         isReply: isReply,
         replyMsgID: replyMsgID,
         content: content,
@@ -90,6 +98,7 @@ Widget classifyMsg({
         messageID: messageID,
         senderIsMe: senderIsMe,
         senderID: senderID,
+        readCount: readCount,
         content: content,
         msgTime: msgTime,
         onLongPressed: onLongPressed,

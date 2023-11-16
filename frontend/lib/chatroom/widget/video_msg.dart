@@ -5,6 +5,7 @@ class VideoMsg extends StatefulWidget {
   final bool senderIsMe;
   final int? messageID;
   final int? senderID;
+  final int? readCount;
   final String content;
   final String msgTime;
   final void Function()? onLongPressed;
@@ -14,6 +15,7 @@ class VideoMsg extends StatefulWidget {
     required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
+    required this.readCount,
     required this.content,
     required this.msgTime,
     this.onLongPressed,
@@ -34,8 +36,7 @@ class _VideoMsgState extends State<VideoMsg> {
   @override
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
-      String temp = await readCount(widget.messageID, widget.chatroomType);
-      if (!mounted) return;
+      String temp = readCount(widget.readCount, widget.chatroomType);
       setState(() {
         read = temp;
       });

@@ -11,6 +11,7 @@ class MsgTile extends StatefulWidget {
   final String content;
   final String msgTime;
   final bool setAllDisSelected;
+  final int? readCount;
   final int? index;
   final int? tileIsSelectedIndex;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
@@ -33,6 +34,7 @@ class MsgTile extends StatefulWidget {
     required this.setAllDisSelected,
     this.tileIsSelectedIndex,
     this.index,
+    required this.readCount,
     required this.setScreenOnTapAndSelectedIndex,
     required this.memberInfos,
     required this.cancelSelected,
@@ -163,6 +165,7 @@ class _MsgTileState extends State<MsgTile> {
                 messageType: widget.messageType,
                 isReply: widget.isReply,
                 replyMsgID: widget.replyMsgID,
+                readCount: widget.readCount,
                 content: widget.content,
                 msgTime: widget.msgTime,
                 onLongPressed: () {

@@ -5,6 +5,7 @@ class FileMsg extends StatefulWidget {
   final bool senderIsMe;
   final int? messageID;
   final int? senderID;
+  final int? readCount;
   final String content;
   final String msgTime;
   final void Function()? onLongPressed;
@@ -16,6 +17,7 @@ class FileMsg extends StatefulWidget {
     this.senderID,
     required this.content,
     required this.msgTime,
+    required this.readCount,
     this.onLongPressed,
     required this.messageID,
   });
@@ -31,8 +33,7 @@ class _FileMsgState extends State<FileMsg> {
   @override
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
-      String temp = await readCount(widget.messageID, widget.chatroomType);
-      if (!mounted) return;
+      String temp = readCount(widget.readCount, widget.chatroomType);
       setState(() {
         read = temp;
       });

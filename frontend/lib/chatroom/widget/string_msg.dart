@@ -7,6 +7,7 @@ class StringMsg extends StatefulWidget {
   final int? senderID;
   final bool isReply;
   final int? replyMsgID;
+  final int? readCount;
   final String content;
   final String msgTime;
   final void Function()? onLongPressed;
@@ -18,6 +19,7 @@ class StringMsg extends StatefulWidget {
     this.senderID,
     required this.isReply,
     this.replyMsgID,
+    required this.readCount,
     required this.content,
     required this.msgTime,
     this.onLongPressed,
@@ -34,8 +36,7 @@ class _StringMsgState extends State<StringMsg> {
   @override
   void didChangeDependencies() async {
     if (widget.senderIsMe) {
-      String temp = await readCount(widget.messageID, widget.chatroomType);
-      if (!mounted) return;
+      String temp = readCount(widget.readCount, widget.chatroomType);
       setState(() {
         read = temp;
       });
