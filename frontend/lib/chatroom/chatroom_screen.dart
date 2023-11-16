@@ -614,6 +614,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                                                           style: AppStyle.body(
                                                               color: AppStyle
                                                                   .gray[700]!),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
                                                         ),
                                                       ),
                                                     ],
@@ -740,6 +743,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                                           announcementData[0]["content"] ?? "",
                                           style: AppStyle.body(
                                               color: AppStyle.gray[700]!),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       GestureDetector(
