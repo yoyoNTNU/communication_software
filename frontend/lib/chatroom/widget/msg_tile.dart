@@ -1,6 +1,7 @@
 part of 'chatroom_widget.dart';
 
 class MsgTile extends StatefulWidget {
+  final GlobalKey msgKey;
   final String chatroomType;
   final bool senderIsMe;
   final int? senderID;
@@ -20,6 +21,7 @@ class MsgTile extends StatefulWidget {
 
   const MsgTile({
     super.key,
+    required this.msgKey,
     required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
@@ -89,6 +91,7 @@ class _MsgTileState extends State<MsgTile> {
       });
     }
     return Container(
+      key: widget.msgKey,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       alignment:
           widget.senderIsMe ? Alignment.centerRight : Alignment.centerLeft,

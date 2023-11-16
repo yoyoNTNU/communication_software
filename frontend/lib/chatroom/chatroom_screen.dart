@@ -35,6 +35,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   List<Map<String, dynamic>> announcementData = [];
   List<dynamic> memberNumber = [];
   List<Map<String, dynamic>> memberData = [];
+  List<Map<String, dynamic>> msgTileHeights = [];
   int memberCount = 0;
   bool isExpanded = false;
   double _height = 1.0;
@@ -212,6 +213,8 @@ class _ChatroomPageState extends State<ChatroomPage>
     } else {
       isKeyboardOpen = false;
     }
+    List<GlobalKey> msgKeys =
+        List.generate(messageData.length, (index) => GlobalKey());
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
@@ -370,9 +373,51 @@ class _ChatroomPageState extends State<ChatroomPage>
                           setState(() {
                             step++;
                           });
+                          for (int i = 0; i < messageData.length; i++) {
+                            final BuildContext? cur = msgKeys[i].currentContext;
+                            if (cur == null) continue;
+                            final RenderBox renderBox =
+                                cur.findRenderObject() as RenderBox;
+                            final msgTileHeight = renderBox.size.height;
+                            setState(() {
+                              msgTileHeights.add({
+                                "messageID": messageData[i]["messageID"],
+                                "height": msgTileHeight,
+                              });
+                            });
+                          }
+                        } else {
+                          for (int i = 0; i < messageData.length; i++) {
+                            int msgIndex = msgTileHeights.indexWhere(
+                                (element) =>
+                                    element["messageID"] ==
+                                    messageData[i]["messageID"]);
+                            final BuildContext? cur = msgKeys[i].currentContext;
+                            if (cur == null) continue;
+                            final RenderBox renderBox =
+                                cur.findRenderObject() as RenderBox;
+                            final msgTileHeight = renderBox.size.height;
+                            if (msgIndex == -1) {
+                              setState(() {
+                                msgTileHeights.add({
+                                  "messageID": messageData[i]["messageID"],
+                                  "height": msgTileHeight,
+                                });
+                              });
+                            } else {
+                              if (msgTileHeights[msgIndex]["height"] !=
+                                  msgTileHeight) {
+                                setState(() {
+                                  msgTileHeights[msgIndex]["height"] =
+                                      msgTileHeight;
+                                });
+                              }
+                            }
+                          }
                         }
                       });
                       return MsgTile(
+                        msgKey: msgKeys[index],
                         index: messageData[index]["messageID"],
                         chatroomType: "group",
                         senderIsMe:
@@ -473,8 +518,16 @@ class _ChatroomPageState extends State<ChatroomPage>
                                         children: [
                                           GestureDetector(
                                             onTap: () {
-                                              print(
-                                                  "跳轉到訊息 ${announce["messageID"]}");
+                                              jumpTo(context, _scrollController,
+                                                  msgTileHeights:
+                                                      msgTileHeights,
+                                                  targetID:
+                                                      announce["messageID"]);
+                                              setState(() {
+                                                isAnnounceExpanded = false;
+                                                isAnnounceExpandedForAnime =
+                                                    false;
+                                              });
                                             },
                                             child: AnimatedContainer(
                                               height: index == 0
@@ -643,8 +696,12 @@ class _ChatroomPageState extends State<ChatroomPage>
                           : SizedBox(
                               height: 40,
                               child: FloatingActionButton(
+                                heroTag: "announce",
                                 onPressed: () {
-                                  print("跳轉到該訊息");
+                                  jumpTo(context, _scrollController,
+                                      msgTileHeights: msgTileHeights,
+                                      targetID: announcementData[0]
+                                          ["messageID"]);
                                 },
                                 backgroundColor: AppStyle.white,
                                 elevation: 2,
@@ -708,6 +765,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         height: 28,
                         width: 110,
                         child: FloatingActionButton(
+                          heroTag: "newest",
                           onPressed: () async {
                             await _scrollController.animateTo(
                               _scrollController.position.maxScrollExtent + 300,
