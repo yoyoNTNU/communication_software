@@ -366,7 +366,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (step == 0) {
                           _scrollController.jumpTo(
-                              _scrollController.position.maxScrollExtent + 100);
+                              _scrollController.position.maxScrollExtent + 300);
                           setState(() {
                             step++;
                           });
@@ -710,7 +710,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         child: FloatingActionButton(
                           onPressed: () async {
                             await _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
+                              _scrollController.position.maxScrollExtent + 300,
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeOut,
                             );
@@ -770,7 +770,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         const Duration(milliseconds: 500),
                       );
                       _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent,
+                        _scrollController.position.maxScrollExtent + 300,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeOut,
                       );
@@ -809,7 +809,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               _scrollController.animateTo(
-                                _scrollController.position.maxScrollExtent,
+                                _scrollController.position.maxScrollExtent +
+                                    300,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,
                               );
@@ -856,7 +857,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
+                              _scrollController.position.maxScrollExtent + 300,
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );
