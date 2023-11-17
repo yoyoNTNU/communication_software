@@ -29,12 +29,22 @@ class AppSettingAPI {
     final token = dbToken?.authorization;
     final Map<String, String> body_ = {};
     if (isLoginMail != null) {
-      body_["isLoginMail"] = isLoginMail;
+      body_["is_login_mail"] = isLoginMail;
     }
     final response = await http.patch(
         Uri(scheme: 'https', host: host, path: '/api/member/info'),
         headers: {'Authorization': token ?? ""},
         body: body_);
+    return response.statusCode;
+  }
+
+  static Future<int> logOut() async{
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.delete(
+        Uri(scheme: 'https', host: host, path: '/auth/member/sign_out'),
+        headers: {'Authorization': token ?? ""},
+      );
     return response.statusCode;
   }
 }

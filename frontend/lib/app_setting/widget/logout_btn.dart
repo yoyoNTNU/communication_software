@@ -2,8 +2,16 @@ part of 'app_setting_widget.dart';
 
 Widget logoutBtn(BuildContext context) {
   return OutlinedButton(
-    onPressed: () {
-      Navigator.popAndPushNamed(context, '/login');
+    onPressed: () async {
+      int responseCode;
+      try {
+        responseCode = await AppSettingAPI.logOut();
+        if (responseCode == 200) {
+          Navigator.popAndPushNamed(context, '/login');
+        }
+      } catch (e) {
+        print('API request error: $e');
+      }
     },
     style: AppStyle.dangerBtn().copyWith(
       minimumSize: MaterialStateProperty.all<Size>(
