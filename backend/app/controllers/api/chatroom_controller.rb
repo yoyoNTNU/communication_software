@@ -164,7 +164,9 @@ class Api::ChatroomController < ApplicationController
     if temp
       message=Message.where(chatroom_id:params[:chatroom_id]).reverse
       message.each do |m|
-        if MessageReader.find_by(member:current_member,message:m).nil?
+        if (!temp.delete_at.nil? && m.created_at < temp.delete_at)
+          break
+        elsif MessageReader.find_by(member:current_member,message:m).nil?
           MessageReader.create(member:current_member,message:m)
         else 
           break
