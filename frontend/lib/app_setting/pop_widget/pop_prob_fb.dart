@@ -261,4 +261,58 @@ class _PopProbFBState extends State<PopProbFB> {
       ),
     );
   }
+
+  // Widget inputField() {
+  //   if (_selectedOption != 4) {
+  //     return Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           '問題描述',
+  //           style: AppStyle.body(color: AppStyle.blue[500]!),
+  //         ),
+  //         Expanded(
+  //           child: TextField(
+  //             controller: _txtController,
+  //             textAlign: TextAlign.start,
+  //             expands: false,
+  //             maxLines: 10, // This makes it expandable
+  //             decoration: InputDecoration(
+  //               border: const OutlineInputBorder(),
+  //               focusedBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(color: AppStyle.blue[500]!),
+  //                 borderRadius: BorderRadius.circular(5),
+  //             ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   } else {
+  //     return Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         Text(
+  //           '問題描述',
+  //           style: AppStyle.body(color: AppStyle.blue[500]!),
+  //         ),
+  //         Expanded(
+  //           child: TextField(
+  //             controller: _txtController,
+  //             textAlign: TextAlign.start,
+  //             expands: false,
+  //             maxLines: 10, // This makes it expandable
+  //             decoration: InputDecoration(
+  //               border: const OutlineInputBorder(),
+  //               focusedBorder: OutlineInputBorder(
+  //                 borderSide: BorderSide(color: AppStyle.blue[500]!),
+  //                 borderRadius: BorderRadius.circular(5),
+  //             ),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   }
+  // }
 }
