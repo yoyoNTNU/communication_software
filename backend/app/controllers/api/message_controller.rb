@@ -2,7 +2,12 @@ class Api::MessageController < ApplicationController
   before_action :authenticate_member!
 
   def index
-    @messages=Message.where(chatroom_id:params[:chatroom_id])
+    chatroom=Chatroom.find_by(id:params[:chatroom_id])
+    chatroom_member=ChatroomMember.find_by(chatroom:chatroom,member:current_member)
+    @messages=Message.where(chatroom:chatroom)
+    if(!chatroom_member.delete_at.nil?)
+      @messages= @messages.where("created_at > ?", chatroom_member.delete_at)
+    end
     render json: {
       error: false,
       message: "succeed to get all message in the chatroom",
