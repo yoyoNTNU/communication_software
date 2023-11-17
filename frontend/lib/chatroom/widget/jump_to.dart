@@ -3,7 +3,7 @@ part of 'chatroom_widget.dart';
 Future<void> jumpTo(
   BuildContext context,
   ScrollController scrollController,
-  void Function({int index, bool isNeedShake}) setWidgetShake, {
+  void Function({int msgID, bool isNeedShake}) setWidgetShake, {
   List<Map<String, dynamic>> msgTileHeights = const [],
   int targetID = 0,
 }) async {
@@ -14,20 +14,12 @@ Future<void> jumpTo(
   for (var map in list) {
     targetPosition += map["height"];
   }
-
-  int findIndex =
-      msgTileHeights.indexWhere((element) => element["messageID"] == targetID);
-
   await scrollController.animateTo(
     targetPosition - 100,
     duration: const Duration(milliseconds: 300),
     curve: Curves.easeOut,
   );
-  if (findIndex != -1) {
-    setWidgetShake(index: findIndex, isNeedShake: true);
-  }
+  setWidgetShake(msgID: targetID, isNeedShake: true);
   await Future.delayed(const Duration(milliseconds: 200));
-  if (findIndex != -1) {
-    setWidgetShake(index: findIndex, isNeedShake: false);
-  }
+  setWidgetShake(msgID: targetID, isNeedShake: false);
 }

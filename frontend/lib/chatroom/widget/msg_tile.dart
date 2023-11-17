@@ -14,7 +14,7 @@ class MsgTile extends StatefulWidget {
   final int? readCount;
   final int? index;
   final int? tileIsSelectedIndex;
-  final bool isWidgetShake;
+  final bool? isWidgetShake;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
   final List<Map<String, dynamic>> memberInfos;
   final VoidCallback cancelSelected;
@@ -63,21 +63,24 @@ class _MsgTileState extends State<MsgTile> {
     return index;
   }
 
+  void setSenderNameAndAvatar() {
+    int index = getIndex(widget.senderID!);
+    senderName = widget.senderIsMe
+        ? ""
+        : index == -1
+            ? ""
+            : widget.memberInfos[index]["name"];
+    senderAvatar = widget.senderIsMe
+        ? null
+        : index == -1
+            ? null
+            : widget.memberInfos[index]["avatar"];
+  }
+
   @override
   void initState() {
-    int index = getIndex(widget.senderID!);
-    if (!mounted) return;
     setState(() {
-      senderName = widget.senderIsMe
-          ? ""
-          : index == -1
-              ? ""
-              : widget.memberInfos[index]["name"];
-      senderAvatar = widget.senderIsMe
-          ? null
-          : index == -1
-              ? null
-              : widget.memberInfos[index]["avatar"];
+      setSenderNameAndAvatar();
     });
 
     super.initState();
@@ -85,6 +88,7 @@ class _MsgTileState extends State<MsgTile> {
 
   @override
   Widget build(BuildContext context) {
+    setSenderNameAndAvatar();
     if (widget.setAllDisSelected) {
       setState(() {
         isSelected = widget.index == widget.tileIsSelectedIndex ? true : false;
@@ -97,7 +101,7 @@ class _MsgTileState extends State<MsgTile> {
     return ShakeWidget(
       shakeConstant: ShakeHorizontalConstant1(),
       enableWebMouseHover: false,
-      autoPlay: widget.isWidgetShake,
+      autoPlay: widget.isWidgetShake ?? false,
       child: Container(
         key: widget.msgKey,
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),

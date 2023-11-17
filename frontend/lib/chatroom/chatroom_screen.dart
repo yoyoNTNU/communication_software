@@ -47,7 +47,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   bool isAnnounceExpanded = false;
   bool isAnnounceExpandedForAnime = false;
   bool isHide = false;
-  List<bool> isWidgetShakes = [];
+  Map<int, bool> isWidgetShakes = {};
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -103,6 +103,7 @@ class _ChatroomPageState extends State<ChatroomPage>
               .first;
           int tempDataIndex = messageData.indexOf(tempData);
           messageData[tempDataIndex] = temp["message"]["message"];
+          isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
         });
       }
     });
@@ -203,7 +204,9 @@ class _ChatroomPageState extends State<ChatroomPage>
         messageData = messages;
         announcementData = announcements;
         msgFinish = true;
-        isWidgetShakes = List.generate(messageData.length, (index) => false);
+        for (var m in messageData) {
+          isWidgetShakes[m["messageID"]] = false;
+        }
       });
     } catch (e) {
       print("API request error: $e");
@@ -451,7 +454,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                         setAllDisSelected: isOnTap,
                         tileIsSelectedIndex: tileIsSelectedIndex,
                         memberInfos: memberData,
-                        isWidgetShake: isWidgetShakes[index],
+                        isWidgetShake:
+                            isWidgetShakes[messageData[index]["messageID"]],
                         setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
                           setState(() {
                             isOnTap = boolean;
@@ -503,7 +507,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                   .first;
                               announcementData.remove(msg);
                               messageData.remove(msg);
-                              isWidgetShakes.removeAt(0);
+                              isWidgetShakes.remove(msgID);
                               if (announcementData.isEmpty) {
                                 isHide = true;
                                 isAnnounceExpanded = false;
@@ -547,11 +551,11 @@ class _ChatroomPageState extends State<ChatroomPage>
                                               });
                                               await jumpTo(
                                                   context, _scrollController, (
-                                                      {int index = 0,
+                                                      {int msgID = 0,
                                                       bool isNeedShake =
                                                           false}) {
                                                 setState(() {
-                                                  isWidgetShakes[index] =
+                                                  isWidgetShakes[msgID] =
                                                       isNeedShake;
                                                 });
                                               },
@@ -733,10 +737,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 heroTag: "announce",
                                 onPressed: () async {
                                   await jumpTo(context, _scrollController, (
-                                          {int index = 0,
+                                          {int msgID = 0,
                                           bool isNeedShake = false}) {
                                     setState(() {
-                                      isWidgetShakes[index] = isNeedShake;
+                                      isWidgetShakes[msgID] = isNeedShake;
                                     });
                                   },
                                       msgTileHeights: msgTileHeights,
@@ -894,7 +898,6 @@ class _ChatroomPageState extends State<ChatroomPage>
                               }),
                             }));
                             setState(() {
-                              isWidgetShakes.add(false);
                               messageData.add({
                                 "messageID": null,
                                 "senderID": currentMemberID,
@@ -944,7 +947,6 @@ class _ChatroomPageState extends State<ChatroomPage>
                             }),
                           }));
                           setState(() {
-                            isWidgetShakes.add(false);
                             messageData.add({
                               "messageID": null,
                               "senderID": currentMemberID,
