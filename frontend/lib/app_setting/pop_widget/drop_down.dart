@@ -152,49 +152,5 @@ class _DropdownState extends State<Dropdown> {
             }).toList();
           }),
     );
-    // return Column(
-    //   mainAxisAlignment: MainAxisAlignment.center,
-    //   crossAxisAlignment: CrossAxisAlignment.start,
-    //   children: [
-    //     const SizedBox(height: 4),
-    //     Container(
-    //       key: _textFieldKey,
-    //       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-    //       decoration: BoxDecoration(
-    //         border: Border.all(color: Colors.grey),
-    //         borderRadius: BorderRadius.circular(5),
-    //       ),
-    //       child: PopupMenuButton<String>(
-    //         onSelected: (String value) {
-    //           setState(() {
-    //             _chosenValue = value;
-    //           });
-    //         },
-    //         itemBuilder: (BuildContext context) {
-    //           // Determine width of the text field
-    //           final RenderBox renderBox = _textFieldKey.currentContext!.findRenderObject() as RenderBox;
-    //           double width = renderBox.size.width;
-
-    //           return <String>['選項1', '選項2', '選項3'].map((String value) {
-    //             return PopupMenuItem<String>(
-    //               value: value,
-    //               child: Container(
-    //                 width: width,
-    //                 child: Text(value),
-    //               ),
-    //             );
-    //           }).toList();
-    //         },
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: [
-    //             Text(_chosenValue!),
-    //             const Icon(Icons.arrow_drop_down),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ],
-    // );
   }
 }

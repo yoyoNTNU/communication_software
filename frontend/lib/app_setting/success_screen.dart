@@ -76,7 +76,7 @@ class _SentSuccessState extends State<SentSuccess> {
                                 Navigator.popAndPushNamed(context, '/setting');
                               },
                               style: AppStyle.secondaryBtn(),
-                              child: const Text("返回登入畫面"),
+                              child: const Text("確定"),
                             ),
                             const SizedBox(
                               height: 8,

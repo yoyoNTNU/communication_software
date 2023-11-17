@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:proj/app_setting/app_setting_api.dart';
 import 'package:proj/app_setting/widget/app_setting_widget.dart';
 import 'package:proj/style.dart';
 
@@ -43,7 +42,7 @@ class _AppSettingState extends State<AppSetting> {
                     const SizedBox(height: 24.0),
                     reportProblem(context),
                     const SizedBox(height: 24.0),
-                    logoutBtn(),    
+                    logoutBtn(context),    
                   ],
                 ),
               ),
