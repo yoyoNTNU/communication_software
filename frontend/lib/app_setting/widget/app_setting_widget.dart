@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proj/style.dart';
 import 'package:proj/app_setting/pop_widget/pop_prob_fb.dart';
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import 'package:proj/app_setting/app_setting_api.dart';
 
 part 'app_box.dart';
 part 'app_logo.dart';
@@ -74,7 +75,7 @@ Widget regardingUS() {
             height: 192,
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Image.asset(
-              "assets/images/Avatar.png",
+              "assets/images/logo.png",
               fit: BoxFit.contain,
             ),
           ),
@@ -82,7 +83,7 @@ Widget regardingUS() {
             height: 8,
           ),
           Text(
-            "我們好棒喔~",
+            'fkjweoaonviewn;volasdnklf;dsnfmklsdmnkl;fmsdldkfjkals;djfkldslkf;aklsdfds',
             style: AppStyle.info(level: 2, color: AppStyle.gray[700]!),
           ),
         ]
@@ -124,6 +125,20 @@ class loginNotification extends StatefulWidget {
 }
 class _loginNotificationState extends State<loginNotification> {
   bool _isChecked = true;
+  int _responseCode = 400;
+
+  Future<void> _modifyNoti(
+      {String? isLoginMail}) async {
+    try {
+      final int responseCode = await AppSettingAPI.modifyNoti(
+          isLoginMail: isLoginMail);
+      setState(() {
+        _responseCode = responseCode;
+      });
+    } catch (e) {
+      print('API request error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,19 +164,31 @@ class _loginNotificationState extends State<loginNotification> {
             height: 44,
             child: Row(children: [
               Container(
-                width: 96,
+                width: 146,
                 child: Row(
                   children: [
-                    Text(
-                      "開啟/關閉",
-                      style: AppStyle.header(level: 3, color: AppStyle.gray[700]!),
+                    SizedBox(
+                      width: 80,
+                      child: Text(
+                        "開啟/關閉",
+                        style: AppStyle.header(level: 3, color: AppStyle.gray[700]!),
+                      ),
                     ),
                     const SizedBox(width: 16),
                     Switcher(
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           _isChecked = value;
                         });
+                        _isChecked == true ? await _modifyNoti(isLoginMail: "true") :
+                        await _modifyNoti(isLoginMail: "false");
+                        if (_responseCode == 200) {
+                          if (!context.mounted) return;
+                          print("switcher成功");
+                        } else {
+                          if (!context.mounted) return;
+                          print("switcher壞了");
+                        }
                       },
                     ),
                   ],
@@ -219,9 +246,11 @@ Widget reportProblem(BuildContext context) {
       )
   );
 }
-Widget logoutBtn() {
+Widget logoutBtn(BuildContext context) {
   return OutlinedButton(
-    onPressed: () {},
+    onPressed: () {
+      Navigator.popAndPushNamed(context, '/login');
+    },
     style: AppStyle.dangerBtn().copyWith(
       minimumSize: MaterialStateProperty.all<Size>(
         const Size(95, 40),

@@ -43,7 +43,7 @@ class _AppSettingState extends State<AppSetting> {
                     const SizedBox(height: 24.0),
                     reportProblem(context),
                     const SizedBox(height: 24.0),
-                    logoutBtn(),    
+                    logoutBtn(context),    
                   ],
                 ),
               ),
