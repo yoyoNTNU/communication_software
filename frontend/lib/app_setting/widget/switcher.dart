@@ -21,23 +21,16 @@ class _SwitcherState extends State<Switcher> {
       animationDuration: const Duration(milliseconds: 300),
       style: ToggleStyle(
           backgroundColor: AppStyle.white,
-          borderRadius: BorderRadius.circular(20),
-          indicatorColor: AppStyle.teal,
-          borderColor: AppStyle.teal),
+          borderRadius: BorderRadius.circular(12),
+          indicatorColor: _isChecked ? AppStyle.teal : AppStyle.gray[400]!,
+          borderColor: AppStyle.blue[100]!),
       indicatorSize: const Size(24, 24),
       iconBuilder: (bool value) {
-        return Row(
+        return const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               '',
-              style: value
-                  ? _isChecked
-                      ? AppStyle.caption(color: AppStyle.white)
-                      : AppStyle.caption(color: AppStyle.teal)
-                  : _isChecked
-                      ? AppStyle.caption(color: AppStyle.teal)
-                      : AppStyle.caption(color: AppStyle.white),
             ),
           ],
         );
@@ -45,7 +38,7 @@ class _SwitcherState extends State<Switcher> {
       selectedIconScale: 1.5,
       height: 24,
       // width: 48,
-      borderWidth: 2,
+      borderWidth: 1,
       iconOpacity: 1,
       selectedIconOpacity: 1,
       current: _isChecked,
