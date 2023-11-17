@@ -11,7 +11,7 @@ String readCount(int? count, String chatroomType) {
     if (count == 1 || count == null) {
       return "";
     } else {
-      return "已讀 ${count! - 1}·";
+      return "已讀 ${count - 1}·";
     }
   }
 }
