@@ -3,15 +3,18 @@ import 'package:proj/style.dart';
 import 'package:proj/main.dart';
 import 'package:proj/chatroom/chatroom_api.dart';
 import 'package:proj/chatroom/widget/chatroom_widget.dart';
+import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'dart:convert';
 import 'package:proj/widget.dart';
 import 'package:proj/data.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:intl/intl.dart';
+import 'dart:io';
 
 class ChatroomPage extends StatefulWidget {
+  final int id;
   const ChatroomPage({
     super.key,
+    required this.id,
   });
 
   @override
@@ -20,21 +23,31 @@ class ChatroomPage extends StatefulWidget {
 
 class _ChatroomPageState extends State<ChatroomPage>
     with TickerProviderStateMixin {
-  late int? chatroomID;
   late AnimationController _animationController;
   late Animation<double> _animation;
   final _messageController = TextEditingController();
   final FocusNode _messageFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
+  Map<String, dynamic> chatroomData = {};
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   List<Map<String, dynamic>> messageData = [];
+  List<Map<String, dynamic>> announcementData = [];
+  List<dynamic> memberNumber = [];
+  List<Map<String, dynamic>> memberData = [];
+  List<Map<String, dynamic>> msgTileHeights = [];
+  int memberCount = 0;
   bool isExpanded = false;
   double _height = 1.0;
   int step = 0;
   bool isOnTap = false;
   int? tileIsSelectedIndex;
   int currentMemberID = 0;
+  bool msgFinish = false;
+  bool isAnnounceExpanded = false;
+  bool isAnnounceExpandedForAnime = false;
+  bool isHide = false;
+  List<bool> isWidgetShakes = [];
 
   void setBottomHeightAnimated(double end) {
     _animation = Tween(begin: _height, end: end).animate(_animationController)
@@ -53,23 +66,27 @@ class _ChatroomPageState extends State<ChatroomPage>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+    _scrollController.addListener(() {
+      setState(() {});
+    });
+    _getAllMessageAndChatroomInfo();
     super.initState();
   }
 
   @override
   void didChangeDependencies() async {
-    chatroomID = ModalRoute.of(context)?.settings.arguments as int?;
     final dbToken = await DatabaseHelper.instance.getToken();
     final id = dbToken?.userID;
     if (!mounted) return;
     setState(() {
       currentMemberID = id!;
     });
+
     channel.sink.add(jsonEncode({
       'command': 'subscribe',
       'identifier': jsonEncode({
         'channel': 'ChatChannel',
-        'chatroom_id': chatroomID,
+        'chatroom_id': widget.id,
       }),
     }));
     channel.stream.listen((message) {
@@ -99,8 +116,120 @@ class _ChatroomPageState extends State<ChatroomPage>
     super.dispose();
   }
 
+  Future<void> _getChatroom() async {
+    try {
+      final Map<String, dynamic> data =
+          await ChatroomAPI.getChatroom(widget.id);
+      if (!mounted) return;
+      setState(() {
+        chatroomData = data;
+      });
+      if (data["type"] == "group") {
+        await _getGroupMember();
+      } else {
+        List<int> friendship =
+            await TransferAPI.chatroomIDtoFriendID(widget.id);
+        for (int i = 0; i < 2; i++) {
+          await _getMemberAvatar(friendship[i]);
+        }
+      }
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
+  Future<void> _getGroupMember() async {
+    try {
+      int groupID = await TransferAPI.chatroomIDtoGroupID(widget.id);
+      final Map<String, dynamic> data =
+          await ChatroomAPI.getGroupMember(groupID);
+      if (!mounted) return;
+      setState(() {
+        memberNumber = data["member"];
+        memberCount = data["count"];
+      });
+      for (int i = 0; i < memberCount; i++) {
+        await _getMemberAvatar(memberNumber[i]);
+      }
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
+  Future<void> _getMemberAvatar(int memberID) async {
+    try {
+      Map<String, dynamic> data;
+      if (memberID == currentMemberID) {
+        data = await MemberAPI.getSelfInfo();
+      } else {
+        data = await MemberAPI.getMemberInfo(memberID);
+      }
+      if (!mounted) return;
+      setState(() {
+        memberData.add({
+          "id": memberID,
+          "name": data["name"],
+          "avatar": data["avatar"],
+        });
+      });
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
+  Future<void> _getAllMessage() async {
+    try {
+      final List<Map<String, dynamic>> messages =
+          await MessageAPI.allMessage(widget.id);
+      for (var m in messages) {
+        if (m["senderID"] == currentMemberID) {
+          int count = 0;
+          try {
+            count = await MessageAPI.getReadCount(m["messageID"]);
+          } catch (e) {
+            count = 1;
+            print("API request error: $e");
+          }
+          m["readCount"] = count;
+        }
+      }
+      final List<Map<String, dynamic>> announcements =
+          messages.where((element) => element["isPinned"] == true).toList();
+      if (announcements.isNotEmpty) {
+        announcements.sort((a, b) => b["updatedAt"].compareTo(a["updatedAt"]));
+      }
+      if (!mounted) return;
+      setState(() {
+        messageData = messages;
+        announcementData = announcements;
+        msgFinish = true;
+        isWidgetShakes = List.generate(messageData.length, (index) => false);
+      });
+    } catch (e) {
+      print("API request error: $e");
+    }
+  }
+
+  Future<void> _getAllMessageAndChatroomInfo() async {
+    showLoading(context);
+    await _getChatroom();
+    await _getAllMessage();
+    if (!context.mounted) return;
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    bool isKeyboardOpen = false;
+    if (mediaQuery.viewInsets.bottom > 0) {
+      isKeyboardOpen = true;
+    } else {
+      isKeyboardOpen = false;
+    }
+    List<GlobalKey> msgKeys =
+        List.generate(messageData.length, (index) => GlobalKey());
+
     return Scaffold(
       backgroundColor: AppStyle.blue[50],
       appBar: AppBar(
@@ -123,11 +252,16 @@ class _ChatroomPageState extends State<ChatroomPage>
         backgroundColor: AppStyle.white,
         elevation: 0,
         title: TitleLine(
-          chatroomType: "friend",
-          groupPeopleCount: 10,
-          isMuted: true,
-          isPinned: true,
-          name: "聊天室$chatroomID內部",
+          chatroomType: chatroomData["type"] ?? "",
+          groupPeopleCount: memberCount,
+          friendID: chatroomData["type"] == "friend" && memberData.length == 2
+              ? memberData[0]["id"] == currentMemberID
+                  ? memberData[1]["id"]
+                  : memberData[0]["id"]
+              : null,
+          isMuted: chatroomData["isMuted"] ?? false,
+          isPinned: chatroomData["isPinned"] ?? false,
+          name: chatroomData["chatroomName"] ?? "",
           isExpanded: isExpanded,
           onTapMemberCount: () {
             setBottomHeightAnimated(isExpanded ? 1 : 41);
@@ -159,107 +293,41 @@ class _ChatroomPageState extends State<ChatroomPage>
                     child: Row(
                       children: [
                         Expanded(
-                          child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
-                              children: [
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
+                            itemCount: memberCount,
+                            itemBuilder: (BuildContext context, int index) {
+                              var member = memberData[index];
+                              return Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      showProfileDialog(context,
+                                          id: member["id"]);
+                                    },
+                                    child: ClipOval(
+                                      clipBehavior: Clip.hardEdge,
+                                      child: member["avatar"] == null
+                                          ? Image.asset(
+                                              "assets/images/avatar.png",
+                                              width: 32,
+                                              height: 32,
+                                            )
+                                          : Image.network(
+                                              member["avatar"],
+                                              width: 32,
+                                              height: 32,
+                                            ),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
+                                  const SizedBox(
+                                    width: 4,
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                ClipOval(
-                                  clipBehavior: Clip.hardEdge,
-                                  child: Image.asset(
-                                    "assets/images/avatar.png",
-                                    width: 32,
-                                    height: 32,
-                                  ),
-                                ),
-                              ]),
+                                ],
+                              );
+                            },
+                          ),
                         ),
                         const SizedBox(
                           width: 8,
@@ -307,42 +375,463 @@ class _ChatroomPageState extends State<ChatroomPage>
                   tileIsSelectedIndex = null;
                 });
               },
-              child: ListView.builder(
-                controller: _scrollController,
-                itemCount: messageData.length,
-                itemBuilder: (BuildContext context, int index) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (step == 0) {
-                      _scrollController.jumpTo(
-                          _scrollController.position.maxScrollExtent + 100);
-                      setState(() {
-                        step++;
-                      });
-                    }
-                  });
-                  return MsgTile(
-                    index: messageData[index]["messageID"],
-                    chatroomType: "group",
-                    senderIsMe:
-                        messageData[index]["senderID"] == currentMemberID,
-                    senderID: messageData[index]["senderID"],
-                    messageType: messageData[index]["type"],
-                    isReply: messageData[index]["isReply"],
-                    replyMsgID: messageData[index]["replyToID"],
-                    content: messageData[index]["content"],
-                    msgTime: messageData[index]["msgTime"],
-                    setAllDisSelected: isOnTap,
-                    tileIsSelectedIndex: tileIsSelectedIndex,
-                    setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
-                      setState(() {
-                        isOnTap = boolean;
-                        if (indexValue != -1) {
-                          tileIsSelectedIndex = indexValue;
+              child: Stack(
+                children: [
+                  ListView.builder(
+                    controller: _scrollController,
+                    itemCount: messageData.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (step == 0) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.maxScrollExtent + 300);
+                          setState(() {
+                            step++;
+                          });
+                          for (int i = 0; i < messageData.length; i++) {
+                            final BuildContext? cur = msgKeys[i].currentContext;
+                            if (cur == null) continue;
+                            final RenderBox renderBox =
+                                cur.findRenderObject() as RenderBox;
+                            final msgTileHeight = renderBox.size.height;
+                            setState(() {
+                              if (messageData[i]["messageID"] != null) {
+                                msgTileHeights.add({
+                                  "messageID": messageData[i]["messageID"],
+                                  "height": msgTileHeight,
+                                });
+                              }
+                            });
+                          }
+                        } else {
+                          for (int i = 0; i < messageData.length; i++) {
+                            int msgIndex = msgTileHeights.indexWhere(
+                                (element) =>
+                                    element["messageID"] ==
+                                    messageData[i]["messageID"]);
+                            final BuildContext? cur = msgKeys[i].currentContext;
+                            if (cur == null) continue;
+                            final RenderBox renderBox =
+                                cur.findRenderObject() as RenderBox;
+                            final msgTileHeight = renderBox.size.height;
+                            if (msgIndex == -1) {
+                              setState(() {
+                                if (messageData[i]["messageID"] != null) {
+                                  msgTileHeights.add({
+                                    "messageID": messageData[i]["messageID"],
+                                    "height": msgTileHeight,
+                                  });
+                                }
+                              });
+                            } else {
+                              if (msgTileHeights[msgIndex]["height"] !=
+                                  msgTileHeight) {
+                                setState(() {
+                                  msgTileHeights[msgIndex]["height"] =
+                                      msgTileHeight;
+                                });
+                              }
+                            }
+                          }
                         }
                       });
+                      return MsgTile(
+                        msgKey: msgKeys[index],
+                        index: messageData[index]["messageID"],
+                        chatroomType: chatroomData["type"] ?? "",
+                        senderIsMe:
+                            messageData[index]["senderID"] == currentMemberID,
+                        senderID: messageData[index]["senderID"],
+                        messageType: messageData[index]["type"],
+                        isReply: messageData[index]["isReply"],
+                        replyMsgID: messageData[index]["replyToID"],
+                        content: messageData[index]["content"],
+                        msgTime: messageData[index]["msgTime"],
+                        readCount: messageData[index]["readCount"],
+                        setAllDisSelected: isOnTap,
+                        tileIsSelectedIndex: tileIsSelectedIndex,
+                        memberInfos: memberData,
+                        isWidgetShake: isWidgetShakes[index],
+                        setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
+                          setState(() {
+                            isOnTap = boolean;
+                            if (indexValue != -1) {
+                              tileIsSelectedIndex = indexValue;
+                            }
+                          });
+                        },
+                        cancelSelected: () {
+                          setState(() {
+                            isOnTap = true;
+                            tileIsSelectedIndex = null;
+                          });
+                        },
+                        setAnnounce: (msgID) async {
+                          setState(() {
+                            isOnTap = true;
+                            tileIsSelectedIndex = null;
+                          });
+                          try {
+                            setState(() {
+                              var msg = messageData
+                                  .where((element) =>
+                                      element["messageID"] == msgID)
+                                  .first;
+                              msg["isPinned"] = true;
+                              isHide = false;
+                              if (announcementData.indexWhere((element) =>
+                                      element["messageID"] == msgID) ==
+                                  -1) {
+                                announcementData.insert(0, msg);
+                              }
+                            });
+                            await MessageAPI.setIsPinned(msgID, true);
+                          } catch (e) {
+                            print("API request error: $e");
+                          }
+                        },
+                        deleteMessage: (msgID) async {
+                          setState(() {
+                            isOnTap = true;
+                            tileIsSelectedIndex = null;
+                          });
+                          try {
+                            setState(() {
+                              var msg = messageData
+                                  .where((element) =>
+                                      element["messageID"] == msgID)
+                                  .first;
+                              announcementData.remove(msg);
+                              messageData.remove(msg);
+                              isWidgetShakes.removeAt(0);
+                              if (announcementData.isEmpty) {
+                                isHide = true;
+                                isAnnounceExpanded = false;
+                                isAnnounceExpandedForAnime = false;
+                              }
+                            });
+                            await MessageAPI.deleteMessage(msgID);
+                          } catch (e) {
+                            print("API request error: $e");
+                          }
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                  if (announcementData.isNotEmpty && !isHide)
+                    Positioned(
+                      top: 4,
+                      left: 8,
+                      right: 8,
+                      child: isAnnounceExpanded
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: announcementData.length > 3
+                                        ? 3
+                                        : announcementData.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      var announce = announcementData[index];
+                                      return Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () async {
+                                              setState(() {
+                                                isAnnounceExpanded = false;
+                                                isAnnounceExpandedForAnime =
+                                                    false;
+                                              });
+                                              await jumpTo(
+                                                  context, _scrollController, (
+                                                      {int index = 0,
+                                                      bool isNeedShake =
+                                                          false}) {
+                                                setState(() {
+                                                  isWidgetShakes[index] =
+                                                      isNeedShake;
+                                                });
+                                              },
+                                                  msgTileHeights:
+                                                      msgTileHeights,
+                                                  targetID:
+                                                      announce["messageID"]);
+                                            },
+                                            child: AnimatedContainer(
+                                              height: index == 0
+                                                  ? 40
+                                                  : isAnnounceExpandedForAnime
+                                                      ? 40
+                                                      : 0,
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              child: SwipeActionCell(
+                                                key: ValueKey(index),
+                                                backgroundColor: AppStyle.white,
+                                                trailingActions: [
+                                                  SwipeAction(
+                                                    widthSpace: 80,
+                                                    color:
+                                                        const Color(0xFFFFE7E6),
+                                                    content: Center(
+                                                      child: Text(
+                                                        '移除公告',
+                                                        style: AppStyle.caption(
+                                                            color:
+                                                                AppStyle.red),
+                                                      ),
+                                                    ),
+                                                    onTap: (CompletionHandler
+                                                        handler) async {
+                                                      handler(false);
+                                                      setState(() {
+                                                        announcementData
+                                                            .removeAt(index);
+                                                        if (announcementData
+                                                            .isEmpty) {
+                                                          isHide = true;
+                                                          isAnnounceExpanded =
+                                                              false;
+                                                          isAnnounceExpandedForAnime =
+                                                              false;
+                                                        }
+                                                      });
+                                                      try {
+                                                        await MessageAPI
+                                                            .setIsPinned(
+                                                                announce[
+                                                                    "messageID"],
+                                                                false);
+                                                      } catch (e) {
+                                                        print(
+                                                            "API request error: $e");
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 24,
+                                                      vertical: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      Image.asset(
+                                                        "assets/icons/announce.png",
+                                                        width: 24,
+                                                        height: 24,
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Expanded(
+                                                        child: Text(
+                                                          announce["content"] ??
+                                                              "",
+                                                          style: AppStyle.body(
+                                                              color: AppStyle
+                                                                  .gray[700]!),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Divider(
+                                            height: 0,
+                                            thickness: 0,
+                                            color: AppStyle.gray[100],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                  AnimatedContainer(
+                                    height: isAnnounceExpandedForAnime ? 40 : 0,
+                                    duration: const Duration(milliseconds: 300),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                    ),
+                                    color: AppStyle.white,
+                                    child: Row(
+                                      children: [
+                                        TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isHide = true;
+                                                isAnnounceExpanded = false;
+                                                isAnnounceExpandedForAnime =
+                                                    false;
+                                              });
+                                            },
+                                            style: AppStyle.textBtn(),
+                                            child: const Text("隱藏公告")),
+                                        const SizedBox(width: 8),
+                                        TextButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                isHide = true;
+                                                isAnnounceExpanded = false;
+                                                isAnnounceExpandedForAnime =
+                                                    false;
+                                              });
+                                              try {
+                                                for (var announce
+                                                    in announcementData) {
+                                                  await MessageAPI.setIsPinned(
+                                                      announce["messageID"],
+                                                      false);
+                                                }
+                                              } catch (e) {
+                                                print("API request error: $e");
+                                              }
+                                              if (!mounted) return;
+                                              setState(() {
+                                                announcementData.clear();
+                                              });
+                                            },
+                                            style: AppStyle.textBtn(),
+                                            child: Text(
+                                              "刪除所有公告",
+                                              style: AppStyle.caption(
+                                                  color: AppStyle.red),
+                                            )),
+                                        const Expanded(child: SizedBox()),
+                                        GestureDetector(
+                                          onTap: () async {
+                                            setState(() {
+                                              isAnnounceExpandedForAnime =
+                                                  false;
+                                            });
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 300));
+                                            setState(() {
+                                              isAnnounceExpanded = false;
+                                            });
+                                          },
+                                          child: const Icon(
+                                            Icons.keyboard_arrow_up_rounded,
+                                            size: 24,
+                                            color: AppStyle.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          : SizedBox(
+                              height: 40,
+                              child: FloatingActionButton(
+                                heroTag: "announce",
+                                onPressed: () async {
+                                  await jumpTo(context, _scrollController, (
+                                          {int index = 0,
+                                          bool isNeedShake = false}) {
+                                    setState(() {
+                                      isWidgetShakes[index] = isNeedShake;
+                                    });
+                                  },
+                                      msgTileHeights: msgTileHeights,
+                                      targetID: announcementData[0]
+                                          ["messageID"]);
+                                },
+                                backgroundColor: AppStyle.white,
+                                elevation: 2,
+                                hoverElevation: 2,
+                                hoverColor: AppStyle.white,
+                                splashColor: AppStyle.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 8),
+                                  child: Row(
+                                    children: [
+                                      Image.asset(
+                                        "assets/icons/announce.png",
+                                        width: 24,
+                                        height: 24,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          announcementData[0]["content"] ?? "",
+                                          style: AppStyle.body(
+                                              color: AppStyle.gray[700]!),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          setState(() {
+                                            isAnnounceExpanded = true;
+                                          });
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 100));
+                                          setState(() {
+                                            isAnnounceExpandedForAnime = true;
+                                          });
+                                        },
+                                        child: const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          size: 24,
+                                          color: AppStyle.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                    ),
+                  if (msgFinish &&
+                      ((((Platform.isAndroid || Platform.isIOS) &&
+                                  !isKeyboardOpen) ||
+                              (!Platform.isAndroid && !Platform.isIOS)) &&
+                          _scrollController.position.pixels !=
+                              _scrollController.position.maxScrollExtent))
+                    Positioned(
+                      bottom: 12,
+                      left: MediaQuery.of(context).size.width * 0.5 - 55,
+                      child: SizedBox(
+                        height: 28,
+                        width: 110,
+                        child: FloatingActionButton(
+                          heroTag: "newest",
+                          onPressed: () async {
+                            await _scrollController.animateTo(
+                              _scrollController.position.maxScrollExtent + 300,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                            );
+                            setState(() {});
+                          },
+                          backgroundColor: AppStyle.gray[100]!,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 4),
+                            child: Text(
+                              "回到最新訊息",
+                              style: AppStyle.body(color: AppStyle.gray[700]!),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
@@ -381,7 +870,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         const Duration(milliseconds: 500),
                       );
                       _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent,
+                        _scrollController.position.maxScrollExtent + 300,
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeOut,
                       );
@@ -393,10 +882,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                               'command': 'message',
                               'identifier': jsonEncode({
                                 'channel': 'ChatChannel',
-                                'chatroom_id': chatroomID,
+                                'chatroom_id': widget.id,
                               }),
                               'data': jsonEncode({
-                                "chatroom_id": chatroomID,
+                                "chatroom_id": widget.id,
                                 "member_id": currentMemberID,
                                 "type_": "string",
                                 "content": _messageController.text,
@@ -405,6 +894,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               }),
                             }));
                             setState(() {
+                              isWidgetShakes.add(false);
                               messageData.add({
                                 "messageID": null,
                                 "senderID": currentMemberID,
@@ -414,12 +904,15 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "isReply": false, //依實際情況
                                 "replyToID": null, //要記得放回覆的msgID
                                 "isPinned": false,
+                                "updatedAt": dateTimeToString(DateTime.now()),
                               });
+
                               _messageController.text = "";
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               _scrollController.animateTo(
-                                _scrollController.position.maxScrollExtent,
+                                _scrollController.position.maxScrollExtent +
+                                    300,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,
                               );
@@ -439,10 +932,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                             'command': 'message',
                             'identifier': jsonEncode({
                               'channel': 'ChatChannel',
-                              'chatroom_id': chatroomID,
+                              'chatroom_id': widget.id,
                             }),
                             'data': jsonEncode({
-                              "chatroom_id": chatroomID,
+                              "chatroom_id": widget.id,
                               "member_id": currentMemberID,
                               "type_": "string",
                               "content": _messageController.text,
@@ -451,6 +944,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                             }),
                           }));
                           setState(() {
+                            isWidgetShakes.add(false);
                             messageData.add({
                               "messageID": null,
                               "senderID": currentMemberID,
@@ -460,12 +954,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "isReply": false, //依實際情況
                               "replyToID": null, //要記得放回覆的msgID
                               "isPinned": false,
+                              "updatedAt": dateTimeToString(DateTime.now()),
                             });
                             _messageController.text = "";
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent,
+                              _scrollController.position.maxScrollExtent + 300,
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeInOut,
                             );

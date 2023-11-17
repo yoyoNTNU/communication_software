@@ -42,6 +42,7 @@ dependencies:
   media_kit_video: ^1.2.4
   media_kit_libs_video: ^1.0.4
   audioplayers: ^5.2.0
+  flutter_shake_animated: ^0.0.5
 
 dev_dependencies:
   flutter_lints: ^2.0.0

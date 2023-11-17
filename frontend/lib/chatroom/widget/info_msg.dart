@@ -3,7 +3,9 @@ part of 'chatroom_widget.dart';
 class InfoMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
+  final int? messageID;
   final int? senderID;
+  final int? readCount;
   final bool isReply;
   final int? replyMsgID;
   final String content;
@@ -14,10 +16,12 @@ class InfoMsg extends StatefulWidget {
     required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
+    required this.readCount,
     required this.isReply,
     this.replyMsgID,
     required this.content,
     required this.msgTime,
+    required this.messageID,
   });
 
   @override

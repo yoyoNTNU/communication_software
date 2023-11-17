@@ -3,11 +3,21 @@ part of 'chatroom_widget.dart';
 class SelectBar extends StatefulWidget {
   final bool senderIsMe;
   final String messageType;
+  final int messageID;
+  final VoidCallback cancelSelected;
+  final void Function(int) setAnnounce;
+  final void Function(int) deleteMessage;
+  final String content;
 
   const SelectBar({
     super.key,
     required this.senderIsMe,
     required this.messageType,
+    required this.messageID,
+    required this.cancelSelected,
+    required this.content,
+    required this.setAnnounce,
+    required this.deleteMessage,
   });
 
   @override
@@ -22,27 +32,29 @@ class _SelectBarState extends State<SelectBar> {
           borderRadius: BorderRadius.circular(4), color: AppStyle.blue[50]),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              print("公告");
-            },
-            child: Container(
-              color: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column(
-                children: [
-                  Image.asset("assets/icons/announce.png"),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Text(
-                    "設為公告",
-                    style: AppStyle.caption(level: 2, color: AppStyle.blue),
-                  ),
-                ],
+          if (widget.messageType == "string")
+            GestureDetector(
+              onTap: () {
+                widget.setAnnounce(widget.messageID);
+              },
+              child: Container(
+                color: Colors.transparent,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Column(
+                  children: [
+                    Image.asset("assets/icons/announce.png"),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      "設為公告",
+                      style: AppStyle.caption(level: 2, color: AppStyle.blue),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
           GestureDetector(
             onTap: () {
               print("回覆");
@@ -72,7 +84,8 @@ class _SelectBarState extends State<SelectBar> {
           if (widget.messageType == "string")
             GestureDetector(
               onTap: () {
-                print("複製");
+                copyToClipboard(context, widget.content);
+                widget.cancelSelected();
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -100,7 +113,7 @@ class _SelectBarState extends State<SelectBar> {
           if (widget.senderIsMe)
             GestureDetector(
               onTap: () {
-                print("收回");
+                widget.deleteMessage(widget.messageID);
               },
               child: Container(
                 decoration: BoxDecoration(

@@ -274,14 +274,26 @@ class _ChatroomListPageState extends State<ChatroomListPage>
         'chatroom_id': chatroomID,
       }),
     }));
-    channel.stream.listen((message) {
+    channel.stream.listen((message) async {
       var temp = jsonDecode(message);
       if (!temp.containsKey('type')) {
-        print("外面收到囉：${temp["message"]["message"]["content"]}");
+        String senderName = await MemberAPI.getSenderName(
+            temp["message"]["message"]["senderID"]);
         if (mounted) {
           setState(() {
-            print("我還活著");
-            //更新UI 及 資料庫
+            var room = chatRooms
+                .firstWhere((element) => element["chatroomID"] == chatroomID);
+            room["messageID"] = temp["message"]["message"]["messageID"];
+            room["messageContent"] = temp["message"]["message"]["content"];
+            room["messageType"] = temp["message"]["message"]["type"];
+            room["messageTime"] = temp["message"]["message"]["msgTime"];
+            room["isRead"] = false;
+            room["sender"] = senderName;
+            if (sortBy == "time") {
+              sortByTime();
+            } else {
+              sortByUnread();
+            }
           });
         } else {
           print("我掛掉了");

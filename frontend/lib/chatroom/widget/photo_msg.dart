@@ -3,7 +3,9 @@ part of 'chatroom_widget.dart';
 class PhotoMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
+  final int? messageID;
   final int? senderID;
+  final int? readCount;
   final String content;
   final String msgTime;
   final void Function()? onLongPressed;
@@ -13,9 +15,11 @@ class PhotoMsg extends StatefulWidget {
     required this.chatroomType,
     required this.senderIsMe,
     this.senderID,
+    required this.readCount,
     required this.content,
     required this.msgTime,
     this.onLongPressed,
+    required this.messageID,
   });
 
   @override
@@ -23,6 +27,19 @@ class PhotoMsg extends StatefulWidget {
 }
 
 class _PhotoMsgState extends State<PhotoMsg> {
+  String read = "";
+
+  @override
+  void didChangeDependencies() async {
+    if (widget.senderIsMe) {
+      String temp = readCount(widget.readCount, widget.chatroomType);
+      setState(() {
+        read = temp;
+      });
+    }
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -30,7 +47,7 @@ class _PhotoMsgState extends State<PhotoMsg> {
       onTap: () {
         fullViewImage(context, widget.content, isNeedDownload: true);
       },
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),
@@ -86,7 +103,7 @@ class _PhotoMsgState extends State<PhotoMsg> {
               bottom: 0,
               right: 0,
               child: Text(
-                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                "$read${widget.msgTime}",
                 style: AppStyle.info(
                     level: 2,
                     color: widget.senderIsMe

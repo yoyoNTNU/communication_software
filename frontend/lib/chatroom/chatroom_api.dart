@@ -34,6 +34,7 @@ class MessageAPI {
           "replyToID": msg['reply_to_id'],
           "isReply": msg['isReply'],
           "isPinned": msg['isPinned'],
+          "updatedAt": msg['updated_at'],
         };
       }).toList();
       return messages;
@@ -130,15 +131,14 @@ class MessageAPI {
   //   return response.statusCode;
   // }
 
-  static Future<int> deleteMessage(int chatroomID, int messageID) async {
+  static Future<int> deleteMessage(int messageID) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.delete(
       Uri(
           scheme: 'https',
           host: host,
-          path:
-              '/api/chatroom/${chatroomID.toString()}/message/${messageID.toString()}'),
+          path: '/api/chatroom/0/message/${messageID.toString()}'),
       headers: {'Authorization': token ?? ""},
     );
     return response.statusCode;
@@ -158,19 +158,36 @@ class MessageAPI {
     return response.statusCode;
   }
 
-  static Future<int> setIsPinned(
-      int chatroomID, int messageID, bool isPinned) async {
+  static Future<int> setIsPinned(int messageID, bool isPinned) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.patch(
         Uri(
             scheme: 'https',
             host: host,
-            path:
-                '/api/chatroom/${chatroomID.toString()}/message/${messageID.toString()}'),
+            path: '/api/chatroom/0/message/${messageID.toString()}'),
         headers: {'Authorization': token ?? ""},
-        body: {"isPinned": isPinned});
+        body: {"isPinned": isPinned.toString()});
     return response.statusCode;
+  }
+
+  static Future<int> getReadCount(int messageID) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.get(
+      Uri(
+          scheme: 'https',
+          host: host,
+          path: '/api/chatroom/0/message/$messageID/read_count'),
+      headers: {'Authorization': token ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final int count = responseData['data'];
+      return count;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
   }
 }
 
@@ -183,6 +200,26 @@ class MemberAPI {
           scheme: 'https',
           host: host,
           path: '/api/friends/${memberID.toString()}'),
+      headers: {'Authorization': token ?? ""},
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final dynamic member = responseData['data'];
+      final Map<String, dynamic> m = {
+        "name": member['name'],
+        "avatar": member['photo'] == null ? null : member['photo']['url'],
+      };
+      return m;
+    } else {
+      throw Exception('API request failed with status ${response.statusCode}');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getSelfInfo() async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    final response = await http.get(
+      Uri(scheme: 'https', host: host, path: '/api/member/info'),
       headers: {'Authorization': token ?? ""},
     );
     if (response.statusCode == 200) {
@@ -238,7 +275,7 @@ class ChatroomAPI {
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       final Map<String, dynamic> infoInfoData2 = responseData['data'];
-      dynamic groupsWithInfo;
+      Map<String, dynamic> groupsWithInfo = {};
       groupsWithInfo["count"] = infoInfoData2['count'];
       groupsWithInfo["member"] = infoInfoData2['member'];
       return groupsWithInfo;
@@ -248,37 +285,26 @@ class ChatroomAPI {
   }
 }
 
-class HelperAPI {
-  static Future<int> typeIDToChatroomID(String type, int typeID) async {
+class TransferAPI {
+  static Future<int> chatroomIDtoGroupID(int chatroomID) async {
     final response = await http.get(
-      Uri(
-          scheme: 'https',
-          host: host,
-          path: '/TypeIDToChatroomID?type_=$type&type_id=${typeID.toString()}'),
-    );
+        Uri.parse('https://$host/ChatroomIDToTypeID?chatroom_id=$chatroomID'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      final Map<String, dynamic> chatroom = responseData['data'];
-      return chatroom["id"];
+      final Map<String, dynamic> infoData = responseData['data'];
+      return infoData['group_id'];
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }
   }
 
-  static Future<Map<String, dynamic>> chatroomIDToTypeID(int chatroomID) async {
+  static Future<List<int>> chatroomIDtoFriendID(int chatroomID) async {
     final response = await http.get(
-      Uri(
-          scheme: 'https',
-          host: host,
-          path: '/TypeIDToChatroomID?chatroom_id=${chatroomID.toString()}'),
-    );
+        Uri.parse('https://$host/ChatroomIDToTypeID?chatroom_id=$chatroomID'));
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      final Map<String, dynamic> chatroom = responseData['data'];
-      return {
-        "type": chatroom["type_"],
-        "typeID": chatroom["type_id"],
-      };
+      final Map<String, dynamic> infoData = responseData['data'];
+      return [infoData['member_id_1'], infoData['member_id_2']];
     } else {
       throw Exception('API request failed with status ${response.statusCode}');
     }

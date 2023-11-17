@@ -3,7 +3,9 @@ part of 'chatroom_widget.dart';
 class FileMsg extends StatefulWidget {
   final String chatroomType;
   final bool senderIsMe;
+  final int? messageID;
   final int? senderID;
+  final int? readCount;
   final String content;
   final String msgTime;
   final void Function()? onLongPressed;
@@ -15,7 +17,9 @@ class FileMsg extends StatefulWidget {
     this.senderID,
     required this.content,
     required this.msgTime,
+    required this.readCount,
     this.onLongPressed,
+    required this.messageID,
   });
 
   @override
@@ -24,8 +28,16 @@ class FileMsg extends StatefulWidget {
 
 class _FileMsgState extends State<FileMsg> {
   String fileSize = "byte";
+  String read = "";
+
   @override
   void didChangeDependencies() async {
+    if (widget.senderIsMe) {
+      String temp = readCount(widget.readCount, widget.chatroomType);
+      setState(() {
+        read = temp;
+      });
+    }
     try {
       var response = await http.head(Uri.parse(widget.content));
       double contentLength = double.parse(response.headers['content-length']!);
@@ -60,7 +72,7 @@ class _FileMsgState extends State<FileMsg> {
       onTap: () {
         print("這裡應該下載檔案");
       },
-      onLongPress: widget.onLongPressed,
+      onLongPress: widget.messageID == null ? null : widget.onLongPressed,
       child: Container(
         constraints:
             BoxConstraints(maxWidth: screenWidth * 0.70, minWidth: 120),
@@ -145,7 +157,7 @@ class _FileMsgState extends State<FileMsg> {
               bottom: 0,
               right: 0,
               child: Text(
-                "${widget.senderIsMe ? readCount(2, widget.chatroomType) : ""}${widget.msgTime}",
+                "$read${widget.msgTime}",
                 style: AppStyle.info(
                     level: 2,
                     color: widget.senderIsMe

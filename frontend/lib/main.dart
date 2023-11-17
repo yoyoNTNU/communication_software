@@ -45,6 +45,17 @@ class ChatApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        onGenerateRoute: (settings) {
+          if (settings.name == '/chatroom') {
+            final args = settings.arguments as int;
+            return MaterialPageRoute(
+              builder: (context) {
+                return ChatroomPage(id: args);
+              },
+            );
+          }
+          return null;
+        },
         theme: ThemeData(
           appBarTheme: const AppBarTheme(
             toolbarHeight: 42,
@@ -70,7 +81,6 @@ class ChatApp extends StatelessWidget {
           '/group': (context) => const GroupPage(),
           '/search': (context) => const SearchPage(),
           '/invite': (context) => const FriendInvite(),
-          '/chatroom': (context) => const ChatroomPage(),
           '/setting': (context) => const AppSetting(),
         },
       ),
