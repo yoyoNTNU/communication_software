@@ -29,6 +29,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   final FocusNode _messageFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
+  int didChangeDependenciesCount = 0;
   Map<String, dynamic> chatroomData = {};
   //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   List<Map<String, dynamic>> messageData = [];
@@ -81,35 +82,44 @@ class _ChatroomPageState extends State<ChatroomPage>
     setState(() {
       currentMemberID = id!;
     });
+    if (didChangeDependenciesCount == 0) {
+      channel.sink.add(jsonEncode({
+        'command': 'subscribe',
+        'identifier': jsonEncode({
+          'channel': 'ChatChannel',
+          'chatroom_id': widget.id,
+        }),
+      }));
+      channel.stream.listen((message) {
+        //收到訊息的話就建立MR
+        var temp = jsonDecode(message);
+        if (!temp.containsKey('type')) {
+          temp["message"]["message"]["msgTime"] =
+              dateTimeStringToString(temp["message"]["message"]["msgTime"]);
+          setState(() {
+            var tempData = messageData.where((element) =>
+                element["messageID"] == null &&
+                element["content"] == temp["message"]["message"]["content"]);
+            if (tempData.isNotEmpty) {
+              int tempDataIndex = messageData.indexOf(tempData.first);
+              messageData[tempDataIndex] = temp["message"]["message"];
+              isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
+            } else {
+              messageData.add(temp["message"]["message"]);
+              isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
+            }
+          });
 
-    channel.sink.add(jsonEncode({
-      'command': 'subscribe',
-      'identifier': jsonEncode({
-        'channel': 'ChatChannel',
-        'chatroom_id': widget.id,
-      }),
-    }));
-    channel.stream.listen((message) {
-      //收到訊息的話就建立MR
-      var temp = jsonDecode(message);
-      if (!temp.containsKey('type')) {
-        temp["message"]["message"]["msgTime"] =
-            dateTimeStringToString(temp["message"]["message"]["msgTime"]);
-        setState(() {
-          var tempData = messageData.where((element) =>
-              element["messageID"] == null &&
-              element["content"] == temp["message"]["message"]["content"]);
-          if (tempData.isNotEmpty) {
-            int tempDataIndex = messageData.indexOf(tempData.first);
-            messageData[tempDataIndex] = temp["message"]["message"];
-            isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
-          } else {
-            messageData.add(temp["message"]["message"]);
-            isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
-          }
-        });
-      }
-    });
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent + 1000,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+      didChangeDependenciesCount++;
+    }
+
     super.didChangeDependencies();
   }
 
@@ -222,6 +232,14 @@ class _ChatroomPageState extends State<ChatroomPage>
     await _getAllMessage();
     if (!context.mounted) return;
     Navigator.of(context).pop();
+  }
+
+  bool isScrollAtBottom() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -389,8 +407,10 @@ class _ChatroomPageState extends State<ChatroomPage>
                     itemBuilder: (BuildContext context, int index) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (step == 0) {
-                          _scrollController.jumpTo(
-                              _scrollController.position.maxScrollExtent + 300);
+                          while (!isScrollAtBottom()) {
+                            _scrollController.jumpTo(
+                                _scrollController.position.maxScrollExtent);
+                          }
                           setState(() {
                             step++;
                           });
@@ -805,8 +825,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                       ((((Platform.isAndroid || Platform.isIOS) &&
                                   !isKeyboardOpen) ||
                               (!Platform.isAndroid && !Platform.isIOS)) &&
-                          _scrollController.position.pixels !=
-                              _scrollController.position.maxScrollExtent))
+                          !isScrollAtBottom()))
                     Positioned(
                       bottom: 12,
                       left: MediaQuery.of(context).size.width * 0.5 - 55,
@@ -816,11 +835,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                         child: FloatingActionButton(
                           heroTag: "newest",
                           onPressed: () async {
-                            await _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent + 300,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeOut,
-                            );
+                            while (!isScrollAtBottom()) {
+                              await _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                            }
                             setState(() {});
                           },
                           backgroundColor: AppStyle.gray[100]!,
@@ -876,11 +897,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                       await Future.delayed(
                         const Duration(milliseconds: 500),
                       );
-                      _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent + 300,
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeOut,
-                      );
+                      while (!isScrollAtBottom()) {
+                        await _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.linear,
+                        );
+                      }
                     },
                     onSubmitted: _messageController.text == ""
                         ? null
@@ -916,12 +939,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                               _messageController.text = "";
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              _scrollController.animateTo(
-                                _scrollController.position.maxScrollExtent +
-                                    300,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOut,
-                              );
+                              while (!isScrollAtBottom()) {
+                                _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.linear,
+                                );
+                              }
                             });
                             _messageFocusNode.requestFocus();
                           },
@@ -964,11 +988,13 @@ class _ChatroomPageState extends State<ChatroomPage>
                             _messageController.text = "";
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            _scrollController.animateTo(
-                              _scrollController.position.maxScrollExtent + 300,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
+                            while (!isScrollAtBottom()) {
+                              _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                            }
                           });
                           _messageFocusNode.requestFocus();
                         },
