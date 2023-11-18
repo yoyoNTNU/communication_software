@@ -28,6 +28,7 @@ class ChatChannel < ApplicationCable::Channel
       "isReply": m.isReply,
       "replyToID": m.reply_to_id,
       "isPinned": m.isPinned,
+      "updatedAt": m.updated_at,
     } })
     chatroom_members=ChatroomMember.where(chatroom_id:m.chatroom_id)
     MessageReader.create(message:m,member:m.member)
