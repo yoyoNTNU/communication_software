@@ -96,14 +96,17 @@ class _ChatroomPageState extends State<ChatroomPage>
         temp["message"]["message"]["msgTime"] =
             dateTimeStringToString(temp["message"]["message"]["msgTime"]);
         setState(() {
-          var tempData = messageData
-              .where((element) =>
-                  element["messageID"] == null &&
-                  element["content"] == temp["message"]["message"]["content"])
-              .first;
-          int tempDataIndex = messageData.indexOf(tempData);
-          messageData[tempDataIndex] = temp["message"]["message"];
-          isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
+          var tempData = messageData.where((element) =>
+              element["messageID"] == null &&
+              element["content"] == temp["message"]["message"]["content"]);
+          if (tempData.isNotEmpty) {
+            int tempDataIndex = messageData.indexOf(tempData.first);
+            messageData[tempDataIndex] = temp["message"]["message"];
+            isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
+          } else {
+            messageData.add(temp["message"]["message"]);
+            isWidgetShakes[temp["message"]["message"]["messageID"]] = false;
+          }
         });
       }
     });
