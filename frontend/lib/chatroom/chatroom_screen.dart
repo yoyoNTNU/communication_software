@@ -407,12 +407,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                     itemBuilder: (BuildContext context, int index) {
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (step == 0) {
-                          while (!isScrollAtBottom()) {
-                            _scrollController.jumpTo(
-                                _scrollController.position.maxScrollExtent);
-                          }
-                          setState(() {
-                            step++;
+                          Future.delayed(Duration.zero, () async {
+                            while (!isScrollAtBottom()) {
+                              await _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                            }
                           });
                           for (int i = 0; i < messageData.length; i++) {
                             final BuildContext? cur = msgKeys[i].currentContext;
@@ -429,6 +431,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                               }
                             });
                           }
+                          setState(() {
+                            step++;
+                          });
                         } else {
                           for (int i = 0; i < messageData.length; i++) {
                             int msgIndex = msgTileHeights.indexWhere(
@@ -939,13 +944,15 @@ class _ChatroomPageState extends State<ChatroomPage>
                               _messageController.text = "";
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
-                              while (!isScrollAtBottom()) {
-                                _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.linear,
-                                );
-                              }
+                              Future.delayed(Duration.zero, () async {
+                                while (!isScrollAtBottom()) {
+                                  await _scrollController.animateTo(
+                                    _scrollController.position.maxScrollExtent,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.linear,
+                                  );
+                                }
+                              });
                             });
                             _messageFocusNode.requestFocus();
                           },
@@ -988,13 +995,15 @@ class _ChatroomPageState extends State<ChatroomPage>
                             _messageController.text = "";
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            while (!isScrollAtBottom()) {
-                              _scrollController.animateTo(
-                                _scrollController.position.maxScrollExtent,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.linear,
-                              );
-                            }
+                            Future.delayed(Duration.zero, () async {
+                              while (!isScrollAtBottom()) {
+                                await _scrollController.animateTo(
+                                  _scrollController.position.maxScrollExtent,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.linear,
+                                );
+                              }
+                            });
                           });
                           _messageFocusNode.requestFocus();
                         },
