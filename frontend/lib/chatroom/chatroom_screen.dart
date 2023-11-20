@@ -484,6 +484,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         tileIsSelectedIndex: tileIsSelectedIndex,
                         messageData: messageData,
                         memberInfos: memberData,
+                        focusNode: _messageFocusNode,
                         isWidgetShake:
                             isWidgetShakes[messageData[index]["messageID"]],
                         setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
@@ -968,6 +969,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               });
 
                               _messageController.text = "";
+                              replyToID = null;
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Future.delayed(Duration.zero, () async {
@@ -1019,6 +1021,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "updatedAt": dateTimeToString(DateTime.now()),
                             });
                             _messageController.text = "";
+                            replyToID = null;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             Future.delayed(Duration.zero, () async {

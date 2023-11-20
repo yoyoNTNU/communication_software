@@ -18,6 +18,7 @@ class MsgTile extends StatefulWidget {
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
   final List<Map<String, dynamic>> memberInfos;
   final List<Map<String, dynamic>>? messageData;
+  final FocusNode focusNode;
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
   final void Function(int) deleteMessage;
@@ -46,6 +47,7 @@ class MsgTile extends StatefulWidget {
     required this.deleteMessage,
     required this.setReplyMsgID,
     required this.messageData,
+    required this.focusNode,
   });
 
   @override
@@ -205,6 +207,7 @@ class _MsgTileState extends State<MsgTile> {
                     setAnnounce: widget.setAnnounce,
                     deleteMessage: widget.deleteMessage,
                     setReplyMsgID: widget.setReplyMsgID,
+                    focusNode: widget.focusNode,
                   ),
               ],
             )
