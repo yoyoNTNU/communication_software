@@ -17,6 +17,7 @@ class MsgTile extends StatefulWidget {
   final bool? isWidgetShake;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
   final List<Map<String, dynamic>> memberInfos;
+  final List<Map<String, dynamic>>? messageData;
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
   final void Function(int) deleteMessage;
@@ -44,6 +45,7 @@ class MsgTile extends StatefulWidget {
     required this.setAnnounce,
     required this.deleteMessage,
     required this.setReplyMsgID,
+    required this.messageData,
   });
 
   @override
@@ -180,12 +182,14 @@ class _MsgTileState extends State<MsgTile> {
                   readCount: widget.readCount,
                   content: widget.content,
                   msgTime: widget.msgTime,
+                  messageData: widget.messageData,
                   onLongPressed: () {
                     setState(() {
                       isSelected = true;
                     });
                     widget.setScreenOnTapAndSelectedIndex(true, widget.index);
                   },
+                  memberInfos: widget.memberInfos,
                 ),
                 if (isSelected)
                   const SizedBox(

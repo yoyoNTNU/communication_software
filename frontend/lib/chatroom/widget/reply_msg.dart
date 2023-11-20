@@ -1,14 +1,18 @@
 part of 'chatroom_widget.dart';
 
 class ReplyMsg extends StatefulWidget {
-  final int replyMsgID;
+  final int? replyMsgID;
   final bool senderIsMe;
+  final List<Map<String, dynamic>> memberInfos;
+  final List<Map<String, dynamic>>? messageData;
   //去撈資料
 
   const ReplyMsg({
     super.key,
     required this.replyMsgID,
     required this.senderIsMe,
+    required this.memberInfos,
+    required this.messageData,
   });
 
   @override
@@ -17,6 +21,42 @@ class ReplyMsg extends StatefulWidget {
 
 class _ReplyMsgState extends State<ReplyMsg> {
   final String msgType = "string";
+  late final Map<String, dynamic> replyMsgData;
+  String senderName = "";
+  String content = "";
+
+  @override
+  void initState() {
+    setReplyMsgData();
+    super.initState();
+  }
+
+  void setReplyMsgData() async {
+    if (widget.replyMsgID != null && widget.messageData != null) {
+      int msgIndex = widget.messageData!
+          .indexWhere((element) => element["messageID"] == widget.replyMsgID);
+      if (msgIndex == -1) {
+        setState(() {
+          content = "訊息已被刪除";
+        });
+        return;
+      }
+      Map<String, dynamic> data = widget.messageData![msgIndex];
+      if (!mounted) return;
+      setState(() {
+        replyMsgData = data;
+        int index = widget.memberInfos
+            .indexWhere((element) => element["id"] == data["senderID"]);
+        senderName = widget.memberInfos[index]["name"];
+        content = data["content"];
+      });
+    } else {
+      setState(() {
+        content = "訊息已被刪除";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +96,7 @@ class _ReplyMsgState extends State<ReplyMsg> {
                 width: 4,
               ),
               Text(
-                "Adam",
+                senderName,
                 style: AppStyle.header(
                     level: 3,
                     color: widget.senderIsMe
@@ -71,7 +111,7 @@ class _ReplyMsgState extends State<ReplyMsg> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Text(
-              msgType == "string" ? "回覆訊息測試" : replyMsgMap(msgType), //要將6種做分類
+              msgType == "string" ? content : replyMsgMap(msgType),
               style: AppStyle.body(
                   color: widget.senderIsMe
                       ? AppStyle.gray[100]!

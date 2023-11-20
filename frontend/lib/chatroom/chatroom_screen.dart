@@ -482,6 +482,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                         readCount: messageData[index]["readCount"],
                         setAllDisSelected: isOnTap,
                         tileIsSelectedIndex: tileIsSelectedIndex,
+                        messageData: messageData,
                         memberInfos: memberData,
                         isWidgetShake:
                             isWidgetShakes[messageData[index]["messageID"]],
