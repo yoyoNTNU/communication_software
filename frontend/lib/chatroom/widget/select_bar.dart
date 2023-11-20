@@ -7,6 +7,8 @@ class SelectBar extends StatefulWidget {
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
   final void Function(int) deleteMessage;
+  final void Function(int) setReplyMsgID;
+  final FocusNode focusNode;
   final String content;
 
   const SelectBar({
@@ -18,6 +20,8 @@ class SelectBar extends StatefulWidget {
     required this.content,
     required this.setAnnounce,
     required this.deleteMessage,
+    required this.setReplyMsgID,
+    required this.focusNode,
   });
 
   @override
@@ -57,7 +61,9 @@ class _SelectBarState extends State<SelectBar> {
             ),
           GestureDetector(
             onTap: () {
-              print("回覆");
+              widget.setReplyMsgID(widget.messageID);
+              widget.cancelSelected();
+              widget.focusNode.requestFocus();
             },
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

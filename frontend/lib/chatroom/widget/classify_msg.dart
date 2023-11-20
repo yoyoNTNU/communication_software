@@ -12,6 +12,9 @@ Widget classifyMsg({
   final String content = "",
   final String msgTime = "",
   final void Function()? onLongPressed,
+  final void Function(int)? jumpToReplyMsg,
+  final List<Map<String, dynamic>> memberInfos = const [],
+  final List<Map<String, dynamic>>? messageData = const [],
 }) {
   switch (messageType) {
     case "string":
@@ -26,6 +29,9 @@ Widget classifyMsg({
         content: content,
         msgTime: msgTime,
         onLongPressed: onLongPressed,
+        memberInfos: memberInfos,
+        messageData: messageData,
+        jumpToReplyMsg: jumpToReplyMsg,
       );
     case "photo":
       return PhotoMsg(

@@ -43,6 +43,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   int step = 0;
   bool isOnTap = false;
   int? tileIsSelectedIndex;
+  int? replyToID;
   int currentMemberID = 0;
   bool msgFinish = false;
   bool isAnnounceExpanded = false;
@@ -408,12 +409,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (step == 0) {
                           Future.delayed(Duration.zero, () async {
-                            while (!isScrollAtBottom()) {
+                            int count = 0;
+                            while (!isScrollAtBottom() && count < 10) {
                               await _scrollController.animateTo(
                                 _scrollController.position.maxScrollExtent,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.linear,
                               );
+                              count++;
                             }
                           });
                           for (int i = 0; i < messageData.length; i++) {
@@ -481,7 +484,9 @@ class _ChatroomPageState extends State<ChatroomPage>
                         readCount: messageData[index]["readCount"],
                         setAllDisSelected: isOnTap,
                         tileIsSelectedIndex: tileIsSelectedIndex,
+                        messageData: messageData,
                         memberInfos: memberData,
+                        focusNode: _messageFocusNode,
                         isWidgetShake:
                             isWidgetShakes[messageData[index]["messageID"]],
                         setScreenOnTapAndSelectedIndex: (boolean, indexValue) {
@@ -546,6 +551,29 @@ class _ChatroomPageState extends State<ChatroomPage>
                           } catch (e) {
                             print("API request error: $e");
                           }
+                        },
+                        setReplyMsgID: (msgID) async {
+                          setState(() {
+                            replyToID = null;
+                          });
+                          await Future.delayed(
+                              const Duration(milliseconds: 100));
+                          setState(() {
+                            replyToID = msgID;
+                          });
+                          await Future.delayed(
+                              const Duration(milliseconds: 100));
+                          setState(() {});
+                        },
+                        jumpToReplyMsg: (replyMsgID) async {
+                          await jumpTo(context, _scrollController, (
+                                  {int msgID = 0, bool isNeedShake = false}) {
+                            setState(() {
+                              isWidgetShakes[msgID] = isNeedShake;
+                            });
+                          },
+                              msgTileHeights: msgTileHeights,
+                              targetID: replyMsgID);
                         },
                       );
                     },
@@ -840,12 +868,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                         child: FloatingActionButton(
                           heroTag: "newest",
                           onPressed: () async {
-                            while (!isScrollAtBottom()) {
+                            int count = 0;
+                            while (!isScrollAtBottom() && count < 10) {
                               await _scrollController.animateTo(
                                 _scrollController.position.maxScrollExtent,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.linear,
                               );
+                              count++;
                             }
                             setState(() {});
                           },
@@ -868,6 +898,17 @@ class _ChatroomPageState extends State<ChatroomPage>
               ),
             ),
           ),
+          if (replyToID != null)
+            Replying(
+              memberInfos: memberData,
+              messageData: messageData,
+              msgID: replyToID!,
+              cancelReply: () {
+                setState(() {
+                  replyToID = null;
+                });
+              },
+            ),
           Container(
             height: 55,
             padding: const EdgeInsets.symmetric(
@@ -902,12 +943,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                       await Future.delayed(
                         const Duration(milliseconds: 500),
                       );
-                      while (!isScrollAtBottom()) {
+                      int count = 0;
+                      while (!isScrollAtBottom() && count < 10) {
                         await _scrollController.animateTo(
                           _scrollController.position.maxScrollExtent,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.linear,
                         );
+                        count++;
                       }
                     },
                     onSubmitted: _messageController.text == ""
@@ -924,8 +967,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "member_id": currentMemberID,
                                 "type_": "string",
                                 "content": _messageController.text,
-                                "isReply": false, //依實際情況
-                                "reply_to_id": null, //要記得放回覆的msgID
+                                "isReply": replyToID != null,
+                                "reply_to_id": replyToID,
                               }),
                             }));
                             setState(() {
@@ -935,22 +978,25 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "type": "string",
                                 "content": _messageController.text,
                                 "msgTime": dateTimeToString(DateTime.now()),
-                                "isReply": false, //依實際情況
-                                "replyToID": null, //要記得放回覆的msgID
+                                "isReply": replyToID != null,
+                                "replyToID": replyToID,
                                 "isPinned": false,
                                 "updatedAt": dateTimeToString(DateTime.now()),
                               });
 
                               _messageController.text = "";
+                              replyToID = null;
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Future.delayed(Duration.zero, () async {
-                                while (!isScrollAtBottom()) {
+                                int count = 0;
+                                while (!isScrollAtBottom() && count < 10) {
                                   await _scrollController.animateTo(
                                     _scrollController.position.maxScrollExtent,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.linear,
                                   );
+                                  count++;
                                 }
                               });
                             });
@@ -976,8 +1022,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "member_id": currentMemberID,
                               "type_": "string",
                               "content": _messageController.text,
-                              "isReply": false, //依實際情況
-                              "reply_to_id": null, //要記得放回覆的msgID
+                              "isReply": replyToID != null,
+                              "reply_to_id": replyToID,
                             }),
                           }));
                           setState(() {
@@ -987,21 +1033,24 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "type": "string",
                               "content": _messageController.text,
                               "msgTime": dateTimeToString(DateTime.now()),
-                              "isReply": false, //依實際情況
-                              "replyToID": null, //要記得放回覆的msgID
+                              "isReply": replyToID != null,
+                              "replyToID": replyToID,
                               "isPinned": false,
                               "updatedAt": dateTimeToString(DateTime.now()),
                             });
                             _messageController.text = "";
+                            replyToID = null;
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             Future.delayed(Duration.zero, () async {
-                              while (!isScrollAtBottom()) {
+                              int count = 0;
+                              while (!isScrollAtBottom() && count < 10) {
                                 await _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.linear,
                                 );
+                                count++;
                               }
                             });
                           });

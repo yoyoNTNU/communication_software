@@ -10,7 +10,10 @@ class StringMsg extends StatefulWidget {
   final int? readCount;
   final String content;
   final String msgTime;
+  final List<Map<String, dynamic>> memberInfos;
+  final List<Map<String, dynamic>>? messageData;
   final void Function()? onLongPressed;
+  final void Function(int)? jumpToReplyMsg;
 
   const StringMsg({
     super.key,
@@ -24,6 +27,9 @@ class StringMsg extends StatefulWidget {
     required this.msgTime,
     this.onLongPressed,
     required this.messageID,
+    required this.memberInfos,
+    required this.messageData,
+    required this.jumpToReplyMsg,
   });
 
   @override
@@ -50,7 +56,7 @@ class _StringMsgState extends State<StringMsg> {
     return GestureDetector(
       onTap: () {
         if (widget.isReply) {
-          print("這邊應該要跳到回覆的那則訊息");
+          widget.jumpToReplyMsg!(widget.replyMsgID!);
         }
       },
       onLongPress: widget.messageID == null ? null : widget.onLongPressed,
@@ -68,7 +74,12 @@ class _StringMsgState extends State<StringMsg> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.isReply)
-                  ReplyMsg(replyMsgID: 1, senderIsMe: widget.senderIsMe),
+                  ReplyMsg(
+                    replyMsgID: widget.replyMsgID,
+                    senderIsMe: widget.senderIsMe,
+                    memberInfos: widget.memberInfos,
+                    messageData: widget.messageData,
+                  ),
                 Transform.translate(
                   offset: const Offset(0, -1),
                   child: Container(

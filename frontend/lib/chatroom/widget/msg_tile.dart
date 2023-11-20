@@ -17,9 +17,13 @@ class MsgTile extends StatefulWidget {
   final bool? isWidgetShake;
   final void Function(bool, int?) setScreenOnTapAndSelectedIndex;
   final List<Map<String, dynamic>> memberInfos;
+  final List<Map<String, dynamic>>? messageData;
+  final FocusNode focusNode;
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
   final void Function(int) deleteMessage;
+  final void Function(int) setReplyMsgID;
+  final void Function(int) jumpToReplyMsg;
 
   const MsgTile({
     super.key,
@@ -42,6 +46,10 @@ class MsgTile extends StatefulWidget {
     required this.cancelSelected,
     required this.setAnnounce,
     required this.deleteMessage,
+    required this.setReplyMsgID,
+    required this.messageData,
+    required this.focusNode,
+    required this.jumpToReplyMsg,
   });
 
   @override
@@ -122,14 +130,14 @@ class _MsgTileState extends State<MsgTile> {
               : CrossAxisAlignment.start,
           children: [
             if (widget.index == null)
-              const SizedBox(
-                width: 4,
-              ),
-            if (widget.index == null)
               Image.asset(
                 "assets/icons/sending.png",
                 width: 12,
                 height: 12,
+              ),
+            if (widget.index == null)
+              const SizedBox(
+                width: 4,
               ),
             if (!widget.senderIsMe)
               Container(
@@ -178,12 +186,15 @@ class _MsgTileState extends State<MsgTile> {
                   readCount: widget.readCount,
                   content: widget.content,
                   msgTime: widget.msgTime,
+                  messageData: widget.messageData,
+                  jumpToReplyMsg: widget.jumpToReplyMsg,
                   onLongPressed: () {
                     setState(() {
                       isSelected = true;
                     });
                     widget.setScreenOnTapAndSelectedIndex(true, widget.index);
                   },
+                  memberInfos: widget.memberInfos,
                 ),
                 if (isSelected)
                   const SizedBox(
@@ -198,6 +209,8 @@ class _MsgTileState extends State<MsgTile> {
                     content: widget.content,
                     setAnnounce: widget.setAnnounce,
                     deleteMessage: widget.deleteMessage,
+                    setReplyMsgID: widget.setReplyMsgID,
+                    focusNode: widget.focusNode,
                   ),
               ],
             )

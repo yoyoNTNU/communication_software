@@ -43,16 +43,14 @@ class MessageAPI {
     }
   }
 
-  static Future<Map<String, dynamic>> getMessage(
-      int chatroomID, int messageID) async {
+  static Future<Map<String, dynamic>> getMessage(int messageID) async {
     final dbToken = await DatabaseHelper.instance.getToken();
     final token = dbToken?.authorization;
     final response = await http.get(
       Uri(
           scheme: 'https',
           host: host,
-          path:
-              '/api/chatroom/${chatroomID.toString()}/message/${messageID.toString()}'),
+          path: '/api/chatroom/0/message/${messageID.toString()}'),
       headers: {'Authorization': token ?? ""},
     );
 
@@ -71,6 +69,7 @@ class MessageAPI {
         "replyToID": msg['reply_to_id'],
         "isReply": msg['isReply'],
         "isPinned": msg['isPinned'],
+        "updatedAt": msg['updated_at'],
       };
       return message;
     } else {
