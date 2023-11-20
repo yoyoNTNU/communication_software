@@ -409,12 +409,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                       WidgetsBinding.instance.addPostFrameCallback((_) {
                         if (step == 0) {
                           Future.delayed(Duration.zero, () async {
-                            while (!isScrollAtBottom()) {
+                            int count = 0;
+                            while (!isScrollAtBottom() && count < 10) {
                               await _scrollController.animateTo(
                                 _scrollController.position.maxScrollExtent,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.linear,
                               );
+                              count++;
                             }
                           });
                           for (int i = 0; i < messageData.length; i++) {
@@ -562,6 +564,16 @@ class _ChatroomPageState extends State<ChatroomPage>
                           await Future.delayed(
                               const Duration(milliseconds: 100));
                           setState(() {});
+                        },
+                        jumpToReplyMsg: (replyMsgID) async {
+                          await jumpTo(context, _scrollController, (
+                                  {int msgID = 0, bool isNeedShake = false}) {
+                            setState(() {
+                              isWidgetShakes[msgID] = isNeedShake;
+                            });
+                          },
+                              msgTileHeights: msgTileHeights,
+                              targetID: replyMsgID);
                         },
                       );
                     },
@@ -856,12 +868,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                         child: FloatingActionButton(
                           heroTag: "newest",
                           onPressed: () async {
-                            while (!isScrollAtBottom()) {
+                            int count = 0;
+                            while (!isScrollAtBottom() && count < 10) {
                               await _scrollController.animateTo(
                                 _scrollController.position.maxScrollExtent,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.linear,
                               );
+                              count++;
                             }
                             setState(() {});
                           },
@@ -929,12 +943,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                       await Future.delayed(
                         const Duration(milliseconds: 500),
                       );
-                      while (!isScrollAtBottom()) {
+                      int count = 0;
+                      while (!isScrollAtBottom() && count < 10) {
                         await _scrollController.animateTo(
                           _scrollController.position.maxScrollExtent,
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.linear,
                         );
+                        count++;
                       }
                     },
                     onSubmitted: _messageController.text == ""
@@ -973,12 +989,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                             });
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               Future.delayed(Duration.zero, () async {
-                                while (!isScrollAtBottom()) {
+                                int count = 0;
+                                while (!isScrollAtBottom() && count < 10) {
                                   await _scrollController.animateTo(
                                     _scrollController.position.maxScrollExtent,
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.linear,
                                   );
+                                  count++;
                                 }
                               });
                             });
@@ -1025,12 +1043,14 @@ class _ChatroomPageState extends State<ChatroomPage>
                           });
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             Future.delayed(Duration.zero, () async {
-                              while (!isScrollAtBottom()) {
+                              int count = 0;
+                              while (!isScrollAtBottom() && count < 10) {
                                 await _scrollController.animateTo(
                                   _scrollController.position.maxScrollExtent,
                                   duration: const Duration(milliseconds: 300),
                                   curve: Curves.linear,
                                 );
+                                count++;
                               }
                             });
                           });

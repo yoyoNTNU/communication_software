@@ -23,6 +23,7 @@ class MsgTile extends StatefulWidget {
   final void Function(int) setAnnounce;
   final void Function(int) deleteMessage;
   final void Function(int) setReplyMsgID;
+  final void Function(int) jumpToReplyMsg;
 
   const MsgTile({
     super.key,
@@ -48,6 +49,7 @@ class MsgTile extends StatefulWidget {
     required this.setReplyMsgID,
     required this.messageData,
     required this.focusNode,
+    required this.jumpToReplyMsg,
   });
 
   @override
@@ -185,6 +187,7 @@ class _MsgTileState extends State<MsgTile> {
                   content: widget.content,
                   msgTime: widget.msgTime,
                   messageData: widget.messageData,
+                  jumpToReplyMsg: widget.jumpToReplyMsg,
                   onLongPressed: () {
                     setState(() {
                       isSelected = true;
