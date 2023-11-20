@@ -43,6 +43,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   int step = 0;
   bool isOnTap = false;
   int? tileIsSelectedIndex;
+  int? replyToID;
   int currentMemberID = 0;
   bool msgFinish = false;
   bool isAnnounceExpanded = false;
@@ -547,6 +548,19 @@ class _ChatroomPageState extends State<ChatroomPage>
                             print("API request error: $e");
                           }
                         },
+                        setReplyMsgID: (msgID) async {
+                          setState(() {
+                            replyToID = null;
+                          });
+                          await Future.delayed(
+                              const Duration(milliseconds: 100));
+                          setState(() {
+                            replyToID = msgID;
+                          });
+                          await Future.delayed(
+                              const Duration(milliseconds: 100));
+                          setState(() {});
+                        },
                       );
                     },
                   ),
@@ -868,6 +882,17 @@ class _ChatroomPageState extends State<ChatroomPage>
               ),
             ),
           ),
+          if (replyToID != null)
+            Replying(
+              memberInfos: memberData,
+              messageData: messageData,
+              msgID: replyToID!,
+              cancelReply: () {
+                setState(() {
+                  replyToID = null;
+                });
+              },
+            ),
           Container(
             height: 55,
             padding: const EdgeInsets.symmetric(
@@ -924,8 +949,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "member_id": currentMemberID,
                                 "type_": "string",
                                 "content": _messageController.text,
-                                "isReply": false, //依實際情況
-                                "reply_to_id": null, //要記得放回覆的msgID
+                                "isReply": replyToID != null,
+                                "reply_to_id": replyToID,
                               }),
                             }));
                             setState(() {
@@ -935,8 +960,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                                 "type": "string",
                                 "content": _messageController.text,
                                 "msgTime": dateTimeToString(DateTime.now()),
-                                "isReply": false, //依實際情況
-                                "replyToID": null, //要記得放回覆的msgID
+                                "isReply": replyToID != null,
+                                "replyToID": replyToID,
                                 "isPinned": false,
                                 "updatedAt": dateTimeToString(DateTime.now()),
                               });
@@ -976,8 +1001,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "member_id": currentMemberID,
                               "type_": "string",
                               "content": _messageController.text,
-                              "isReply": false, //依實際情況
-                              "reply_to_id": null, //要記得放回覆的msgID
+                              "isReply": replyToID != null,
+                              "reply_to_id": replyToID,
                             }),
                           }));
                           setState(() {
@@ -987,8 +1012,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                               "type": "string",
                               "content": _messageController.text,
                               "msgTime": dateTimeToString(DateTime.now()),
-                              "isReply": false, //依實際情況
-                              "replyToID": null, //要記得放回覆的msgID
+                              "isReply": replyToID != null,
+                              "replyToID": replyToID,
                               "isPinned": false,
                               "updatedAt": dateTimeToString(DateTime.now()),
                             });

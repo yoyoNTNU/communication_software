@@ -20,6 +20,7 @@ class MsgTile extends StatefulWidget {
   final VoidCallback cancelSelected;
   final void Function(int) setAnnounce;
   final void Function(int) deleteMessage;
+  final void Function(int) setReplyMsgID;
 
   const MsgTile({
     super.key,
@@ -42,6 +43,7 @@ class MsgTile extends StatefulWidget {
     required this.cancelSelected,
     required this.setAnnounce,
     required this.deleteMessage,
+    required this.setReplyMsgID,
   });
 
   @override
@@ -122,14 +124,14 @@ class _MsgTileState extends State<MsgTile> {
               : CrossAxisAlignment.start,
           children: [
             if (widget.index == null)
-              const SizedBox(
-                width: 4,
-              ),
-            if (widget.index == null)
               Image.asset(
                 "assets/icons/sending.png",
                 width: 12,
                 height: 12,
+              ),
+            if (widget.index == null)
+              const SizedBox(
+                width: 4,
               ),
             if (!widget.senderIsMe)
               Container(
@@ -198,6 +200,7 @@ class _MsgTileState extends State<MsgTile> {
                     content: widget.content,
                     setAnnounce: widget.setAnnounce,
                     deleteMessage: widget.deleteMessage,
+                    setReplyMsgID: widget.setReplyMsgID,
                   ),
               ],
             )
