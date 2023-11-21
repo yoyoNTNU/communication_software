@@ -22,14 +22,6 @@ class InputTextField extends StatefulWidget {
 
 class _InputTextFieldState extends State<InputTextField> {
   @override
-  void initState() {
-    super.initState();
-    widget.focusNode.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return TextField(
       maxLines: null,
