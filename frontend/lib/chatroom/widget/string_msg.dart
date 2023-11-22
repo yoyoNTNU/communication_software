@@ -56,7 +56,11 @@ class _StringMsgState extends State<StringMsg> {
     return GestureDetector(
       onTap: () {
         if (widget.isReply) {
-          widget.jumpToReplyMsg!(widget.replyMsgID!);
+          int msgIndex = widget.messageData!.indexWhere(
+              (element) => element["messageID"] == widget.replyMsgID);
+          if (msgIndex != -1) {
+            widget.jumpToReplyMsg!(widget.replyMsgID!);
+          }
         }
       },
       onLongPress: widget.messageID == null ? null : widget.onLongPressed,
