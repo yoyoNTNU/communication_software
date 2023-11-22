@@ -150,6 +150,15 @@ flutter:
     - assets/icons/download.png
     - assets/icons/edit_teal.png
     - assets/icons/refresh_2.png
+    - assets/icons/camera_blue.png
+    - assets/icons/cellphone_blue.png
+    - assets/icons/file_blue.png
+    - assets/icons/img_box_blue.png
+    - assets/icons/phone_blue.png
+    - assets/icons/record.png
+    - assets/icons/stop_and_play.png
+    - assets/icons/user_box.png
+    - assets/icons/video_recorder.png
 
     # Animations
     - assets/animations/loading.gif
