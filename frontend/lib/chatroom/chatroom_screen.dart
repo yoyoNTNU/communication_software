@@ -868,8 +868,8 @@ class _ChatroomPageState extends State<ChatroomPage>
                           _scrollController.jumpTo(
                             _scrollController.position.pixels +
                                 (Platform.isAndroid || Platform.isIOS
-                                    ? 314
-                                    : 195),
+                                    ? 315
+                                    : 196),
                           );
                         },
                         child: Image.asset("assets/icons/dashboard.png"),
