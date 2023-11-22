@@ -58,8 +58,19 @@ class _MenuState extends State<Menu> {
       MenuIcon(
           iconPath: "assets/icons/img_box_blue.png",
           title: "照片",
-          onTap: () {
+          onTap: () async {
             print("照片");
+            XFile? photo = await selectSinglePhoto();
+            if (photo != null) {
+              try {
+                Map<String, int> data = await MessageAPI.sentXFileMessage(
+                    widget.chatroomID,
+                    type: "photo",
+                    file: photo);
+              } catch (e) {
+                print('API request error: $e');
+              }
+            }
           }),
       MenuIcon(
           iconPath: "assets/icons/stop_and_play.png",

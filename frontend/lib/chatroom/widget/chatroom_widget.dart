@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proj/chatroom/chatroom_api.dart';
 import 'package:proj/style.dart';
 import 'package:proj/widget.dart';
 import 'package:media_kit/media_kit.dart';
@@ -6,6 +7,7 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'dart:async';
