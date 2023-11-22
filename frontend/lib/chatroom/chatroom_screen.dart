@@ -833,158 +833,189 @@ class _ChatroomPageState extends State<ChatroomPage>
                 });
               },
             ),
-          Container(
-            height: 55,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            decoration: const BoxDecoration(
-              color: AppStyle.white,
-              border: Border(
-                top: BorderSide(color: AppStyle.teal),
-              ),
-            ),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    print("DashBoard");
-                  },
-                  child: Image.asset("assets/icons/dashboard.png"),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: InputTextField(
-                    controller: _messageController,
-                    focusNode: _messageFocusNode,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    onTap: () async {
-                      await Future.delayed(
-                        const Duration(milliseconds: 500),
-                      );
-                      int count = 0;
-                      while (!isScrollAtBottom() && count < 10) {
-                        await _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.linear,
-                        );
-                        count++;
-                      }
-                    },
-                    onSubmitted: _messageController.text == ""
-                        ? null
-                        : (value) {
-                            channel.sink.add(jsonEncode({
-                              'command': 'message',
-                              'identifier': jsonEncode({
-                                'channel': 'ChatChannel',
-                                'chatroom_id': widget.id,
-                              }),
-                              'data': jsonEncode({
-                                "chatroom_id": widget.id,
-                                "member_id": currentMemberID,
-                                "type_": "string",
-                                "content": _messageController.text,
-                                "isReply": replyToID != null,
-                                "reply_to_id": replyToID,
-                              }),
-                            }));
-                            setState(() {
-                              messageData.add({
-                                "messageID": null,
-                                "senderID": currentMemberID,
-                                "type": "string",
-                                "content": _messageController.text,
-                                "msgTime": dateTimeToString(DateTime.now()),
-                                "isReply": replyToID != null,
-                                "replyToID": replyToID,
-                                "isPinned": false,
-                                "updatedAt": dateTimeToString(DateTime.now()),
-                              });
-
-                              _messageController.text = "";
-                              replyToID = null;
-                            });
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Future.delayed(Duration.zero, () async {
-                                int count = 0;
-                                while (!isScrollAtBottom() && count < 10) {
-                                  await _scrollController.animateTo(
-                                    _scrollController.position.maxScrollExtent,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.linear,
-                                  );
-                                  count++;
-                                }
-                              });
-                            });
-                            _messageFocusNode.requestFocus();
+          isDisplayMenu
+              ? Menu(
+                  chatroomID: widget.id,
+                  cancelDisplayMenu: () {
+                    setState(() {
+                      isDisplayMenu = false;
+                    });
+                    _scrollController.jumpTo(
+                      _scrollController.position.pixels -
+                          (Platform.isAndroid || Platform.isIOS ? 314 : 195),
+                    );
+                  })
+              : Container(
+                  height: 55,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: AppStyle.white,
+                    border: Border(
+                      top: BorderSide(color: AppStyle.teal),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            replyToID = null;
+                            isDisplayMenu = !isDisplayMenu;
+                          });
+                          _scrollController.jumpTo(
+                            _scrollController.position.pixels +
+                                (Platform.isAndroid || Platform.isIOS
+                                    ? 314
+                                    : 195),
+                          );
+                        },
+                        child: Image.asset("assets/icons/dashboard.png"),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: InputTextField(
+                          controller: _messageController,
+                          focusNode: _messageFocusNode,
+                          onChanged: (value) {
+                            setState(() {});
                           },
+                          onTap: () async {
+                            await Future.delayed(
+                              const Duration(milliseconds: 500),
+                            );
+                            int count = 0;
+                            while (!isScrollAtBottom() && count < 10) {
+                              await _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                              count++;
+                            }
+                          },
+                          onSubmitted: _messageController.text == ""
+                              ? null
+                              : (value) {
+                                  channel.sink.add(jsonEncode({
+                                    'command': 'message',
+                                    'identifier': jsonEncode({
+                                      'channel': 'ChatChannel',
+                                      'chatroom_id': widget.id,
+                                    }),
+                                    'data': jsonEncode({
+                                      "chatroom_id": widget.id,
+                                      "member_id": currentMemberID,
+                                      "type_": "string",
+                                      "content": _messageController.text,
+                                      "isReply": replyToID != null,
+                                      "reply_to_id": replyToID,
+                                    }),
+                                  }));
+                                  setState(() {
+                                    messageData.add({
+                                      "messageID": null,
+                                      "senderID": currentMemberID,
+                                      "type": "string",
+                                      "content": _messageController.text,
+                                      "msgTime":
+                                          dateTimeToString(DateTime.now()),
+                                      "isReply": replyToID != null,
+                                      "replyToID": replyToID,
+                                      "isPinned": false,
+                                      "updatedAt":
+                                          dateTimeToString(DateTime.now()),
+                                    });
+
+                                    _messageController.text = "";
+                                    replyToID = null;
+                                  });
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    Future.delayed(Duration.zero, () async {
+                                      int count = 0;
+                                      while (
+                                          !isScrollAtBottom() && count < 10) {
+                                        await _scrollController.animateTo(
+                                          _scrollController
+                                              .position.maxScrollExtent,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.linear,
+                                        );
+                                        count++;
+                                      }
+                                    });
+                                  });
+                                  _messageFocusNode.requestFocus();
+                                },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: _messageController.text == ""
+                            ? null
+                            : () {
+                                channel.sink.add(jsonEncode({
+                                  'command': 'message',
+                                  'identifier': jsonEncode({
+                                    'channel': 'ChatChannel',
+                                    'chatroom_id': widget.id,
+                                  }),
+                                  'data': jsonEncode({
+                                    "chatroom_id": widget.id,
+                                    "member_id": currentMemberID,
+                                    "type_": "string",
+                                    "content": _messageController.text,
+                                    "isReply": replyToID != null,
+                                    "reply_to_id": replyToID,
+                                  }),
+                                }));
+                                setState(() {
+                                  messageData.add({
+                                    "messageID": null,
+                                    "senderID": currentMemberID,
+                                    "type": "string",
+                                    "content": _messageController.text,
+                                    "msgTime": dateTimeToString(DateTime.now()),
+                                    "isReply": replyToID != null,
+                                    "replyToID": replyToID,
+                                    "isPinned": false,
+                                    "updatedAt":
+                                        dateTimeToString(DateTime.now()),
+                                  });
+                                  _messageController.text = "";
+                                  replyToID = null;
+                                });
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Future.delayed(Duration.zero, () async {
+                                    int count = 0;
+                                    while (!isScrollAtBottom() && count < 10) {
+                                      await _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.linear,
+                                      );
+                                      count++;
+                                    }
+                                  });
+                                });
+                                _messageFocusNode.requestFocus();
+                              },
+                        child: Image.asset("assets/icons/send.png"),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                GestureDetector(
-                  onTap: _messageController.text == ""
-                      ? null
-                      : () {
-                          channel.sink.add(jsonEncode({
-                            'command': 'message',
-                            'identifier': jsonEncode({
-                              'channel': 'ChatChannel',
-                              'chatroom_id': widget.id,
-                            }),
-                            'data': jsonEncode({
-                              "chatroom_id": widget.id,
-                              "member_id": currentMemberID,
-                              "type_": "string",
-                              "content": _messageController.text,
-                              "isReply": replyToID != null,
-                              "reply_to_id": replyToID,
-                            }),
-                          }));
-                          setState(() {
-                            messageData.add({
-                              "messageID": null,
-                              "senderID": currentMemberID,
-                              "type": "string",
-                              "content": _messageController.text,
-                              "msgTime": dateTimeToString(DateTime.now()),
-                              "isReply": replyToID != null,
-                              "replyToID": replyToID,
-                              "isPinned": false,
-                              "updatedAt": dateTimeToString(DateTime.now()),
-                            });
-                            _messageController.text = "";
-                            replyToID = null;
-                          });
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Future.delayed(Duration.zero, () async {
-                              int count = 0;
-                              while (!isScrollAtBottom() && count < 10) {
-                                await _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.linear,
-                                );
-                                count++;
-                              }
-                            });
-                          });
-                          _messageFocusNode.requestFocus();
-                        },
-                  child: Image.asset("assets/icons/send.png"),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
