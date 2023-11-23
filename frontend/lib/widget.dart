@@ -112,7 +112,7 @@ void fullViewImage(
             Expanded(
               child: ClipRect(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints.expand(),
+                  constraints: const BoxConstraints.expand(),
                   child: PhotoView(
                     backgroundDecoration:
                         BoxDecoration(color: Colors.grey.shade900),
