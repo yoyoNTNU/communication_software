@@ -31,6 +31,6 @@ class InfoMsg extends StatefulWidget {
 class _InfoMsgState extends State<InfoMsg> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
+    return const SizedBox();
   }
 }
