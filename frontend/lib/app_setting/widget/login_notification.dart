@@ -26,12 +26,13 @@ class _LoginNotificationState extends State<LoginNotification> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        decoration: BoxDecoration(
-          color: AppStyle.white,
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Column(children: [
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      decoration: BoxDecoration(
+        color: AppStyle.white,
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Column(
+        children: [
           title("登入通知"),
           const SizedBox(
             height: 12,
@@ -42,9 +43,10 @@ class _LoginNotificationState extends State<LoginNotification> {
             color: AppStyle.gray[100],
           ),
           Container(
-              padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-              height: 44,
-              child: Row(children: [
+            padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+            height: 44,
+            child: Row(
+              children: [
                 SizedBox(
                   width: 146,
                   child: Row(
@@ -78,7 +80,11 @@ class _LoginNotificationState extends State<LoginNotification> {
                     ],
                   ),
                 ),
-              ]))
-        ]));
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
