@@ -14,8 +14,7 @@ Widget title(String text, [String? tips, BuildContext? context]) {
   if (tips != null && context != null) {
     tapDirect = TapGestureRecognizer()
       ..onTap = () {
-        //TODO 改為回報問題頁面
-        Navigator.pushNamed(context, '/home');
+        Navigator.popAndPushNamed(context, '/setting');
       };
   } else {
     tapDirect = TapGestureRecognizer()..onTap = () {};
