@@ -847,7 +847,9 @@ class _ChatroomListPageState extends State<ChatroomListPage>
                         room: ChatRoomCard(
                           chatroomID: room["chatroomID"]!,
                           messageID: room["messageID"]!,
-                          messageContent: room["messageContent"]!,
+                          messageContent: room["messageType"] == "string"
+                              ? room["messageContent"]!
+                              : "",
                           messageType: room["messageType"]!,
                           messageTime: room["messageTime"]!,
                           cmIsPinned: room["cmIsPinned"]!,

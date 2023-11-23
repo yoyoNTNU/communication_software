@@ -20,8 +20,8 @@ class ReplyMsg extends StatefulWidget {
 }
 
 class _ReplyMsgState extends State<ReplyMsg> {
-  final String msgType = "string";
   late final Map<String, dynamic> replyMsgData;
+  String msgType = "string";
   String senderName = "";
   String content = "";
 
@@ -48,6 +48,7 @@ class _ReplyMsgState extends State<ReplyMsg> {
         int index = widget.memberInfos
             .indexWhere((element) => element["id"] == data["senderID"]);
         senderName = widget.memberInfos[index]["name"];
+        msgType = data["type"];
         content = data["content"];
       });
     } else {

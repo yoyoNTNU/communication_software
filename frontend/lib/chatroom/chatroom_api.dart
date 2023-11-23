@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:proj/main.dart';
 import 'package:proj/data.dart';
@@ -103,32 +104,37 @@ class MessageAPI {
     return response.statusCode;
   }
 
-  //還要研究voice跟file的型別
-  // static Future<int> sentFileMessage(
-  //   int chatroomID, {
-  //   String type = "",
-  //   String content = "",
-  //   bool isReply = false,
-  //   int replyToID = 0,
-  // }) async {
-  //   final dbToken = await DatabaseHelper.instance.getToken();
-  //   final token = dbToken?.authorization;
-  //   final response = await http.post(
-  //       Uri(
-  //           scheme: 'https',
-  //           host: host,
-  //           path: '/api/chatroom/${chatroomID.toString()}/message'),
-  //       headers: {
-  //         'Authorization': token ?? ""
-  //       },
-  //       body: {
-  //         "type_": type,
-  //         "content": content,
-  //         "reply_to_id": replyToID,
-  //         "isReply": isReply
-  //       });
-  //   return response.statusCode;
-  // }
+  static Future<Map<String, int>> sentXFileMessage(
+    int chatroomID, {
+    String type = "",
+    XFile? file,
+  }) async {
+    final dbToken = await DatabaseHelper.instance.getToken();
+    final token = dbToken?.authorization;
+    var request = http.MultipartRequest(
+        'POST',
+        Uri(
+            scheme: 'https',
+            host: host,
+            path: '/api/chatroom/$chatroomID/message'));
+    request.headers['Authorization'] = token ?? "";
+    request.fields['type_'] = type;
+
+    if (file != null) {
+      var tempFile = await http.MultipartFile.fromPath('file', file.path);
+      request.files.add(tempFile);
+    }
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      // 请求成功，解析响应
+      var responseBody = await response.stream.bytesToString();
+      print('Response: $responseBody');
+    } else {
+      // 请求失败，处理错误
+      print('Request failed with status: ${response.statusCode}');
+    }
+    return {"state": response.statusCode};
+  }
 
   static Future<int> deleteMessage(int messageID) async {
     final dbToken = await DatabaseHelper.instance.getToken();

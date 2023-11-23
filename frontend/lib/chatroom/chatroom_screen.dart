@@ -38,7 +38,7 @@ class _ChatroomPageState extends State<ChatroomPage>
   List<Map<String, dynamic>> memberData = [];
   List<Map<String, dynamic>> msgTileHeights = [];
   int memberCount = 0;
-  bool isExpanded = false;
+  bool isShowMemberThumbnail = false;
   double _height = 1.0;
   int step = 0;
   bool isOnTap = false;
@@ -48,7 +48,8 @@ class _ChatroomPageState extends State<ChatroomPage>
   bool msgFinish = false;
   bool isAnnounceExpanded = false;
   bool isAnnounceExpandedForAnime = false;
-  bool isHide = false;
+  bool isAnnounceHide = false;
+  bool isDisplayMenu = false;
   Map<int, bool> isWidgetShakes = {};
 
   void setBottomHeightAnimated(double end) {
@@ -287,10 +288,10 @@ class _ChatroomPageState extends State<ChatroomPage>
           isMuted: chatroomData["isMuted"] ?? false,
           isPinned: chatroomData["isPinned"] ?? false,
           name: chatroomData["chatroomName"] ?? "",
-          isExpanded: isExpanded,
+          isExpanded: isShowMemberThumbnail,
           onTapMemberCount: () {
-            setBottomHeightAnimated(isExpanded ? 1 : 41);
-            isExpanded = !isExpanded;
+            setBottomHeightAnimated(isShowMemberThumbnail ? 1 : 41);
+            isShowMemberThumbnail = !isShowMemberThumbnail;
           },
         ),
         actions: [
@@ -303,92 +304,15 @@ class _ChatroomPageState extends State<ChatroomPage>
           ),
         ],
         bottom: PreferredSize(
-            preferredSize: Size.fromHeight(_height),
-            child: Column(
-              children: [
-                if (isExpanded)
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(24, 3, 24, 4),
-                    height: _height - 1,
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: AppStyle.teal),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            //電腦版只能透過觸控板用兩指滑動 滑鼠沒辦法達到這個功能
-                            itemCount: memberCount,
-                            itemBuilder: (BuildContext context, int index) {
-                              var member = memberData[index];
-                              return Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      showProfileDialog(context,
-                                          id: member["id"]);
-                                    },
-                                    child: ClipOval(
-                                      clipBehavior: Clip.hardEdge,
-                                      child: member["avatar"] == null
-                                          ? Image.asset(
-                                              "assets/images/avatar.png",
-                                              width: 32,
-                                              height: 32,
-                                            )
-                                          : Image.network(
-                                              member["avatar"],
-                                              width: 32,
-                                              height: 32,
-                                            ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 4,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        SizedBox(
-                          width: 24,
-                          child: _height == 41
-                              ? IconButton(
-                                  splashRadius: 12,
-                                  padding: EdgeInsets.zero,
-                                  splashColor: AppStyle.white,
-                                  focusColor: AppStyle.white,
-                                  hoverColor: AppStyle.white,
-                                  highlightColor: AppStyle.white,
-                                  alignment: Alignment.centerRight,
-                                  iconSize: 24,
-                                  onPressed: () {
-                                    print("進入成員列表");
-                                  },
-                                  icon: const Icon(
-                                    Icons.keyboard_arrow_right_rounded,
-                                    size: 24,
-                                  ),
-                                )
-                              : null,
-                        )
-                      ],
-                    ),
-                  ),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: AppStyle.blue[100],
-                ),
-              ],
-            )),
+          preferredSize: Size.fromHeight(_height),
+          child: MemberThumbnailList(
+            height: _height,
+            memberCount: memberCount,
+            memberData: memberData,
+            chatroomID: widget.id,
+            isShowMemberThumbnail: isShowMemberThumbnail,
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -515,7 +439,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                       element["messageID"] == msgID)
                                   .first;
                               msg["isPinned"] = true;
-                              isHide = false;
+                              isAnnounceHide = false;
                               if (announcementData.indexWhere((element) =>
                                       element["messageID"] == msgID) ==
                                   -1) {
@@ -542,7 +466,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                               messageData.remove(msg);
                               isWidgetShakes.remove(msgID);
                               if (announcementData.isEmpty) {
-                                isHide = true;
+                                isAnnounceHide = true;
                                 isAnnounceExpanded = false;
                                 isAnnounceExpandedForAnime = false;
                               }
@@ -578,7 +502,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                       );
                     },
                   ),
-                  if (announcementData.isNotEmpty && !isHide)
+                  if (announcementData.isNotEmpty && !isAnnounceHide)
                     Positioned(
                       top: 4,
                       left: 8,
@@ -652,7 +576,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                                             .removeAt(index);
                                                         if (announcementData
                                                             .isEmpty) {
-                                                          isHide = true;
+                                                          isAnnounceHide = true;
                                                           isAnnounceExpanded =
                                                               false;
                                                           isAnnounceExpandedForAnime =
@@ -724,7 +648,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                         TextButton(
                                             onPressed: () {
                                               setState(() {
-                                                isHide = true;
+                                                isAnnounceHide = true;
                                                 isAnnounceExpanded = false;
                                                 isAnnounceExpandedForAnime =
                                                     false;
@@ -736,7 +660,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                         TextButton(
                                             onPressed: () async {
                                               setState(() {
-                                                isHide = true;
+                                                isAnnounceHide = true;
                                                 isAnnounceExpanded = false;
                                                 isAnnounceExpandedForAnime =
                                                     false;
@@ -909,158 +833,189 @@ class _ChatroomPageState extends State<ChatroomPage>
                 });
               },
             ),
-          Container(
-            height: 55,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
-            decoration: const BoxDecoration(
-              color: AppStyle.white,
-              border: Border(
-                top: BorderSide(color: AppStyle.teal),
-              ),
-            ),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    print("DashBoard");
-                  },
-                  child: Image.asset("assets/icons/dashboard.png"),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  child: InputTextField(
-                    controller: _messageController,
-                    focusNode: _messageFocusNode,
-                    onChanged: (value) {
-                      setState(() {});
-                    },
-                    onTap: () async {
-                      await Future.delayed(
-                        const Duration(milliseconds: 500),
-                      );
-                      int count = 0;
-                      while (!isScrollAtBottom() && count < 10) {
-                        await _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.linear,
-                        );
-                        count++;
-                      }
-                    },
-                    onSubmitted: _messageController.text == ""
-                        ? null
-                        : (value) {
-                            channel.sink.add(jsonEncode({
-                              'command': 'message',
-                              'identifier': jsonEncode({
-                                'channel': 'ChatChannel',
-                                'chatroom_id': widget.id,
-                              }),
-                              'data': jsonEncode({
-                                "chatroom_id": widget.id,
-                                "member_id": currentMemberID,
-                                "type_": "string",
-                                "content": _messageController.text,
-                                "isReply": replyToID != null,
-                                "reply_to_id": replyToID,
-                              }),
-                            }));
-                            setState(() {
-                              messageData.add({
-                                "messageID": null,
-                                "senderID": currentMemberID,
-                                "type": "string",
-                                "content": _messageController.text,
-                                "msgTime": dateTimeToString(DateTime.now()),
-                                "isReply": replyToID != null,
-                                "replyToID": replyToID,
-                                "isPinned": false,
-                                "updatedAt": dateTimeToString(DateTime.now()),
-                              });
-
-                              _messageController.text = "";
-                              replyToID = null;
-                            });
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Future.delayed(Duration.zero, () async {
-                                int count = 0;
-                                while (!isScrollAtBottom() && count < 10) {
-                                  await _scrollController.animateTo(
-                                    _scrollController.position.maxScrollExtent,
-                                    duration: const Duration(milliseconds: 300),
-                                    curve: Curves.linear,
-                                  );
-                                  count++;
-                                }
-                              });
-                            });
-                            _messageFocusNode.requestFocus();
+          isDisplayMenu
+              ? Menu(
+                  chatroomID: widget.id,
+                  cancelDisplayMenu: () {
+                    setState(() {
+                      isDisplayMenu = false;
+                    });
+                    _scrollController.jumpTo(
+                      _scrollController.position.pixels -
+                          (Platform.isAndroid || Platform.isIOS ? 313 : 194),
+                    );
+                  })
+              : Container(
+                  height: 55,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: AppStyle.white,
+                    border: Border(
+                      top: BorderSide(color: AppStyle.teal),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            replyToID = null;
+                            isDisplayMenu = !isDisplayMenu;
+                          });
+                          _scrollController.jumpTo(
+                            _scrollController.position.pixels +
+                                (Platform.isAndroid || Platform.isIOS
+                                    ? 315
+                                    : 196),
+                          );
+                        },
+                        child: Image.asset("assets/icons/dashboard.png"),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: InputTextField(
+                          controller: _messageController,
+                          focusNode: _messageFocusNode,
+                          onChanged: (value) {
+                            setState(() {});
                           },
+                          onTap: () async {
+                            await Future.delayed(
+                              const Duration(milliseconds: 500),
+                            );
+                            int count = 0;
+                            while (!isScrollAtBottom() && count < 10) {
+                              await _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                              count++;
+                            }
+                          },
+                          onSubmitted: _messageController.text == ""
+                              ? null
+                              : (value) {
+                                  channel.sink.add(jsonEncode({
+                                    'command': 'message',
+                                    'identifier': jsonEncode({
+                                      'channel': 'ChatChannel',
+                                      'chatroom_id': widget.id,
+                                    }),
+                                    'data': jsonEncode({
+                                      "chatroom_id": widget.id,
+                                      "member_id": currentMemberID,
+                                      "type_": "string",
+                                      "content": _messageController.text,
+                                      "isReply": replyToID != null,
+                                      "reply_to_id": replyToID,
+                                    }),
+                                  }));
+                                  setState(() {
+                                    messageData.add({
+                                      "messageID": null,
+                                      "senderID": currentMemberID,
+                                      "type": "string",
+                                      "content": _messageController.text,
+                                      "msgTime":
+                                          dateTimeToString(DateTime.now()),
+                                      "isReply": replyToID != null,
+                                      "replyToID": replyToID,
+                                      "isPinned": false,
+                                      "updatedAt":
+                                          dateTimeToString(DateTime.now()),
+                                    });
+
+                                    _messageController.text = "";
+                                    replyToID = null;
+                                  });
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    Future.delayed(Duration.zero, () async {
+                                      int count = 0;
+                                      while (
+                                          !isScrollAtBottom() && count < 10) {
+                                        await _scrollController.animateTo(
+                                          _scrollController
+                                              .position.maxScrollExtent,
+                                          duration:
+                                              const Duration(milliseconds: 300),
+                                          curve: Curves.linear,
+                                        );
+                                        count++;
+                                      }
+                                    });
+                                  });
+                                  _messageFocusNode.requestFocus();
+                                },
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      GestureDetector(
+                        onTap: _messageController.text == ""
+                            ? null
+                            : () {
+                                channel.sink.add(jsonEncode({
+                                  'command': 'message',
+                                  'identifier': jsonEncode({
+                                    'channel': 'ChatChannel',
+                                    'chatroom_id': widget.id,
+                                  }),
+                                  'data': jsonEncode({
+                                    "chatroom_id": widget.id,
+                                    "member_id": currentMemberID,
+                                    "type_": "string",
+                                    "content": _messageController.text,
+                                    "isReply": replyToID != null,
+                                    "reply_to_id": replyToID,
+                                  }),
+                                }));
+                                setState(() {
+                                  messageData.add({
+                                    "messageID": null,
+                                    "senderID": currentMemberID,
+                                    "type": "string",
+                                    "content": _messageController.text,
+                                    "msgTime": dateTimeToString(DateTime.now()),
+                                    "isReply": replyToID != null,
+                                    "replyToID": replyToID,
+                                    "isPinned": false,
+                                    "updatedAt":
+                                        dateTimeToString(DateTime.now()),
+                                  });
+                                  _messageController.text = "";
+                                  replyToID = null;
+                                });
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Future.delayed(Duration.zero, () async {
+                                    int count = 0;
+                                    while (!isScrollAtBottom() && count < 10) {
+                                      await _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 300),
+                                        curve: Curves.linear,
+                                      );
+                                      count++;
+                                    }
+                                  });
+                                });
+                                _messageFocusNode.requestFocus();
+                              },
+                        child: Image.asset("assets/icons/send.png"),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                GestureDetector(
-                  onTap: _messageController.text == ""
-                      ? null
-                      : () {
-                          channel.sink.add(jsonEncode({
-                            'command': 'message',
-                            'identifier': jsonEncode({
-                              'channel': 'ChatChannel',
-                              'chatroom_id': widget.id,
-                            }),
-                            'data': jsonEncode({
-                              "chatroom_id": widget.id,
-                              "member_id": currentMemberID,
-                              "type_": "string",
-                              "content": _messageController.text,
-                              "isReply": replyToID != null,
-                              "reply_to_id": replyToID,
-                            }),
-                          }));
-                          setState(() {
-                            messageData.add({
-                              "messageID": null,
-                              "senderID": currentMemberID,
-                              "type": "string",
-                              "content": _messageController.text,
-                              "msgTime": dateTimeToString(DateTime.now()),
-                              "isReply": replyToID != null,
-                              "replyToID": replyToID,
-                              "isPinned": false,
-                              "updatedAt": dateTimeToString(DateTime.now()),
-                            });
-                            _messageController.text = "";
-                            replyToID = null;
-                          });
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            Future.delayed(Duration.zero, () async {
-                              int count = 0;
-                              while (!isScrollAtBottom() && count < 10) {
-                                await _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent,
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.linear,
-                                );
-                                count++;
-                              }
-                            });
-                          });
-                          _messageFocusNode.requestFocus();
-                        },
-                  child: Image.asset("assets/icons/send.png"),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
