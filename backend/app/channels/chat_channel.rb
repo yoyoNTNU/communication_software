@@ -7,6 +7,8 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def receive(data)
+    # current action: ["send_string_msg","send_file_msg","delete_msg","set_announcement","delete_announcement"]
+    # maybe need action:["inputing"]
     chatroom_id=data['chatroom_id']
     channel_name = "chatroom_#{chatroom_id}"
     message = data
@@ -15,7 +17,6 @@ class ChatChannel < ApplicationCable::Channel
       member_id:data['member_id'],
       type_:data['type_'],
       content:data['content'],
-      file:data['file'],
       isReply: data['isReply'],
       reply_to_id:data['reply_to_id']
     )
