@@ -842,7 +842,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                     });
                     _scrollController.jumpTo(
                       _scrollController.position.pixels -
-                          (Platform.isAndroid || Platform.isIOS ? 314 : 195),
+                          (Platform.isAndroid || Platform.isIOS ? 313 : 194),
                     );
                   })
               : Container(
