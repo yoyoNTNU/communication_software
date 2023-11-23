@@ -6,7 +6,7 @@ Widget logoutBtn(BuildContext context) {
       int responseCode;
       try {
         responseCode = await AppSettingAPI.logOut();
-        if (responseCode == 200) {
+        if (responseCode == 200 && context.mounted) {
           Navigator.popAndPushNamed(context, '/login');
         }
       } catch (e) {
