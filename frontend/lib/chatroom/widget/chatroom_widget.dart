@@ -8,6 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/gestures.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'dart:async';

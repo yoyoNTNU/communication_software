@@ -38,6 +38,56 @@ class StringMsg extends StatefulWidget {
 
 class _StringMsgState extends State<StringMsg> {
   String read = "";
+  RegExp urlRegex = RegExp(r'\b(?:https?://)[^\s]+');
+  late final Iterable<RegExpMatch> matches;
+  List<TextSpan> textSpans = [];
+  int currentIndex = 0;
+
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
+  @override
+  void initState() {
+    matches = urlRegex.allMatches(widget.content);
+    for (RegExpMatch match in matches) {
+      textSpans.add(
+        TextSpan(
+          text: widget.content.substring(currentIndex, match.start),
+          style: AppStyle.body(
+              color: widget.senderIsMe ? AppStyle.white : AppStyle.gray[700]!),
+        ),
+      );
+      textSpans.add(
+        TextSpan(
+          text: match.group(0),
+          style: AppStyle.body(
+                  color:
+                      widget.senderIsMe ? AppStyle.white : AppStyle.blue[500]!)
+              .copyWith(decoration: TextDecoration.underline),
+          recognizer: TapGestureRecognizer()
+            ..onTap = () {
+              _launchUrl(Uri.parse(match.group(0)!));
+            },
+        ),
+      );
+
+      currentIndex = match.end;
+    }
+
+    // Add the remaining text after the last URL
+    textSpans.add(
+      TextSpan(
+        text: widget.content.substring(currentIndex),
+        style: AppStyle.body(
+            color: widget.senderIsMe ? AppStyle.white : AppStyle.gray[700]!),
+      ),
+    );
+
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() async {
@@ -99,12 +149,11 @@ class _StringMsgState extends State<StringMsg> {
                       ),
                     ),
                     padding: EdgeInsets.only(top: widget.isReply ? 4 : 0),
-                    child: Text(
-                      widget.content,
-                      style: AppStyle.body(
-                          color: widget.senderIsMe
-                              ? AppStyle.white
-                              : AppStyle.gray[700]!),
+                    child: RichText(
+                      text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: textSpans,
+                      ),
                     ),
                   ),
                 ),
