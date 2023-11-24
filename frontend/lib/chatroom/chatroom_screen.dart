@@ -29,9 +29,9 @@ class _ChatroomPageState extends State<ChatroomPage>
   final FocusNode _messageFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   final channel = IOWebSocketChannel.connect("wss://$host/cable");
+  //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   int didChangeDependenciesCount = 0;
   Map<String, dynamic> chatroomData = {};
-  //final channel = IOWebSocketChannel.connect("ws://localhost:3000/cable");
   List<Map<String, dynamic>> messageData = [];
   List<Map<String, dynamic>> announcementData = [];
   List<dynamic> memberNumber = [];
@@ -836,6 +836,7 @@ class _ChatroomPageState extends State<ChatroomPage>
           isDisplayMenu
               ? Menu(
                   chatroomID: widget.id,
+                  channel: channel,
                   cancelDisplayMenu: () {
                     setState(() {
                       isDisplayMenu = false;
@@ -908,6 +909,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                       'chatroom_id': widget.id,
                                     }),
                                     'data': jsonEncode({
+                                      "action": "send_string_msg",
                                       "chatroom_id": widget.id,
                                       "member_id": currentMemberID,
                                       "type_": "string",
@@ -969,6 +971,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                     'chatroom_id': widget.id,
                                   }),
                                   'data': jsonEncode({
+                                    "action": "send_string_msg",
                                     "chatroom_id": widget.id,
                                     "member_id": currentMemberID,
                                     "type_": "string",
