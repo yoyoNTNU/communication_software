@@ -7,9 +7,9 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    # current action: ["send_string_msg","send_file_msg","delete_msg","set_announcement","delete_announcement"]
-    # maybe need action:["inputing"]
-    case data['action']  
+    # current do_action: ["send_string_msg","send_file_msg","delete_msg","set_announcement","delete_announcement"]
+    # maybe need do_action:["inputing"]
+    case data['do_action']  
     when "send_string_msg"
       chatroom_id=data['chatroom_id']
       channel_name = "chatroom_#{chatroom_id}"
@@ -23,12 +23,13 @@ class ChatChannel < ApplicationCable::Channel
       )
     when "send_file_msg"
       m=Message.find_by(id:data['messageID'])
+      channel_name = "chatroom_#{m.chatroom_id}"
     end  
       ActionCable.server.broadcast(channel_name, { message: {
         "messageID": m.id,
         "senderID": m.member_id,
         "type": m.type_,
-        "content": m.type_=="string" ? m.content : m.file,
+        "content": m.type_=="string" ? m.content : m.file.url,
         "msgTime": m.created_at,
         "isReply": m.isReply,
         "replyToID": m.reply_to_id,

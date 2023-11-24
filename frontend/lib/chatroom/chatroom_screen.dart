@@ -909,7 +909,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                       'chatroom_id': widget.id,
                                     }),
                                     'data': jsonEncode({
-                                      "action": "send_string_msg",
+                                      "do_action": "send_string_msg",
                                       "chatroom_id": widget.id,
                                       "member_id": currentMemberID,
                                       "type_": "string",
@@ -971,7 +971,7 @@ class _ChatroomPageState extends State<ChatroomPage>
                                     'chatroom_id': widget.id,
                                   }),
                                   'data': jsonEncode({
-                                    "action": "send_string_msg",
+                                    "do_action": "send_string_msg",
                                     "chatroom_id": widget.id,
                                     "member_id": currentMemberID,
                                     "type_": "string",

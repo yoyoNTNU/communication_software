@@ -78,7 +78,7 @@ class _MenuState extends State<Menu> {
                       'chatroom_id': widget.chatroomID,
                     }),
                     'data': jsonEncode({
-                      "action": "send_file_msg",
+                      "do_action": "send_file_msg",
                       "messageID": data["msgID"],
                     }),
                   }));
