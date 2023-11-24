@@ -3,11 +3,13 @@ part of 'chatroom_widget.dart';
 class Menu extends StatefulWidget {
   final int chatroomID;
   final VoidCallback cancelDisplayMenu;
+  final IOWebSocketChannel channel;
 
   const Menu({
     super.key,
     required this.chatroomID,
     required this.cancelDisplayMenu,
+    required this.channel,
   });
 
   @override
@@ -59,17 +61,33 @@ class _MenuState extends State<Menu> {
           iconPath: "assets/icons/img_box_blue.png",
           title: "照片",
           onTap: () async {
-            print("照片");
             XFile? photo = await selectSinglePhoto();
             if (photo != null) {
+              if (!mounted) return;
+              showLoading(context);
               try {
                 Map<String, int> data = await MessageAPI.sentXFileMessage(
                     widget.chatroomID,
                     type: "photo",
                     file: photo);
+                if (data["status"] == 200) {
+                  widget.channel.sink.add(jsonEncode({
+                    'command': 'message',
+                    'identifier': jsonEncode({
+                      'channel': 'ChatChannel',
+                      'chatroom_id': widget.chatroomID,
+                    }),
+                    'data': jsonEncode({
+                      "action": "send_file_msg",
+                      "messageID": data["msgID"],
+                    }),
+                  }));
+                }
               } catch (e) {
                 print('API request error: $e');
               }
+              if (!mounted) return;
+              Navigator.pop(context);
             }
           }),
       MenuIcon(

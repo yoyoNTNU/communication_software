@@ -126,14 +126,15 @@ class MessageAPI {
     }
     var response = await request.send();
     if (response.statusCode == 200) {
-      // 请求成功，解析响应
-      var responseBody = await response.stream.bytesToString();
-      print('Response: $responseBody');
+      final jsonString = await utf8.decodeStream(response.stream);
+      final Map<String, dynamic> data = json.decode(jsonString);
+      return {
+        "status": response.statusCode,
+        "msgID": data['data']['id'],
+      };
     } else {
-      // 请求失败，处理错误
-      print('Request failed with status: ${response.statusCode}');
+      throw Exception('API request failed with status ${response.statusCode}');
     }
-    return {"state": response.statusCode};
   }
 
   static Future<int> deleteMessage(int messageID) async {
