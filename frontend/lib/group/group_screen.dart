@@ -284,33 +284,62 @@ class _GroupPageState extends State<GroupPage> {
                 color: Colors.transparent,
               ),
             ),
+          // if (step == 0 && friendList.isNotEmpty)
+          //   SliverList(
+          //     delegate: SliverChildListDelegate(
+          //       List.generate(friendList.length, (int index) {
+          //         return Column(
+          //           children: [
+          //             MemberCard(
+          //               id: friendList[index]["id"],
+          //               avatar: friendList[index]["photo"],
+          //               name: friendList[index]["nickname"],
+          //               check: friendList[index]["check"],
+          //               onTap: () {
+          //                 setState(() {
+          //                   friendList[index]["check"] =
+          //                       !friendList[index]["check"];
+          //                   // print(friendList);
+          //                   // print(copyFriendList);
+          //                 });
+          //               },
+          //             ),
+          //             Container(
+          //               color: Colors.transparent,
+          //               height: 12,
+          //             )
+          //           ],
+          //         );
+          //       }),
+          //     ),
+          //   ),
           if (step == 0 && friendList.isNotEmpty)
             SliverList(
-              delegate: SliverChildListDelegate(
-                List.generate(friendList.length, (int index) {
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
                   return Column(
                     children: [
                       MemberCard(
                         id: friendList[index]["id"],
                         avatar: friendList[index]["photo"],
                         name: friendList[index]["nickname"],
-                        check: friendList[index]["check"],
-                        onTap: () {
+                        isSelected: friendList[index]["check"],
+                        onRadioChanged: (bool newValue) {
                           setState(() {
-                            friendList[index]["check"] =
-                                !friendList[index]["check"];
-                            // print(friendList);
-                            // print(copyFriendList);
+                            // Update the check status of the tapped item
+                            friendList[index]["check"] = newValue;
+                            
                           });
                         },
                       ),
                       Container(
                         color: Colors.transparent,
                         height: 12,
-                      )
+                      ),
                     ],
                   );
-                }),
+                },
+                childCount: friendList.length, // Specifies the number of children for the delegate
               ),
             ),
           if (step == 0 && friendList.isEmpty)
