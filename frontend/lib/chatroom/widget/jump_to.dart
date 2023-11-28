@@ -14,16 +14,10 @@ Future<void> jumpTo(
   for (var map in list) {
     targetPosition += map["height"];
   }
-  if (scrollController.position.pixels != targetPosition - 100) {
-    scrollController.jumpTo(
-      0,
-    );
-    await scrollController.animateTo(
-      targetPosition - 100,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-  }
+
+  scrollController.jumpTo(
+    targetPosition - 100,
+  );
 
   setWidgetShake(msgID: targetID, isNeedShake: true);
   await Future.delayed(const Duration(milliseconds: 200));
