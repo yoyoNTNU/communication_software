@@ -28,6 +28,7 @@ class PhotoMsg extends StatefulWidget {
 
 class _PhotoMsgState extends State<PhotoMsg> {
   String read = "";
+  bool isLoaded = false;
 
   @override
   void didChangeDependencies() async {
@@ -91,7 +92,7 @@ class _PhotoMsgState extends State<PhotoMsg> {
                     children: [
                       Container(
                         height: 200,
-                        width: screenWidth * 0.7,
+                        width: isLoaded ? 0 : screenWidth * 0.7,
                         color: widget.senderIsMe
                             ? AppStyle.blue[400]
                             : AppStyle.white,
@@ -101,6 +102,17 @@ class _PhotoMsgState extends State<PhotoMsg> {
                         child: Image.network(
                           widget.content,
                           fit: BoxFit.contain,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                setState(() {
+                                  isLoaded = true;
+                                });
+                              });
+                            }
+                            return child;
+                          },
                         ),
                       ),
                     ],
